@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bammoozle - Make Learning Fun</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 
+      --- INICIO DEL CSS (Correspondería a style.css) --- 
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAC663; /* Color de fondo principal */
+             /* Se quita el overflow-x-hidden para permitir que las formas se vean completas */
+        }
+
+        /* Contenedor principal para evitar que el contenido se desborde */
+        .main-container {
+            overflow-x: hidden;
+        }
+
+        /* Paleta de colores principal */
+        :root {
+            --bam-yellow: #FAC663;
+            --bam-purple: #8453DB;
+            --bam-purple-dark: #7148c2;
+            --bam-pink: #F0386B;
+            --bam-blue: #0A91AB;
+        }
+
+        .bg-bam-purple { background-color: var(--bam-purple); }
+        .hover\:bg-bam-purple-dark:hover { background-color: var(--bam-purple-dark); }
+        .text-bam-purple { color: var(--bam-purple); }
+        
+        /* Principio HCI: Mejora de Contraste y Legibilidad */
+        /* Se añade una sombra sutil al texto para que destaque sobre el fondo. */
+        .text-shadow {
+            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Estilos para las formas decorativas SVG */
+        .shape { position: absolute; z-index: 0; animation: float 8s ease-in-out infinite; }
+        .shape-planet-1 { width: 130px; height: 130px; top: 15%; left: 10%; }
+        .shape-cloud-1 { width: 137px; top: 20%; right: 5%; animation-delay: -2s; }
+        .shape-cloud-2 { width: 100px; bottom: 15%; left: 20%; animation-delay: -4s; transform: rotate(180deg); opacity: 0.75; }
+        .shape-planet-2 { width: 130px; top: 70%; right: 10%; animation-delay: -3s; transform: scale(0.9); }
+        .shape-cloud-3 { width: 80px; top: 65%; right: 25%; animation-delay: -5s; transform: rotate(90deg); }
+
+
+        /* Animación para formas flotantes */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        /* Animación para la aparición del texto */
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+
+        /* Estilos para la navegación móvil */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+    <!-- --- FIN DEL CSS --- -->
+
+</head>
+<body class="relative min-h-screen">
+
+    <!-- Elementos decorativos de fondo (ahora pueden desbordarse sin ser cortados) -->
+    <div class="absolute inset-0 w-full h-full overflow-hidden">
+        <div class="shape shape-planet-1">
+            <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100.967 15.6542C96.6336 16.1417 92.1377 18.2542 87.5877 21.775C80.871 18.2542 73.396 16.3583 65.596 16.25C52.4877 16.25 40.1919 21.0167 30.9294 30.0625C26.3335 34.5318 22.6697 39.8683 20.1501 45.763C17.6304 51.6578 16.3049 57.9937 16.2502 64.4042C16.1625 70.5248 17.2283 76.6072 19.3919 82.3333C13.596 88.8333 8.17938 102.267 14.896 109.85C17.7127 112.992 21.721 114.4 26.5419 114.4C41.2211 114.4 63.4294 101.4 82.1169 84.825C106.979 62.7792 126.209 33.8 114.942 21.0708C113.233 19.1143 111.07 17.6072 108.643 16.6817C106.216 15.7561 103.599 15.4405 101.021 15.7625L100.967 15.6542ZM22.9669 102.592C21.7752 101.237 22.9669 96.7417 25.0794 92.95C26.596 95.0625 28.221 97.1208 30.0627 99.0167C31.2544 100.208 32.5002 101.292 33.746 102.375C28.0585 104.108 24.2127 104 22.9669 102.537V102.592ZM105.571 38.1333C103.892 35.5875 102.05 33.0958 99.8836 30.875C98.9627 29.9542 98.0419 29.0875 97.0669 28.275C99.1794 27.0833 100.859 26.5417 102.05 26.3792C104 26.1625 105.463 26.7042 106.709 28.1125C107.9 29.4667 107.629 33.0417 105.517 38.0792L105.571 38.1333ZM87.4794 90.8375C78.596 98.7458 67.6002 106.871 56.4961 112.937C59.0961 113.371 61.696 113.696 64.4044 113.696H65.0544C77.8919 113.696 89.9169 108.821 99.0711 99.8833C108.388 90.8375 113.588 78.65 113.75 65.5417C113.75 64.2958 113.696 63.1042 113.642 61.8583C106.709 71.825 97.5544 81.7917 87.4794 90.7833V90.8375Z" fill="#0A91AB"/></svg>
+        </div>
+        <div class="shape shape-cloud-1">
+             <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/>
+</svg>
+
+        </div>
+        <div class="shape shape-cloud-2">
+            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/>
+        </svg>
+
+        </div>
+        <div class="shape shape-planet-2">
+            <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100.967 15.6542C96.6336 16.1417 92.1377 18.2542 87.5877 21.775C80.871 18.2542 73.396 16.3583 65.596 16.25C52.4877 16.25 40.1919 21.0167 30.9294 30.0625C26.3335 34.5318 22.6697 39.8683 20.1501 45.763C17.6304 51.6578 16.3049 57.9937 16.2502 64.4042C16.1625 70.5248 17.2283 76.6072 19.3919 82.3333C13.596 88.8333 8.17938 102.267 14.896 109.85C17.7127 112.992 21.721 114.4 26.5419 114.4C41.2211 114.4 63.4294 101.4 82.1169 84.825C106.979 62.7792 126.209 33.8 114.942 21.0708C113.233 19.1143 111.07 17.6072 108.643 16.6817C106.216 15.7561 103.599 15.4405 101.021 15.7625L100.967 15.6542ZM22.9669 102.592C21.7752 101.237 22.9669 96.7417 25.0794 92.95C26.596 95.0625 28.221 97.1208 30.0627 99.0167C31.2544 100.208 32.5002 101.292 33.746 102.375C28.0585 104.108 24.2127 104 22.9669 102.537V102.592ZM105.571 38.1333C103.892 35.5875 102.05 33.0958 99.8836 30.875C98.9627 29.9542 98.0419 29.0875 97.0669 28.275C99.1794 27.0833 100.859 26.5417 102.05 26.3792C104 26.1625 105.463 26.7042 106.709 28.1125C107.9 29.4667 107.629 33.0417 105.517 38.0792L105.571 38.1333ZM87.4794 90.8375C78.596 98.7458 67.6002 106.871 56.4961 112.937C59.0961 113.371 61.696 113.696 64.4044 113.696H65.0544C77.8919 113.696 89.9169 108.821 99.0711 99.8833C108.388 90.8375 113.588 78.65 113.75 65.5417C113.75 64.2958 113.696 63.1042 113.642 61.8583C106.709 71.825 97.5544 81.7917 87.4794 90.7833V90.8375Z" fill="#0A91AB"/></svg>
+        </div>
+        <div class="shape shape-cloud-3">
+             <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/>
+            </svg>
+
+        </div>
+    </div>
+    
+    <div class="main-container relative z-10 flex-grow flex flex-col min-h-screen">
+        <!-- Cabecera -->
+        <header class="p-4 md:p-6">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="text-3xl font-bold text-white text-shadow">Bammoozle</div>
+                <nav class="hidden md:flex items-center space-x-6 font-semibold text-white text-shadow">
+                    <a href="#" class="hover:text-opacity-80">Games</a>
+                    <a href="#" class="hover:text-opacity-80">Blog</a>
+                    <a href="#" class="hover:text-opacity-80">Pricing</a>
+                    <a href="#" class="hover:text-opacity-80">Class PIN</a>
+                    <a href="#" class="border-2 border-white rounded-full px-6 py-2 hover:bg-white hover:text-bam-purple transition-colors">Sign in</a>
+                    <a href="#" class="bg-bam-purple text-white rounded-full px-6 py-2.5 hover:bg-bam-purple-dark transition-colors">Join for Free</a>
+                </nav>
+                <button id="hamburger-btn" class="md:hidden text-3xl text-white">☰</button>
+            </div>
+        </header>
+
+        <!-- Contenido Hero -->
+        <main class="flex-grow flex items-center justify-center p-4">
+            <div class="w-full max-w-4xl mx-auto text-center text-white text-shadow">
+                
+                <h1 class="text-5xl md:text-7xl font-black mb-4 fade-in-up">
+                    <span class="inline-block mr-4">18,859 teachers signed up last week to make learning fun</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl font-semibold mb-2 fade-in-up delay-1">Save endless hours of lesson planning</p>
+                <p class="text-lg md:text-xl mb-10 fade-in-up delay-2">Cancel or change your plan anytime</p>
+
+                <div class="fade-in-up delay-3">
+                    <button type="submit" class="bg-bam-purple text-white font-bold text-xl px-12 py-4 rounded-2xl hover:bg-bam-purple-dark transition-all duration-300 shadow-lg transform hover:scale-105">
+                        Get Started
+                    </button>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Menú de Navegación Móvil (fuera del contenedor principal para que no se vea afectado por el overflow) -->
+    <div id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-gray-900 bg-opacity-90 backdrop-blur-sm text-white p-6 transform -translate-x-full z-30">
+        <button id="close-menu-btn" class="absolute top-4 right-4 text-3xl">&times;</button>
+        <nav class="flex flex-col space-y-4 mt-12 font-semibold">
+            <a href="#" class="hover:text-bam-purple">Games</a>
+            <a href="#" class="hover:text-bam-purple">Blog</a>
+            <a href="#" class="hover:text-bam-purple">Pricing</a>
+            <a href="#" class="hover:text-bam-purple">Class PIN</a>
+            <hr class="border-gray-600 my-4"/>
+            <a href="#">Sign in</a>
+            <a href="#" class="bg-bam-purple rounded-full px-6 py-2.5 text-center">Join for Free</a>
+        </nav>
+    </div>
+
+    <!-- 
+      --- INICIO DEL JAVASCRIPT (Correspondería a script.js) --- 
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            
+            // --- Lógica de Navegación Móvil ---
+            if(hamburgerBtn) {
+                hamburgerBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    mobileMenu.classList.remove('-translate-x-full');
+                });
+            }
+            if(closeMenuBtn) {
+                closeMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.add('-translate-x-full');
+                });
+            }
+            // Opcional: Cerrar menú si se hace clic fuera de él
+            document.addEventListener('click', (e) => {
+                if (mobileMenu && !mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                    mobileMenu.classList.add('-translate-x-full');
+                }
+            })
+        });
+    </script>
+    <!-- --- FIN DEL JAVASCRIPT --- -->
+
+</body>
+</html>

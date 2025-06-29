@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Board - Bammoozle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 
+      --- INICIO DEL CSS (Correspondería a style.css) --- 
+    -->
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #ECECEC; /* Fondo gris claro general */
+            color: #333333;
+        }
+        /* Paleta de colores principal */
+        :root {
+            --bam-yellow: #FAC663;
+            --bam-yellow-darker: #F8BE4B; /* Nuevo tono de amarillo más oscuro */
+            --bam-pink: #F0386B; 
+            --bam-blue-dark: #1C77C3; /* Color de las tarjetas */
+            --bam-join-blue: #0D3659;
+            --bam-header-dark: #333333;
+            --bam-text-dark: #333333;
+        }
+
+        .bg-bam-yellow { background-color: var(--bam-yellow); }
+        .bg-bam-yellow-darker { background-color: var(--bam-yellow-darker); }
+        .bg-bam-blue-dark { background-color: var(--bam-blue-dark); }
+        .bg-bam-pink-team { background-color: var(--bam-pink); }
+        .bg-bam-join-blue { background-color: var(--bam-join-blue); }
+        .hover\:bg-bam-join-blue-dark:hover { background-color: #082138; }
+        .bg-bam-header-dark { background-color: var(--bam-header-dark); }
+        
+        /* Estilos para las tarjetas del juego */
+        .game-tile {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .game-tile:hover {
+            transform: scale(1.05);
+        }
+        .game-tile.is-flipped {
+            transform: rotateY(180deg);
+            opacity: 0;
+            pointer-events: none; /* Evita clics en tarjetas volteadas */
+        }
+    </style>
+    <!-- --- FIN DEL CSS --- -->
+
+</head>
+<body class="min-h-screen">
+
+    <!-- Cabecera Completa -->
+    <header class="bg-bam-header-dark p-4">
+         <div class="container mx-auto flex justify-between items-center text-white">
+            <div class="flex items-center space-x-8">
+                <a href="#" class="hover:opacity-70">
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.12499 15.8749H3.49999V25.4999C3.49999 27.0124 4.73749 28.2499 6.24999 28.2499H22.75C24.2625 28.2499 25.5 27.0124 25.5 25.4999V15.8749H26.875C27.425 15.8749 27.9337 15.5449 28.14 15.0224C28.3462 14.5137 28.2362 13.9224 27.8375 13.5237L15.4762 1.14869C15.349 1.02123 15.1979 0.920097 15.0316 0.851098C14.8653 0.782098 14.6869 0.746582 14.5069 0.746582C14.3268 0.746582 14.1485 0.782098 13.9821 0.851098C13.8158 0.920097 13.6647 1.02123 13.5375 1.14869L1.14874 13.5237C0.749992 13.9224 0.639992 14.5137 0.846242 15.0224C1.05249 15.5312 1.56124 15.8749 2.11124 15.8749H2.12499ZM14.5 4.06369L22.75 12.3137V25.4999H6.24999V12.3137L14.5 4.06369Z" fill="#ECECEC"/>
+</svg>
+
+</svg>
+
+                </a>
+                 <nav class="hidden md:flex items-center space-x-6 font-semibold">
+                    <a href="#" class="hover:text-gray-300">Games</a>
+                    <a href="#" class="hover:text-gray-300">Blog</a>
+                    <a href="#" class="hover:text-gray-300">Class PIN</a>
+                </nav>
+            </div>
+            <div class="hidden md:flex items-center space-x-4 font-semibold">
+                <a href="#" class="hover:text-gray-300">Sign in</a>
+                <a href="#" class="bg-bam-join-blue text-white rounded-full px-6 py-2 text-sm font-bold hover:bg-bam-join-blue-dark transition-colors">Join for Free</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bloque de Controles Superior -->
+    <div class="bg-bam-yellow-darker text-bam-dark py-4 px-6">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+            <!-- Controles -->
+             <div class="flex items-center space-x-2 justify-center md:justify-start">
+                <span class="font-bold">Controls:</span>
+                <button class="bg-white/50 rounded-full h-8 w-8 text-xl font-bold flex items-center justify-center">&times;</button>
+                <button class="bg-white/50 rounded-full h-8 w-8 text-xl font-bold flex items-center justify-center">🔊</button>
+            </div>
+            <!-- Título del Juego -->
+            <div class="text-center">
+                 <h1 class="text-4xl font-bold">Game</h1>
+                 <p class="font-semibold">Verbs followed by gerunds or infinitive (no diff...)</p>
+            </div>
+             <!-- Placeholder para alinear -->
+            <div class="hidden md:block"></div>
+        </div>
+    </div>
+    
+    <!-- Bloque de Puntuaciones Inferior -->
+    <div class="bg-bam-yellow text-bam-dark py-4 px-6">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+             <!-- Editar Equipos -->
+             <div class="flex items-center justify-center md:justify-start space-x-2">
+                 <span class="font-bold">Edit teams:</span>
+                 <button class="hover:text-purple-600"><svg class="h-6 w-6" viewBox="0 0 60 60" fill="currentColor"><path d="M36.24 16L11.44 40.7733C11.0933 41.12 10.8533 41.5467 10.7467 42L8.08 52.6667C7.84 53.5733 8.10667 54.5333 8.77333 55.2C9.28 55.7067 9.97333 55.9733 10.6667 55.9733C10.88 55.9733 11.0933 55.9733 11.3067 55.8933L21.9733 53.2267C22.4533 53.12 22.88 52.88 23.2 52.5333L47.9733 27.76L36.2133 16H36.24Z"/><path d="M56 12.2399L51.76 7.99994C49.68 5.91994 46.2933 5.91994 44.2133 7.99994L39.9733 12.2399L51.7333 23.9999L55.9733 19.7599C58.0533 17.6799 58.0533 14.2933 55.9733 12.2133L56 12.2399Z"/></svg></button>
+            </div>
+            <!-- Puntuaciones de Equipos -->
+            <div class="flex justify-center items-end space-x-8 col-span-1">
+                <div class="text-center">
+                    <div class="bg-bam-pink-team text-white px-4 py-1 rounded-t-lg font-bold">Team 1</div>
+                    <div class="font-bold text-3xl">0 points</div>
+                </div>
+                 <div class="text-center">
+                    <div class="font-bold">Team 2</div>
+                    <div class="font-bold text-3xl">0 points</div>
+                </div>
+            </div>
+            <div class="hidden md:block"></div>
+        </div>
+    </div>
+
+    <!-- Tablero de Juego (Bloque Blanco) -->
+    <main class="bg-white p-4 md:p-8">
+        <div id="game-board" class="container mx-auto grid grid-cols-5 gap-4">
+            <!-- Las tarjetas se generan con JS -->
+        </div>
+    </main>
+    
+    <!-- 
+      --- INICIO DEL JAVASCRIPT (Correspondería a script.js) --- 
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameBoard = document.getElementById('game-board');
+            const NUMBER_OF_TILES = 10; // Número de tarjetas ajustado al template
+
+            if(gameBoard) {
+                // Generar las tarjetas del juego
+                for (let i = 1; i <= NUMBER_OF_TILES; i++) {
+                    const tile = document.createElement('div');
+                    tile.classList.add(
+                        'game-tile', 'bg-bam-blue-dark', 'text-white', 'rounded-lg', 
+                        'aspect-square', 'flex', 'items-center', 'justify-center', 
+                        'text-6xl', 'font-bold', 'cursor-pointer'
+                    );
+                    tile.textContent = i;
+                    
+                    // Añadir evento de clic para voltear la tarjeta
+                    tile.addEventListener('click', () => {
+                        // Aquí se abriría el modal de la pregunta
+                        // Por ahora, solo la volteamos
+                        tile.classList.add('is-flipped'); 
+                    }, { once: true }); // El evento solo se dispara una vez
+
+                    gameBoard.appendChild(tile);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

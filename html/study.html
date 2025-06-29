@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study - Bammoozle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 
+      --- INICIO DEL CSS (Correspondería a style.css) --- 
+    -->
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #ECECEC;
+            color: #333333;
+        }
+        /* Paleta de colores principal */
+        :root {
+            --bam-yellow: #FAC663;
+            --bam-purple: #8453DB;
+            --bam-red: #FB4D3D;
+            --bam-green: #95DB53;
+            --bam-green-dark: #82C344;
+            --bam-blue: #0A91AB;
+            --bam-cyan: #0A91AB; /* Mismo que el azul para el progreso */
+            --bam-grey-light: #F8F8F8;
+            --bam-grey-border: #E0E0E0;
+            --bam-grey-dark: #8D98A2;
+            --bam-text-dark: #333333;
+        }
+
+        .bg-bam-yellow { background-color: var(--bam-yellow); }
+        .bg-bam-purple { background-color: var(--bam-purple); }
+        .bg-bam-red { background-color: var(--bam-red); }
+        .bg-bam-green { background-color: var(--bam-green); }
+        .bg-bam-blue { background-color: var(--bam-blue); }
+        .bg-bam-grey-light { background-color: var(--bam-grey-light); }
+        .border-bam-grey { border-color: var(--bam-grey-border); }
+
+        .text-bam-dark { color: var(--bam-text-dark); }
+        .text-bam-grey-dark { color: var(--bam-grey-dark); }
+        .text-bam-blue { color: var(--bam-blue); }
+        
+        /* Estilos para las tarjetas de estudio */
+        .study-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .study-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <!-- --- FIN DEL CSS --- -->
+
+</head>
+<body class="min-h-screen">
+
+    <!-- Cabecera -->
+    <!-- Cabecera Completa -->
+    <header class="bg-bam-header-dark p-4">
+         <div class="container mx-auto flex justify-between items-center text-white">
+            <div class="flex items-center space-x-8">
+                <a href="#" class="hover:opacity-70">
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.12499 15.8749H3.49999V25.4999C3.49999 27.0124 4.73749 28.2499 6.24999 28.2499H22.75C24.2625 28.2499 25.5 27.0124 25.5 25.4999V15.8749H26.875C27.425 15.8749 27.9337 15.5449 28.14 15.0224C28.3462 14.5137 28.2362 13.9224 27.8375 13.5237L15.4762 1.14869C15.349 1.02123 15.1979 0.920097 15.0316 0.851098C14.8653 0.782098 14.6869 0.746582 14.5069 0.746582C14.3268 0.746582 14.1485 0.782098 13.9821 0.851098C13.8158 0.920097 13.6647 1.02123 13.5375 1.14869L1.14874 13.5237C0.749992 13.9224 0.639992 14.5137 0.846242 15.0224C1.05249 15.5312 1.56124 15.8749 2.11124 15.8749H2.12499ZM14.5 4.06369L22.75 12.3137V25.4999H6.24999V12.3137L14.5 4.06369Z" fill="#ECECEC"/>
+</svg>
+
+</svg>
+
+                </a>
+                 <nav class="hidden md:flex items-center space-x-6 font-semibold">
+                    <a href="#" class="hover:text-gray-300">Games</a>
+                    <a href="#" class="hover:text-gray-300">Blog</a>
+                    <a href="#" class="hover:text-gray-300">Class PIN</a>
+                </nav>
+            </div>
+            <div class="hidden md:flex items-center space-x-4 font-semibold">
+                <a href="#" class="hover:text-gray-300">Sign in</a>
+                <a href="#" class="bg-bam-join-blue text-white rounded-full px-6 py-2 text-sm font-bold hover:bg-bam-join-blue-dark transition-colors">Join for Free</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Título de la página -->
+    <div class="bg-bam-yellow text-bam-dark p-6">
+        <div class="container mx-auto flex justify-between items-center flex-wrap gap-4">
+            <div>
+                <h1 class="text-4xl font-bold">Study</h1>
+                <p class="font-semibold">Verbs followed by gerunds or infinitive (no diff...)</p>
+            </div>
+            <div class="flex items-center space-x-2">
+                 <div class="text-right">
+                    <p class="font-bold text-sm">Translate the page</p>
+                    <div class="flex gap-1 mt-1">
+                        <button class="bg-white border-2 border-bam-green-dark text-bam-green-dark font-bold px-4 py-1 rounded">Spanish</button>
+                        <button class="bg-bam-green-dark text-white font-bold px-4 py-1 rounded">English</button>
+                    </div>
+                </div>
+                <div class="bg-bam-green rounded-full p-2 w-10 h-10 flex items-center justify-center">
+                    <span class="text-white font-bold text-2xl">?</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <main class="container mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Columna Izquierda: Monitoring Center -->
+        <aside class="lg:col-span-1 space-y-6">
+             <div class="bg-bam-grey-light border border-bam-grey rounded-lg p-6">
+                <h2 class="text-2xl font-bold mb-4">Monitoring Center:</h2>
+                <p class="text-sm text-gray-500 mb-6">See the progress of your study session.</p>
+                
+                <div class="bg-cyan-500 text-white rounded-lg p-4 mb-4">
+                    <p class="font-bold">Progress Percentage</p>
+                    <div class="flex items-center gap-4">
+                        <svg class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.293a1 1 0 00-1.414-1.414L9 9.586 7.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                        <p class="text-5xl font-bold">0%</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-lg font-semibold mb-6">
+                    <div class="flex justify-between"><span>❌ Wrong:</span> <span>1</span></div>
+                    <div class="flex justify-between"><span>&#x1F50D; Seen:</span> <span>1</span></div>
+                    <div class="flex justify-between"><span>✔ Correct:</span> <span>1</span></div>
+                </div>
+
+                <h3 class="font-bold mb-2">How to study:</h3>
+                <p class="text-sm text-gray-500 mb-6">Read the statement and make your answer, then check if it's correct after pressing the magnifying glass.</p>
+                
+                <div class="grid grid-cols-1 gap-3">
+                    <button class="bg-bam-red text-white w-full py-3 rounded-lg font-bold text-lg hover:bg-opacity-90 transition">Restart</button>
+                    <button class="bg-bam-purple text-white w-full py-3 rounded-lg font-bold text-lg hover:bg-opacity-90 transition">Back</button>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Columna Derecha: Tarjetas de Estudio -->
+        <div class="lg:col-span-2">
+            <div class="flex justify-between items-start mb-4 flex-wrap gap-y-2">
+                 <div class="flex items-center gap-2">
+                    <h2 class="text-2xl font-bold">What you will see in this game:</h2>
+                     <div class="bg-bam-green rounded-full p-1 w-6 h-6 flex items-center justify-center">
+                        <span class="text-white font-bold text-md">?</span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 -mt-2 mb-4">These are the cards that will be in the game, here you can familiarize with them. Each one of them has a score (by default it's 15).</p>
+            
+            <div id="study-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Tarjetas de ejemplo -->
+                <div class="study-card bg-white border-2 border-bam-grey rounded-lg p-6">
+                    <p class="text-lg mb-4">I didn't even bother ______ (ask).</p>
+                    <div class="flex justify-between items-center">
+                        <p class="font-bold text-bam-grey-dark">v 15</p>
+                        <button class="bg-bam-purple p-2 rounded-lg text-white hover:bg-opacity-90"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></button>
+                    </div>
+                </div>
+                 <div class="study-card bg-white border-2 border-bam-grey rounded-lg p-6">
+                    <p class="text-lg mb-4">I hate ______ (do) the dishes!</p>
+                    <div class="flex justify-between items-center">
+                        <p class="font-bold text-bam-grey-dark">v 15</p>
+                        <button class="bg-bam-purple p-2 rounded-lg text-white hover:bg-opacity-90"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></button>
+                    </div>
+                </div>
+                 <div class="study-card bg-white border-2 border-bam-grey rounded-lg p-6">
+                    <p class="text-lg mb-4">I prefer ______ (work) in teams.</p>
+                    <div class="flex justify-between items-center">
+                        <p class="font-bold text-bam-grey-dark">v 15</p>
+                        <button class="bg-bam-purple p-2 rounded-lg text-white hover:bg-opacity-90"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></button>
+                    </div>
+                </div>
+                 <div class="study-card bg-white border-2 border-bam-grey rounded-lg p-6">
+                    <p class="text-lg mb-4">We can't continue ______ (ignore) the Earth's issues.</p>
+                    <div class="flex justify-between items-center">
+                        <p class="font-bold text-bam-grey-dark">v 15</p>
+                        <button class="bg-bam-purple p-2 rounded-lg text-white hover:bg-opacity-90"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 
+      --- INICIO DEL JAVASCRIPT (Correspondería a script.js) --- 
+    -->
+    <script>
+        // Por ahora, esta página no requiere JavaScript complejo.
+        // La interactividad de los botones de la lupa se añadiría aquí,
+        // probablemente abriendo un modal o revelando la respuesta.
+    </script>
+</body>
+</html>
