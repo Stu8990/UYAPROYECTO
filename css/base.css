@@ -1,0 +1,173 @@
+/* variables css, fuentes y paleta de color  
+author: Stuart Paalma*/
+
+/* Fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+/* Variables CSS - Paleta de Colores */
+:root {
+  /* Colores principales */
+  --bam-yellow: #FAC663;
+  --bam-yellow-darker: #F8BE4B;
+  --bam-purple: #8453DB;
+  --bam-purple-dark: #7148c2;
+  --bam-pink: #F0386B;
+  --bam-red: #FB4D3D;
+  --bam-green: #95DB53;
+  --bam-green-dark: #82C344;
+  --bam-blue: #0A91AB;
+  --bam-blue-dark: #1C77C3;
+  --bam-blue-light: #49C8F0;
+  --bam-cyan: #0A91AB;
+  
+  /* Colores de interfaz */
+  --bam-join-blue: #0D3659;
+  --bam-join-blue-dark: #082138;
+  --bam-header-dark: #333333;
+  --bam-grey-light: #F8F8F8;
+  --bam-grey-border: #E0E0E0;
+  --bam-grey-dark: #8D98A2;
+  --bam-background: #ECECEC;
+  
+  /* Colores de texto */
+  --bam-text-dark: #333333;
+  --bam-text-light: #FFFFFF;
+  --bam-text-error: #FB4D3D;
+  
+  /* Espaciado */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  
+  /* Bordes */
+  --border-radius-sm: 0.5rem;
+  --border-radius-md: 0.75rem;
+  --border-radius-lg: 1rem;
+  --border-radius-xl: 1.5rem;
+  --border-radius-full: 9999px;
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Transiciones */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
+}
+
+/* Reset y estilos base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Fredoka', sans-serif;
+  background-color: var(--bam-background);
+  color: var(--bam-text-dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Clase especial para páginas de landing */
+.landing-page {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bam-yellow);
+}
+
+/* Utilidades de color de fondo */
+.bg-bam-yellow { background-color: var(--bam-yellow); }
+.bg-bam-yellow-darker { background-color: var(--bam-yellow-darker); }
+.bg-bam-purple { background-color: var(--bam-purple); }
+.bg-bam-purple-dark { background-color: var(--bam-purple-dark); }
+.bg-bam-pink { background-color: var(--bam-pink); }
+.bg-bam-red { background-color: var(--bam-red); }
+.bg-bam-green { background-color: var(--bam-green); }
+.bg-bam-green-dark { background-color: var(--bam-green-dark); }
+.bg-bam-blue { background-color: var(--bam-blue); }
+.bg-bam-blue-dark { background-color: var(--bam-blue-dark); }
+.bg-bam-cyan { background-color: var(--bam-cyan); }
+.bg-bam-join-blue { background-color: var(--bam-join-blue); }
+.bg-bam-header-dark { background-color: var(--bam-header-dark); }
+.bg-bam-grey-light { background-color: var(--bam-grey-light); }
+.bg-bam-grey-dark { background-color: var(--bam-grey-dark); }
+
+/* Utilidades de color de texto */
+.text-bam-dark { color: var(--bam-text-dark); }
+.text-bam-light { color: var(--bam-text-light); }
+.text-bam-purple { color: var(--bam-purple); }
+.text-bam-blue { color: var(--bam-blue); }
+.text-bam-grey-dark { color: var(--bam-grey-dark); }
+.text-bam-error { color: var(--bam-text-error); }
+
+/* Utilidades de borde */
+.border-bam-grey { border-color: var(--bam-grey-border); }
+.border-bam-purple { border-color: var(--bam-purple); }
+.border-bam-blue { border-color: var(--bam-blue); }
+.border-bam-error { border-color: var(--bam-text-error); }
+
+/* Estados de hover */
+.hover\:bg-bam-purple-dark:hover { background-color: var(--bam-purple-dark); }
+.hover\:bg-bam-join-blue-dark:hover { background-color: var(--bam-join-blue-dark); }
+
+/* Estados de focus para formularios */
+.focus\:border-bam-purple:focus { 
+  border-color: var(--bam-purple); 
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(132, 83, 219, 0.1);
+}
+.focus\:border-bam-blue:focus { 
+  border-color: var(--bam-blue); 
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(10, 145, 171, 0.1);
+}
+
+/* Checkbox personalizado */
+.form-checkbox:checked { 
+  background-color: var(--bam-purple); 
+  border-color: var(--bam-purple);
+}
+
+/* Utilidades de texto */
+.text-shadow {
+  text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Contenedores y layout */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.main-container {
+  overflow-x: hidden;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+/* Utilidades de display */
+.hidden { display: none !important; }
+.block { display: block !important; }
+.flex { display: flex !important; }
+.grid { display: grid !important; }
+
+/* Transiciones */
+.transition-all { transition: all var(--transition-normal); }
+.transition-colors { transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast); }
+.transition-transform { transition: transform var(--transition-normal); }

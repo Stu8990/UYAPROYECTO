@@ -4,169 +4,218 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Game - Bammoozle</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/components.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- 
-      --- INICIO DEL CSS (Correspondería a style.css) --- 
-    -->
-    <style>
-        body {
-            font-family: 'Fredoka', sans-serif;
-            background-color: #ECECEC;
-            color: #333333;
-        }
-        /* Paleta de colores principal */
-        :root {
-            --bam-yellow: #FAC663;
-            --bam-purple: #8453DB;
-            --bam-pink: #F0386B; /* Color para Image Library */
-            --bam-red-delete: #FB4D3D;
-            --bam-green: #95DB53;
-            --bam-green-dark: #82C344;
-            --bam-blue: #0A91AB; /* Color para Save */
-            --bam-grey-light: #F8F8F8;
-            --bam-grey-border: #E0E0E0;
-            --bam-grey-dark: #8D98A2; /* Color para Close y botones de toolbar */
-            --bam-text-dark: #333333;
-        }
-
-        .bg-bam-yellow { background-color: var(--bam-yellow); }
-        .bg-bam-blue-save { background-color: var(--bam-blue); }
-        .bg-bam-pink-library { background-color: var(--bam-pink); }
-        .bg-bam-red-delete { background-color: var(--bam-red-delete); }
-        .bg-bam-grey-dark { background-color: var(--bam-grey-dark); }
-        .border-bam-grey { border-color: var(--bam-grey-border); }
-        .text-bam-blue { color: var(--bam-blue); }
-
-    </style>
-    <!-- --- FIN DEL CSS --- -->
-
 </head>
 <body class="min-h-screen">
 
-    <!-- Cabecera -->
-    <header class="bg-white shadow-sm p-4">
-         <div class="container mx-auto flex justify-between items-center text-bam-dark">
+    <!-- Navegación -->
+    <header class="header-light">
+        <nav class="nav">
             <div class="flex items-center space-x-8">
-                <a href="#" class="hover:opacity-70">
-                    <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.125 17.875H5.5V27.5C5.5 29.0125 6.7375 30.25 8.25 30.25H24.75C26.2625 30.25 27.5 29.0125 27.5 27.5V17.875H28.875C29.425 17.875 29.9338 17.545 30.14 17.0225C30.3463 16.5138 30.2362 15.9225 29.8375 15.5238L17.4762 3.14875C17.349 3.02128 17.1979 2.92015 17.0316 2.85115C16.8653 2.78216 16.687 2.74664 16.5069 2.74664C16.3268 2.74664 16.1485 2.78216 15.9821 2.85115C15.8158 2.92015 15.6647 3.02128 15.5375 3.14875L3.14875 15.5238C2.75 15.9225 2.64 16.5138 2.84625 17.0225C3.0525 17.5312 3.56125 17.875 4.11125 17.875H4.125ZM16.5 6.06375L24.75 14.3138V27.5H8.25V14.3138L16.5 6.06375Z" fill="#333333"/>
-</svg>
-
+                <a href="../index.html" class="nav-brand hover:opacity-70">
+                    <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.125 17.875H5.5V27.5C5.5 29.0125 6.7375 30.25 8.25 30.25H24.75C26.2625 30.25 27.5 29.0125 27.5 27.5V17.875H28.875C29.425 17.875 29.9338 17.545 30.14 17.0225C30.3463 16.5138 30.2362 15.9225 29.8375 15.5238L17.4762 3.14875C17.349 3.02128 17.1979 2.92015 17.0316 2.85115C16.8653 2.78216 16.687 2.74664 16.5069 2.74664C16.3268 2.74664 16.1485 2.78216 15.9821 2.85115C15.8158 2.92015 15.6647 3.02128 15.5375 3.14875L3.14875 15.5238C2.75 15.9225 2.64 16.5138 2.84625 17.0225C3.0525 17.5312 3.56125 17.875 4.11125 17.875H4.125ZM16.5 6.06375L24.75 14.3138V27.5H8.25V14.3138L16.5 6.06375Z" fill="#333333"/>
+                    </svg>
                 </a>
-                <nav class="hidden md:flex items-center space-x-6 font-semibold">
-                    <a href="#" class="hover:text-bam-purple">Games</a>
-                    <a href="#" class="hover:text-bam-purple">Blog</a>
-                    <a href="#" class="hover:text-bam-purple">Class PIN</a>
-                </nav>
+                
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Games</a>
+                    <a href="#" class="nav-link">Blog</a>
+                    <a href="#" class="nav-link">Class PIN</a>
+                </div>
             </div>
-            <div class="hidden md:flex items-center space-x-4 font-semibold">
-                <a href="#" class="hover:text-bam-purple">Sign in</a>
-                <a href="#" class="bg-bam-blue text-white rounded-full px-6 py-2 text-sm font-bold hover:bg-opacity-80 transition-colors">Join for Free</a>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link">Sign in</a>
+                <a href="#" class="btn btn-info btn-sm btn-rounded">Join for Free</a>
             </div>
-            <button class="md:hidden text-3xl">☰</button>
-        </div>
+            
+            <button id="hamburger-btn" class="hamburger">☰</button>
+        </nav>
     </header>
 
     <!-- Título de la página -->
     <div class="bg-bam-yellow text-bam-dark p-6">
-        <div class="container mx-auto flex justify-between items-center flex-wrap gap-4">
+        <div class="container flex justify-between items-center flex-wrap gap-4">
             <div>
                 <h1 class="text-4xl font-bold">Edit Game</h1>
                 <p class="font-semibold">Verbs followed by gerunds or infinitive (no diff...)</p>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button class="btn btn-primary" onclick="window.location.href='game-main.html'">
+                    Back to Game
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Contenido Principal -->
-    <main class="container mx-auto p-4 md:p-8">
+    <main class="container p-4 md:p-8">
         
         <!-- Barra de herramientas superior -->
         <div class="flex justify-end items-center space-x-2 mb-6">
-            <button class="bg-bam-grey-dark text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90">Import</button>
-            <button class="bg-bam-grey-dark text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90">Multiple Choice</button>
-            <button class="bg-bam-grey-dark text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90">Settings</button>
-            <button class="bg-bam-red-delete text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90">Delete</button>
+            <button class="btn btn-secondary">Import</button>
+            <button class="btn btn-secondary">Multiple Choice</button>
+            <button class="btn btn-secondary">Settings</button>
+            <button class="btn btn-danger">Delete</button>
         </div>
 
         <!-- Formulario de Edición -->
-        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-            <form id="edit-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                <div>
-                    <label for="question" class="block font-bold mb-1">Question</label>
-                    <input type="text" id="question" name="question" class="w-full border-2 border-bam-grey rounded-lg p-2 focus:border-bam-blue outline-none">
-                </div>
-                <div>
-                    <label for="answer" class="block font-bold mb-1">Answer</label>
-                    <input type="text" id="answer" name="answer" class="w-full border-2 border-bam-grey rounded-lg p-2 focus:border-bam-blue outline-none">
-                </div>
-                <div>
-                    <label for="points" class="block font-bold mb-1">Points</label>
-                    <input type="number" id="points" name="points" class="w-full md:w-1/2 border-2 border-bam-grey rounded-lg p-2 focus:border-bam-blue outline-none">
-                </div>
-                 <div>
-                    <label for="image-options" class="block font-bold mb-1">Image options</label>
-                    <input type="text" id="image-options" name="image-options" class="w-full border-2 border-bam-grey rounded-lg p-2 focus:border-bam-blue outline-none">
-                     <div class="mt-2">
-                        <label class="block text-sm text-gray-600 mb-1">Browse gifs, upload image or paste URL</label>
-                        <button type="button" class="bg-bam-pink-library text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90">Image Library</button>
+        <div class="card mb-8">
+            <div class="card-header">
+                <h2 class="card-title">Add/Edit Question</h2>
+            </div>
+            
+            <div class="card-body">
+                <form id="edit-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                    <div class="form-group">
+                        <label for="question" class="form-label">Question</label>
+                        <input type="text" id="question" name="question" class="form-input" placeholder="Enter your question here...">
+                        <div id="question-error" class="form-error"></div>
                     </div>
-                </div>
-                <div class="md:col-span-2 flex items-center space-x-4 mt-4">
-                    <button type="submit" class="bg-bam-blue-save text-white font-bold py-2 px-8 rounded-lg hover:opacity-90">Save</button>
-                    <button type="button" class="bg-bam-grey-dark text-white font-bold py-2 px-8 rounded-lg hover:opacity-90">Close</button>
-                </div>
-            </form>
+                    
+                    <div class="form-group">
+                        <label for="answer" class="form-label">Answer</label>
+                        <input type="text" id="answer" name="answer" class="form-input" placeholder="Enter the correct answer...">
+                        <div id="answer-error" class="form-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="points" class="form-label">Points</label>
+                        <input type="number" id="points" name="points" value="15" class="form-input w-full md:w-1/2" min="1" max="100">
+                        <div id="points-error" class="form-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="image-options" class="form-label">Image options</label>
+                        <input type="text" id="image-options" name="image-options" class="form-input" placeholder="Image URL or search term">
+                        <div class="mt-2">
+                            <label class="block text-sm text-gray-600 mb-1">Browse gifs, upload image or paste URL</label>
+                            <button type="button" class="btn btn-sm" style="background-color: var(--bam-pink); color: white;">
+                                Image Library
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="md:col-span-2 flex items-center space-x-4 mt-4">
+                        <button type="submit" class="btn btn-info btn-lg">Save</button>
+                        <button type="button" class="btn btn-secondary btn-lg" onclick="document.getElementById('edit-form').reset();">Clear</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- Lista de preguntas existentes -->
-        <div id="questions-list" class="space-y-4">
-            <!-- Ejemplo de una pregunta -->
-            <div class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
-                <div class="flex-grow">
-                    <p class="text-gray-500">I can't bear ______ (see) homeless people or animals.</p>
-                    <p class="font-bold text-bam-blue">I can't bear TO SEE / SEEING homeless people or animals.</p>
-                </div>
-                <div class="flex items-center space-x-2 text-gray-600">
-                    <span class="font-bold mr-4">v 15</span>
-                    <button class="hover:text-bam-blue"><svg class="h-5 w-5" viewBox="150 0 60 60" fill="currentColor"><path d="M201.333 10.6667H178.427L174.667 6.90671C173.653 5.89337 172.32 5.33337 170.907 5.33337H158.667C155.733 5.33337 153.333 7.73337 153.333 10.6667V48C153.333 50.9334 155.733 53.3334 158.667 53.3334H201.333C204.267 53.3334 206.667 50.9334 206.667 48V16C206.667 13.0667 204.267 10.6667 201.333 10.6667ZM201.333 48H158.667V16H201.333V48Z"/></svg></button>
-                    <button class="hover:text-bam-blue"><svg class="h-5 w-5" viewBox="0 0 60 60" fill="currentColor"><path d="M36.24 16L11.44 40.7733C11.0933 41.12 10.8533 41.5467 10.7467 42L8.08 52.6667C7.84 53.5733 8.10667 54.5333 8.77333 55.2C9.28 55.7067 9.97333 55.9733 10.6667 55.9733C10.88 55.9733 11.0933 55.9733 11.3067 55.8933L21.9733 53.2267C22.4533 53.12 22.88 52.88 23.2 52.5333L47.9733 27.76L36.2133 16H36.24Z"/><path d="M56 12.2399L51.76 7.99994C49.68 5.91994 46.2933 5.91994 44.2133 7.99994L39.9733 12.2399L51.7333 23.9999L55.9733 19.7599C58.0533 17.6799 58.0533 14.2933 55.9733 12.2133L56 12.2399Z"/></svg></button>
-                    <button class="hover:text-bam-red-delete"><svg class="h-5 w-5" viewBox="1118 0 60 60" fill="currentColor"><path d="M1155.33 16V10.6667C1155.33 7.73337 1152.93 5.33337 1150 5.33337H1134C1131.07 5.33337 1128.67 7.73337 1128.67 10.6667V16H1115.33V21.3334H1120.67V53.3334C1120.67 56.2667 1123.07 58.6667 1126 58.6667H1158C1160.93 58.6667 1163.33 56.2667 1163.33 53.3334V21.3334H1168.67V16H1155.33ZM1134 10.6667H1150V16H1134V10.6667ZM1136.67 48H1131.33V26.6667H1136.67V48ZM1152.67 48H1147.33V26.6667H1152.67V48Z"/></svg></button>
-                </div>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Current Questions</h2>
+                <p class="card-subtitle">Click on any question to edit it</p>
             </div>
-            <!-- Ejemplo de una segunda pregunta -->
-             <div class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
-                <div class="flex-grow">
-                    <p class="text-gray-500">Chis likes ______ (go out).</p>
-                    <p class="font-bold text-bam-blue">Chis likes TO GO OUT / GOING OUT.</p>
-                </div>
-                <div class="flex items-center space-x-2 text-gray-600">
-                    <span class="font-bold mr-4">v 15</span>
-                    <button class="hover:text-bam-blue"><svg class="h-5 w-5" viewBox="150 0 60 60" fill="currentColor"><path d="M201.333 10.6667H178.427L174.667 6.90671C173.653 5.89337 172.32 5.33337 170.907 5.33337H158.667C155.733 5.33337 153.333 7.73337 153.333 10.6667V48C153.333 50.9334 155.733 53.3334 158.667 53.3334H201.333C204.267 53.3334 206.667 50.9334 206.667 48V16C206.667 13.0667 204.267 10.6667 201.333 10.6667ZM201.333 48H158.667V16H201.333V48Z"/></svg></button>
-                    <button class="hover:text-bam-blue"><svg class="h-5 w-5" viewBox="0 0 60 60" fill="currentColor"><path d="M36.24 16L11.44 40.7733C11.0933 41.12 10.8533 41.5467 10.7467 42L8.08 52.6667C7.84 53.5733 8.10667 54.5333 8.77333 55.2C9.28 55.7067 9.97333 55.9733 10.6667 55.9733C10.88 55.9733 11.0933 55.9733 11.3067 55.8933L21.9733 53.2267C22.4533 53.12 22.88 52.88 23.2 52.5333L47.9733 27.76L36.2133 16H36.24Z"/><path d="M56 12.2399L51.76 7.99994C49.68 5.91994 46.2933 5.91994 44.2133 7.99994L39.9733 12.2399L51.7333 23.9999L55.9733 19.7599C58.0533 17.6799 58.0533 14.2933 55.9733 12.2133L56 12.2399Z"/></svg></button>
-                    <button class="hover:text-bam-red-delete"><svg class="h-5 w-5" viewBox="1118 0 60 60" fill="currentColor"><path d="M1155.33 16V10.6667C1155.33 7.73337 1152.93 5.33337 1150 5.33337H1134C1131.07 5.33337 1128.67 7.73337 1128.67 10.6667V16H1115.33V21.3334H1120.67V53.3334C1120.67 56.2667 1123.07 58.6667 1126 58.6667H1158C1160.93 58.6667 1163.33 56.2667 1163.33 53.3334V21.3334H1168.67V16H1155.33ZM1134 10.6667H1150V16H1134V10.6667ZM1136.67 48H1131.33V26.6667H1136.67V48ZM1152.67 48H1147.33V26.6667H1152.67V48Z"/></svg></button>
+            
+            <div class="card-body">
+                <div id="questions-list" class="space-y-4">
+                    <!-- Las preguntas se generan con JavaScript -->
                 </div>
             </div>
         </div>
     </main>
-    
-    <!-- 
-      --- INICIO DEL JAVASCRIPT (Correspondería a script.js) --- 
-    -->
+
+    <!-- Menú móvil -->
+    <div id="mobile-menu" class="mobile-menu">
+        <button id="close-menu-btn" class="mobile-menu-close">&times;</button>
+        <nav class="mobile-menu-links">
+            <a href="#" class="mobile-menu-link">Games</a>
+            <a href="#" class="mobile-menu-link">Blog</a>
+            <a href="#" class="mobile-menu-link">Class PIN</a>
+            <hr class="border-gray-600 my-4"/>
+            <a href="#" class="mobile-menu-link">Sign in</a>
+            <a href="#" class="btn btn-primary btn-rounded text-center">Join for Free</a>
+        </nav>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/game.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // Lógica específica para la página de edición
+        document.addEventListener('DOMContentLoaded', function() {
+            const { EditorController } = window.BammoozleGame;
+            
+            // Inicializar el controlador de editor
+            EditorController.init();
+            
+            // Funcionalidad adicional para la página de edición
+            const imageLibraryBtn = document.querySelector('button[style*="--bam-pink"]');
+            if (imageLibraryBtn) {
+                imageLibraryBtn.addEventListener('click', () => {
+                    const { NotificationSystem } = window.BammoozleUtils;
+                    NotificationSystem.info('Image Library feature coming soon!');
+                });
+            }
+            
+            // Validación adicional para el formulario
             const form = document.getElementById('edit-form');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                // Aquí iría la lógica para guardar la pregunta
-                console.log('Guardando pregunta...');
-                const question = document.getElementById('question').value;
-                const answer = document.getElementById('answer').value;
-                console.log({ question, answer });
-                alert('¡Pregunta guardada! (Revisa la consola)');
+            const questionInput = document.getElementById('question');
+            const answerInput = document.getElementById('answer');
+            const pointsInput = document.getElementById('points');
+            
+            // Validación en tiempo real
+            questionInput.addEventListener('blur', () => {
+                const { ValidationUtils } = window.BammoozleUtils;
+                const result = ValidationUtils.validateRequired(questionInput.value, 'Question');
+                if (!result.isValid) {
+                    ValidationUtils.showFieldError('question', result.message);
+                } else {
+                    ValidationUtils.showFieldError('question', '');
+                }
             });
+            
+            answerInput.addEventListener('blur', () => {
+                const { ValidationUtils } = window.BammoozleUtils;
+                const result = ValidationUtils.validateRequired(answerInput.value, 'Answer');
+                if (!result.isValid) {
+                    ValidationUtils.showFieldError('answer', result.message);
+                } else {
+                    ValidationUtils.showFieldError('answer', '');
+                }
+            });
+            
+            pointsInput.addEventListener('blur', () => {
+                const { ValidationUtils } = window.BammoozleUtils;
+                const value = parseInt(pointsInput.value);
+                if (!value || value < 1 || value > 100) {
+                    ValidationUtils.showFieldError('points', 'Points must be between 1 and 100');
+                } else {
+                    ValidationUtils.showFieldError('points', '');
+                }
+            });
+            
+            // Atajos de teclado
+            document.addEventListener('keydown', (e) => {
+                // Ctrl + S para guardar
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    form.dispatchEvent(new Event('submit'));
+                }
+                
+                // Ctrl + N para nueva pregunta
+                if (e.ctrlKey && e.key === 'n') {
+                    e.preventDefault();
+                    form.reset();
+                    questionInput.focus();
+                }
+            });
+            
+            // Mostrar información de atajos
+            const { NotificationSystem } = window.BammoozleUtils;
+            setTimeout(() => {
+                NotificationSystem.info('Tip: Use Ctrl+S to save, Ctrl+N for new question');
+            }, 2000);
         });
     </script>
 </body>

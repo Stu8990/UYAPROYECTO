@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Board - Bammoozle</title>
+    
+    <!-- CSS -->
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/components.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navegación -->
+    <header class="header">
+        <nav class="nav">
+            <div class="flex items-center space-x-8">
+                <a href="../index.html" class="nav-brand hover:opacity-70">
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.12499 15.8749H3.49999V25.4999C3.49999 27.0124 4.73749 28.2499 6.24999 28.2499H22.75C24.2625 28.2499 25.5 27.0124 25.5 25.4999V15.8749H26.875C27.425 15.8749 27.9337 15.5449 28.14 15.0224C28.3462 14.5137 28.2362 13.9224 27.8375 13.5237L15.4762 1.14869C15.349 1.02123 15.1979 0.920097 15.0316 0.851098C14.8653 0.782098 14.6869 0.746582 14.5069 0.746582C14.3268 0.746582 14.1485 0.782098 13.9821 0.851098C13.8158 0.920097 13.6647 1.02123 13.5375 1.14869L1.14874 13.5237C0.749992 13.9224 0.639992 14.5137 0.846242 15.0224C1.05249 15.5312 1.56124 15.8749 2.11124 15.8749H2.12499ZM14.5 4.06369L22.75 12.3137V25.4999H6.24999V12.3137L14.5 4.06369Z" fill="#ECECEC"/>
+                    </svg>
+                </a>
+                
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Games</a>
+                    <a href="#" class="nav-link">Blog</a>
+                    <a href="#" class="nav-link">Class PIN</a>
+                </div>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link">Sign in</a>
+                <a href="#" class="btn btn-info btn-sm btn-rounded">Join for Free</a>
+            </div>
+            
+            <button id="hamburger-btn" class="hamburger">☰</button>
+        </nav>
+    </header>
+
+    <!-- Bloque de Controles Superior -->
+    <div class="bg-bam-yellow-darker text-bam-dark py-4 px-6">
+        <div class="container grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+            <!-- Controles -->
+            <div class="flex items-center space-x-2 justify-center md:justify-start">
+                <span class="font-bold">Controls:</span>
+                <button class="btn btn-icon btn-sm bg-white/50 hover:bg-white/70" onclick="window.location.href='game-main.html'">
+                    &times;
+                </button>
+                <button class="btn btn-icon btn-sm bg-white/50 hover:bg-white/70" id="sound-toggle">
+                    🔊
+                </button>
+            </div>
+            
+            <!-- Título del Juego -->
+            <div class="text-center">
+                <h1 class="text-4xl font-bold">Game</h1>
+                <p id="game-title" class="font-semibold">Verbs followed by gerunds or infinitive (no diff...)</p>
+            </div>
+            
+            <!-- Placeholder para alinear -->
+            <div class="hidden md:block"></div>
+        </div>
+    </div>
+    
+    <!-- Bloque de Puntuaciones -->
+    <div class="bg-bam-yellow text-bam-dark py-4 px-6">
+        <div class="container grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+            <!-- Editar Equipos -->
+            <div class="flex items-center justify-center md:justify-start space-x-2">
+                <span class="font-bold">Edit teams:</span>
+                <button class="btn btn-icon btn-sm hover:text-purple-600" aria-label="edit teams">
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Puntuaciones de Equipos -->
+            <div class="flex justify-center items-end space-x-8 col-span-1">
+                <div id="team1-container" class="text-center">
+                    <div class="bg-bam-pink text-white px-4 py-1 rounded-t-lg font-bold">
+                        <span id="team1-name">Team 1</span>
+                    </div>
+                    <div class="font-bold text-3xl">
+                        <span id="team1-score">0 points</span>
+                    </div>
+                </div>
+                
+                <div id="team2-container" class="text-center">
+                    <div class="font-bold">
+                        <span id="team2-name">Team 2</span>
+                    </div>
+                    <div class="font-bold text-3xl">
+                        <span id="team2-score">0 points</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hidden md:block"></div>
+        </div>
+    </div>
+
+    <!-- Tablero de Juego -->
+    <main class="bg-white p-4 md:p-8">
+        <div class="container">
+            <div class="text-center mb-6">
+                <p class="text-gray-600 mb-2">Turno actual: <span id="current-team" class="font-bold">Team 1</span></p>
+                <div class="flex justify-center space-x-4">
+                    <button id="restart-button" class="btn btn-danger">Restart Game</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='game-main.html'">Back to Setup</button>
+                </div>
+            </div>
+            
+            <div id="game-board" class="grid-responsive cols-5">
+                <!-- Las tarjetas se generan con JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Menú móvil -->
+    <div id="mobile-menu" class="mobile-menu">
+        <button id="close-menu-btn" class="mobile-menu-close">&times;</button>
+        <nav class="mobile-menu-links">
+            <a href="#" class="mobile-menu-link">Games</a>
+            <a href="#" class="mobile-menu-link">Blog</a>
+            <a href="#" class="mobile-menu-link">Class PIN</a>
+            <hr class="border-gray-600 my-4"/>
+            <a href="#" class="mobile-menu-link">Sign in</a>
+            <a href="#" class="btn btn-primary btn-rounded text-center">Join for Free</a>
+        </nav>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/game.js"></script>
+    <script>
+        // Lógica específica para el tablero de juego
+        document.addEventListener('DOMContentLoaded', function() {
+            const { GameController } = window.BammoozleGame;
+            
+            // Generar tablero de juego
+            const gameBoard = document.getElementById('game-board');
+            const numberOfTiles = 10;
+            
+            if (gameBoard) {
+                for (let i = 1; i <= numberOfTiles; i++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'game-tile';
+                    tile.textContent = i;
+                    tile.setAttribute('data-tile', i);
+                    
+                    // Evento de clic para seleccionar pregunta
+                    tile.addEventListener('click', () => {
+                        GameController.selectQuestion(i);
+                    }, { once: true });
+                    
+                    gameBoard.appendChild(tile);
+                }
+            }
+            
+            // Inicializar el juego automáticamente
+            GameController.startGame();
+            
+            // Actualizar equipo actual en la UI
+            function updateCurrentTeamDisplay() {
+                const currentTeamSpan = document.getElementById('current-team');
+                const { GameData } = window.BammoozleGame;
+                
+                if (currentTeamSpan && GameData) {
+                    currentTeamSpan.textContent = GameData.teams[GameData.currentTeam - 1].name;
+                    currentTeamSpan.className = `font-bold ${GameData.currentTeam === 1 ? 'text-pink-600' : 'text-blue-600'}`;
+                }
+            }
+            
+            // Actualizar display inicial
+            updateCurrentTeamDisplay();
+            
+            // Actualizar cuando cambie el turno
+            const originalAnswerQuestion = GameController.answerQuestion;
+            GameController.answerQuestion = function(isCorrect) {
+                originalAnswerQuestion.call(this, isCorrect);
+                updateCurrentTeamDisplay();
+            };
+            
+            // Control de sonido
+            const soundToggle = document.getElementById('sound-toggle');
+            let soundEnabled = true;
+            
+            if (soundToggle) {
+                soundToggle.addEventListener('click', () => {
+                    soundEnabled = !soundEnabled;
+                    soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+                    
+                    const { NotificationSystem } = window.BammoozleUtils;
+                    NotificationSystem.info(soundEnabled ? 'Sonido activado' : 'Sonido desactivado');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

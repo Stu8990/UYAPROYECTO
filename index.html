@@ -3,235 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bammoozle - Join for Free</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Bammoozle - Make Learning Fun</title>
     
-    <!-- 
-      --- INICIO DEL CSS (Correspondería a style.css) --- 
-    -->
-    <style>
-        body { font-family: 'Fredoka', sans-serif; }
-        :root {
-            --bam-yellow: #FAC663;
-            --bam-purple: #8453DB;
-            --bam-purple-dark: #7148c2;
-            --bam-pink: #F0386B;
-            --bam-blue: #0A91AB;
-            --bam-red-error: #FB4D3D;
-            --bam-text-dark: #333333;
-        }
-        .bg-bam-yellow { background-color: var(--bam-yellow); }
-        .bg-bam-purple { background-color: var(--bam-purple); }
-        .hover\:bg-bam-purple-dark:hover { background-color: var(--bam-purple-dark); }
-        .text-bam-purple { color: var(--bam-purple); }
-        .focus\:ring-bam-purple:focus { --tw-ring-color: var(--bam-purple); }
-        .focus\:border-bam-purple:focus { border-color: var(--bam-purple); }
-        .form-checkbox:checked { background-color: var(--bam-purple); }
-        .text-bam-dark { color: var(--bam-text-dark); }
-        .border-error { border-color: var(--bam-red-error); }
-        .text-error { color: var(--bam-red-error); }
-
-        .shape { position: absolute; z-index: 0; animation: float 8s ease-in-out infinite; }
-        .shape-planet-1 { width: 130px; top: 15%; left: 10%; }
-        .shape-cloud-1 { width: 110px; top: 25%; right: 12%; animation-delay: -2s;}
-        .shape-cloud-2 { width: 110px; bottom: 20%; left: 20%; animation-delay: -4s;}
-        .shape-planet-2 { width: 130px; top: 75%; left: 80%; animation-delay: -3s;}
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        #notification { transition: opacity 0.5s, transform 0.5s; z-index: 100; }
-        #mobile-menu { transition: transform 0.3s ease-in-out; }
-    </style>
-    <!-- --- FIN DEL CSS --- -->
-
+    <!-- CSS -->
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/components.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-bam-yellow text-bam-dark overflow-x-hidden relative min-h-screen flex flex-col">
+<body class="landing-page relative min-h-screen flex flex-col">
 
-    <!-- Elementos decorativos -->
+    <!-- Elementos decorativos de fondo -->
     <div class="absolute inset-0 w-full h-full overflow-hidden">
         <div class="shape shape-planet-1">
-            <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100.967 15.6542C96.6336 16.1417 92.1377 18.2542 87.5877 21.775C80.871 18.2542 73.396 16.3583 65.596 16.25C52.4877 16.25 40.1919 21.0167 30.9294 30.0625C26.3335 34.5318 22.6697 39.8683 20.1501 45.763C17.6304 51.6578 16.3049 57.9937 16.2502 64.4042C16.1625 70.5248 17.2283 76.6072 19.3919 82.3333C13.596 88.8333 8.17938 102.267 14.896 109.85C17.7127 112.992 21.721 114.4 26.5419 114.4C41.2211 114.4 63.4294 101.4 82.1169 84.825C106.979 62.7792 126.209 33.8 114.942 21.0708C113.233 19.1143 111.07 17.6072 108.643 16.6817C106.216 15.7561 103.599 15.4405 101.021 15.7625L100.967 15.6542Z" fill="#0A91AB"/></svg>
-        </div>
-        <div class="shape shape-cloud-1">
-             <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/></svg>
-        </div>
-        <div class="shape shape-cloud-2">
-            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/></svg>
-        </div>
-        <div class="shape shape-planet-2">
-            <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100.967 15.6542C96.6336 16.1417 92.1377 18.2542 87.5877 21.775C80.871 18.2542 73.396 16.3583 65.596 16.25C52.4877 16.25 40.1919 21.0167 30.9294 30.0625C26.3335 34.5318 22.6697 39.8683 20.1501 45.763C17.6304 51.6578 16.3049 57.9937 16.2502 64.4042C16.1625 70.5248 17.2283 76.6072 19.3919 82.3333C13.596 88.8333 8.17938 102.267 14.896 109.85C17.7127 112.992 21.721 114.4 26.5419 114.4C41.2211 114.4 63.4294 101.4 82.1169 84.825C106.979 62.7792 126.209 33.8 114.942 21.0708C113.233 19.1143 111.07 17.6072 108.643 16.6817C106.216 15.7561 103.599 15.4405 101.021 15.7625L100.967 15.6542Z" fill="#0A91AB"/></svg>
+            <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100.967 15.6542C96.6336 16.1417 92.1377 18.2542 87.5877 21.775C80.871 18.2542 73.396 16.3583 65.596 16.25C52.4877 16.25 40.1919 21.0167 30.9294 30.0625C26.3335 34.5318 22.6697 39.8683 20.1501 45.763C17.6304 51.6578 16.3049 57.9937 16.2502 64.4042C16.1625 70.5248 17.2283 76.6072 19.3919 82.3333C13.596 88.8333 8.17938 102.267 14.896 109.85C17.7127 112.992 21.721 114.4 26.5419 114.4C41.2211 114.4 63.4294 101.4 82.1169 84.825C106.979 62.7792 126.209 33.8 114.942 21.0708C113.233 19.1143 111.07 17.6072 108.643 16.6817C106.216 15.7561 103.599 15.4405 101.021 15.7625L100.967 15.6542Z" fill="#0A91AB"/>
+            </svg>
         </div>
     </div>
     
-    <div id="notification" class="fixed top-5 right-5 bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-[-20px]"><span id="notification-message"></span></div>
-    <div id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-gray-800 text-white p-6 transform -translate-x-full z-30">...</div>
-
-    <div class="relative z-10 flex-grow flex flex-col">
+    <!-- Contenedor principal -->
+    <div class="main-container relative z-10 flex-grow flex flex-col min-h-screen">
+        <!-- Navegación -->
         <header class="p-4 md:p-6">
-            <div class="container mx-auto flex justify-between items-center">
-                <div class="text-3xl font-bold text-bam-dark">Bammoozle</div>
-                <nav class="hidden md:flex items-center space-x-6 font-semibold text-bam-dark">
-                    <a href="#" class="hover:text-bam-purple">Games</a>
-                    <a href="#" class="hover:text-bam-purple">Blog</a>
-                    <a href="#" class="hover:text-bam-purple">Pricing</a>
-                    <a href="#" class="hover:text-bam-purple">Class PIN</a>
-                    <button id="header-signin-btn" class="border-2 border-gray-800 rounded-full px-6 py-2 hover:bg-gray-800 hover:text-white transition-colors">Sign in</button>
-                    <button id="header-join-btn" class="bg-bam-purple text-white rounded-full px-6 py-2.5 hover:bg-bam-purple-dark transition-colors">Join for Free</button>
-                </nav>
-                <button id="hamburger-btn" class="md:hidden text-3xl text-bam-dark">☰</button>
-            </div>
+            <nav class="nav">
+                <a href="#" class="nav-brand text-white text-shadow">Bammoozle</a>
+                
+                <div class="nav-links text-white text-shadow">
+                    <a href="#" class="nav-link">Games</a>
+                    <a href="#" class="nav-link">Blog</a>
+                    <a href="#" class="nav-link">Pricing</a>
+                    <a href="#" class="nav-link">Class PIN</a>
+                    <button id="header-signin-btn" class="btn btn-outline text-white border-white hover:bg-white hover:text-bam-purple">
+                        Sign in
+                    </button>
+                    <button id="header-join-btn" class="btn btn-primary btn-rounded">
+                        Join for Free
+                    </button>
+                </div>
+                
+                <button id="hamburger-btn" class="hamburger text-white">☰</button>
+            </nav>
         </header>
 
+        <!-- Contenido Hero -->
         <main class="flex-grow flex items-center justify-center p-4">
-            <div class="w-full max-w-md mx-auto text-center">
-                <h1 id="form-title" class="text-5xl font-bold mb-8 text-bam-dark">Join for free</h1>
+            <div class="w-full max-w-4xl mx-auto text-center">
                 
-                <form id="auth-form" novalidate>
-                    <div class="mb-4 text-left">
-                        <label for="email" class="font-semibold mb-2 block text-bam-dark">Email*</label>
-                        <input type="email" id="email" placeholder="Enter your email address" class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 focus:border-bam-purple focus:ring-bam-purple outline-none transition-colors" required>
-                        <p id="email-error" class="text-error text-sm mt-1 h-5"></p>
-                    </div>
-                    <div class="mb-4 text-left relative">
-                        <label for="password" class="font-semibold mb-2 block text-bam-dark">Password*</label>
-                        <input type="password" id="password" placeholder="Enter your password" class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 focus:border-bam-purple focus:ring-bam-purple outline-none transition-colors" required>
-                        <button type="button" id="toggle-password" class="absolute right-4 top-12 text-gray-500">...</button>
-                        <p id="password-error" class="text-error text-sm mt-1 h-5"></p>
-                    </div>
+                <!-- Modo Landing Page -->
+                <div id="landing-content" class="text-white text-shadow">
+                    <h1 class="text-5xl md:text-7xl font-black mb-4 fade-in-up">
+                        <span class="inline-block mr-4">18,859 teachers signed up last week to make learning fun</span>
+                    </h1>
                     
-                    <!-- Campo para confirmar contraseña (solo en modo registro) -->
-                    <div id="confirm-password-field" class="mb-4 text-left relative hidden">
-                        <label for="confirm-password" class="font-semibold mb-2 block text-bam-dark">Confirm Password*</label>
-                        <input type="password" id="confirm-password" placeholder="Confirm your password" class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 focus:border-bam-purple focus:ring-bam-purple outline-none transition-colors">
-                        <p id="confirm-password-error" class="text-error text-sm mt-1 h-5"></p>
+                    <p class="text-xl md:text-2xl font-semibold mb-2 fade-in-up delay-1">Save endless hours of lesson planning</p>
+                    <p class="text-lg md:text-xl mb-10 fade-in-up delay-2">Cancel or change your plan anytime</p>
+
+                    <div class="fade-in-up delay-3">
+                        <button id="get-started-btn" class="btn btn-primary btn-xl btn-rounded shadow-lg transform hover:scale-105">
+                            Get Started
+                        </button>
                     </div>
+                </div>
+                
+                <!-- Modo Formulario -->
+                <div id="form-content" class="w-full max-w-md mx-auto hidden">
+                    <h1 id="form-title" class="text-5xl font-bold mb-8 text-bam-dark">Join for free</h1>
                     
-                    <div class="flex justify-between items-center mb-6">
-                        <a href="#" class="text-sm font-semibold hover:underline text-bam-dark">I forgot my password</a>
-                        <label for="remember" class="flex items-center space-x-2 cursor-pointer">...</label>
-                    </div>
+                    <form id="auth-form" novalidate>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email*</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email address" class="form-input" required>
+                            <div id="email-error" class="form-error"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password*</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="password" name="password" placeholder="Enter your password" class="form-input" required>
+                                <button type="button" id="toggle-password" class="input-icon">
+                                    <svg id="eye-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg id="eye-closed" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L8.11 8.11m1.768 1.768l4.242 4.242M8.11 8.11l2.304 2.304m7.586 7.586L21.46 21.46m-5.955-5.955l-4.242-4.242m4.242 4.242l2.304 2.304m-2.304-2.304l-2.304-2.304"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div id="password-error" class="form-error"></div>
+                        </div>
+                        
+                        <!-- Campo para confirmar contraseña (solo en modo registro) -->
+                        <div id="confirm-password-field" class="form-group hidden">
+                            <label for="confirm-password" class="form-label">Confirm Password*</label>
+                            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" class="form-input">
+                            <div id="confirm-password-error" class="form-error"></div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center mb-6">
+                            <a href="#" class="text-sm font-semibold hover:underline text-bam-dark">I forgot my password</a>
+                            <label for="remember" class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" id="remember" name="remember" class="form-checkbox">
+                                <span class="text-sm font-semibold text-bam-dark">Remember me</span>
+                            </label>
+                        </div>
 
-                    <button id="submit-button" type="submit" class="w-full bg-bam-purple text-white font-bold text-xl py-4 rounded-2xl hover:bg-bam-purple-dark transition-all duration-300 shadow-lg transform hover:scale-105">
-                        Create Account
-                    </button>
+                        <button id="submit-button" type="submit" class="btn btn-primary btn-xl btn-rounded w-full shadow-lg transform hover:scale-105">
+                            Create Account
+                        </button>
 
-                    <!-- Botón para cambiar entre login y registro -->
-                    <p id="form-switcher" class="mt-6 text-sm font-semibold text-bam-dark">
-                        Already have an account? <span class="text-bam-purple cursor-pointer hover:underline">Sign in</span>
-                    </p>
-                </form>
+                        <!-- Botón para cambiar entre login y registro -->
+                        <p id="form-switcher" class="mt-6 text-sm font-semibold text-bam-dark cursor-pointer">
+                            Already have an account? <span class="text-bam-purple hover:underline">Sign in</span>
+                        </p>
+                    </form>
+                </div>
             </div>
         </main>
     </div>
 
+    <!-- Menú de navegación móvil -->
+    <div id="mobile-menu" class="mobile-menu">
+        <button id="close-menu-btn" class="mobile-menu-close">&times;</button>
+        <nav class="mobile-menu-links">
+            <a href="#" class="mobile-menu-link">Games</a>
+            <a href="#" class="mobile-menu-link">Blog</a>
+            <a href="#" class="mobile-menu-link">Pricing</a>
+            <a href="#" class="mobile-menu-link">Class PIN</a>
+            <hr class="border-gray-600 my-4"/>
+            <a href="#" class="mobile-menu-link">Sign in</a>
+            <a href="#" class="btn btn-primary btn-rounded text-center">Join for Free</a>
+        </nav>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/ui.js"></script>
     <script>
+        // Lógica específica para la página de landing/auth
         document.addEventListener('DOMContentLoaded', function() {
-            // --- ELEMENTOS DEL DOM ---
-            const form = document.getElementById('auth-form');
-            const formTitle = document.getElementById('form-title');
-            const submitButton = document.getElementById('submit-button');
-            const formSwitcher = document.getElementById('form-switcher');
+            const landingContent = document.getElementById('landing-content');
+            const formContent = document.getElementById('form-content');
+            const getStartedBtn = document.getElementById('get-started-btn');
             
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            const confirmPasswordField = document.getElementById('confirm-password-field');
-            const confirmPasswordInput = document.getElementById('confirm-password');
-
-            const emailError = document.getElementById('email-error');
-            const passwordError = document.getElementById('password-error');
-            const confirmPasswordError = document.getElementById('confirm-password-error');
-            
-            const headerSigninBtn = document.getElementById('header-signin-btn');
-            const headerJoinBtn = document.getElementById('header-join-btn');
-
-            let isLoginMode = false; // Inicia en modo Registro ("Join for free")
-
-            // --- LÓGICA PARA ACTUALIZAR LA UI ---
-            function updateFormUI() {
-                // Limpiar errores al cambiar de modo
-                [emailError, passwordError, confirmPasswordError].forEach(el => el.textContent = '');
-                [emailInput, passwordInput, confirmPasswordInput].forEach(el => el.classList.remove('border-error'));
-
-                if (isLoginMode) {
-                    formTitle.textContent = 'Sign In';
-                    submitButton.textContent = 'Sign In';
-                    confirmPasswordField.classList.add('hidden');
-                    formSwitcher.innerHTML = `Don't have an account? <span class="text-bam-purple cursor-pointer hover:underline">Join for free</span>`;
-                } else {
-                    formTitle.textContent = 'Join for Free';
-                    submitButton.textContent = 'Create Account';
-                    confirmPasswordField.classList.remove('hidden');
-                    formSwitcher.innerHTML = `Already have an account? <span class="text-bam-purple cursor-pointer hover:underline">Sign in</span>`;
-                }
-            }
-
-            // --- EVENT LISTENERS PARA CAMBIAR DE MODO ---
-            formSwitcher.addEventListener('click', () => {
-                isLoginMode = !isLoginMode;
-                updateFormUI();
-            });
-            headerSigninBtn.addEventListener('click', () => {
-                isLoginMode = true;
-                updateFormUI();
-            });
-            headerJoinBtn.addEventListener('click', () => {
-                isLoginMode = false;
-                updateFormUI();
-            });
-
-            // --- VALIDACIÓN Y ENVÍO DEL FORMULARIO ---
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                let isValid = true;
-                
-                // Validación básica
-                if (!emailInput.value) { isValid = false; emailError.textContent = 'Email is required.'; }
-                if (!passwordInput.value) { isValid = false; passwordError.textContent = 'Password is required.'; }
-
-                // Validación específica de Registro
-                if (!isLoginMode) {
-                    if (passwordInput.value !== confirmPasswordInput.value) {
-                        isValid = false;
-                        confirmPasswordError.textContent = 'Passwords do not match.';
-                    }
-                    if (!confirmPasswordInput.value) {
-                       isValid = false;
-                       confirmPasswordError.textContent = 'Please confirm your password.';
-                    }
-                }
-
-                if (isValid) {
-                    showNotification(isLoginMode ? 'Login successful!' : 'Account created successfully!', false);
-                    // Simular redirección después de 1.5 segundos
-                    setTimeout(() => {
-                        // En un proyecto real, redirigir a la página correspondiente
-                        window.location.href = '#'; // Cambiar a 'game-view.html' o similar
-                    }, 1500);
-                } else {
-                    showNotification('Please fix the errors in the form.', true);
-                }
-            });
-
-            // Función de notificación (simplificada)
-            function showNotification(message, isError) {
-                const notification = document.getElementById('notification');
-                const notificationMessage = document.getElementById('notification-message');
-                notificationMessage.textContent = message;
-                notification.className = `fixed top-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg opacity-100 transform translate-y-0 ${isError ? 'bg-red-500' : 'bg-green-500'}`;
-                setTimeout(() => {
-                    notification.className = notification.className.replace('opacity-100', 'opacity-0');
-                }, 3000);
+            // Mostrar formulario cuando se hace clic en "Get Started"
+            if (getStartedBtn) {
+                getStartedBtn.addEventListener('click', () => {
+                    landingContent.classList.add('hidden');
+                    formContent.classList.remove('hidden');
+                    
+                    // Cambiar el fondo del body
+                    document.body.classList.remove('landing-page');
+                    document.body.style.backgroundColor = '#FAC663';
+                });
             }
             
-            // Inicializar la UI
-            updateFormUI();
+            // Volver al landing desde el header
+            const headerButtons = document.querySelectorAll('#header-signin-btn, #header-join-btn');
+            headerButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    landingContent.classList.add('hidden');
+                    formContent.classList.remove('hidden');
+                    document.body.classList.remove('landing-page');
+                    document.body.style.backgroundColor = '#FAC663';
+                });
+            });
         });
     </script>
 </body>
 </html>
+            </svg>
+        </div>
+        <div class="shape shape-cloud-1">
+            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/>
+            </svg>
+        </div>
+        <div class="shape shape-cloud-2">
+            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/>
+            </svg>
+        </div>
+        <div class="shape shape-planet-2">
+            <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100.967 15.6542C96.6336 16.1417 92.1377 18.2542 87.5877 21.775C80.871 18.2542 73.396 16.3583 65.596 16.25C52.4877 16.25 40.1919 21.0167 30.9294 30.0625C26.3335 34.5318 22.6697 39.8683 20.1501 45.763C17.6304 51.6578 16.3049 57.9937 16.2502 64.4042C16.1625 70.5248 17.2283 76.6072 19.3919 82.3333C13.596 88.8333 8.17938 102.267 14.896 109.85C17.7127 112.992 21.721 114.4 26.5419 114.4C41.2211 114.4 63.4294 101.4 82.1169 84.825C106.979 62.7792 126.209 33.8 114.942 21.0708C113.233 19.1143 111.07 17.6072 108.643 16.6817C106.216 15.7561 103.599 15.4405 101.021 15.7625L100.967 15.6542Z" fill="#0A91AB"/>
