@@ -129,7 +129,7 @@ const GameController = {
     GameData.gameState = "playing";
     GameData.answeredQuestions = [];
     this.updateUI();
-    
+
     const { NotificationSystem } = window.BammoozleUtils;
     NotificationSystem.success("Game started! Select a card.");
   },
@@ -140,10 +140,10 @@ const GameController = {
     GameData.teams.forEach(team => team.score = 0);
     GameData.currentTeam = 1;
     GameData.currentQuestion = null;
-    
+
     this.updateUI();
     this.regenerateBoard();
-    
+
     const { NotificationSystem } = window.BammoozleUtils;
     NotificationSystem.info("Game restarted");
   },
@@ -168,22 +168,22 @@ const GameController = {
 
   showQuestion(question) {
     const { ModalSystem } = window.BammoozleUI;
-    
+
     const content = `
-      <div class="text-center">
-        <div class="mb-4">
-          <span class="text-sm font-semibold text-gray-500">Question for ${GameData.teams[GameData.currentTeam - 1].name}</span>
-        </div>
-        <div class="bg-white p-6 rounded-lg mb-6 text-center">
-          <p class="text-xl font-medium text-black">${question.question}</p>
-        </div>
-        <div class="flex justify-center">
-          <button class="btn btn-info btn-lg" onclick="BammoozleGame.GameController.showAnswer()" style="background-color: #49C8F0; color: white;">
-            🔍 Check
-          </button>
-        </div>
+    <div class="text-center">
+      <div class="mb-4">
+        <span class="text-sm font-semibold text-gray-500">Question for ${GameData.teams[GameData.currentTeam - 1].name}</span>
       </div>
-    `;
+      <div class="bg-white p-6 rounded-lg mb-6 text-center">
+        <p class="text-xl font-medium text-black">${question.question}</p>
+      </div>
+      <div class="flex justify-center">
+        <button class="btn btn-info btn-lg" onclick="BammoozleGame.GameController.showAnswer()" style="background-color: #49C8F0; color: white;">
+          🔍 Check
+        </button>
+      </div>
+    </div>
+  `;
 
     ModalSystem.createModal("", content, {
       id: "question-modal",
@@ -191,16 +191,32 @@ const GameController = {
     });
   },
 
+  // Reemplazar estas funciones en js/game.js
+
+  // 1. Modificar showAnswer() para evitar modales anidados
   showAnswer() {
     if (!GameData.currentQuestion) return;
-    
-    const { ModalSystem } = window.BammoozleUI;
-    
-    // Cerrar modal actual
-    ModalSystem.closeModal();
-    
-    // Mostrar modal de respuesta con botones Yes/No
-    const content = `
+
+    console.log('🔧 showAnswer: Cerrando modal anterior...');
+
+    // Cerrar cualquier modal existente FORZADAMENTE
+    const existingModals = document.querySelectorAll('.modal-backdrop:not(.hidden)');
+    existingModals.forEach(modal => {
+      modal.classList.add('hidden');
+      if (modal.id.includes('question-modal') || modal.id.includes('dynamic-modal')) {
+        setTimeout(() => {
+          if (document.body.contains(modal)) {
+            document.body.removeChild(modal);
+          }
+        }, 100);
+      }
+    });
+
+    // Esperar un momento antes de crear el nuevo modal
+    setTimeout(() => {
+      const { ModalSystem } = window.BammoozleUI;
+
+      const content = `
       <div class="text-center">
         <div class="bg-white p-6 rounded-lg mb-6 text-center">
           <p class="text-xl font-medium text-black mb-4">${GameData.currentQuestion.question}</p>
@@ -220,27 +236,46 @@ const GameController = {
       </div>
     `;
 
-    ModalSystem.createModal("", content, {
-      id: "answer-modal",
-      closeButtonText: "Close"
-    });
+      ModalSystem.createModal("", content, {
+        id: "answer-modal",
+        closeButtonText: "Close"
+      });
+
+      console.log('✅ showAnswer: Nuevo modal creado');
+    }, 150);
   },
 
+  // 2. Modificar answerQuestion() para evitar modales anidados
   answerQuestion(isCorrect) {
     if (!GameData.currentQuestion) return;
-    
+
+    console.log('🔧 answerQuestion: Cerrando modal anterior...');
+
     const currentTeamIndex = GameData.currentTeam - 1;
     const question = GameData.currentQuestion;
-    
-    // Cerrar modal actual
-    const { ModalSystem } = window.BammoozleUI;
-    ModalSystem.closeModal();
-    
-    // Mostrar resultado
-    let resultContent;
-    if (isCorrect) {
-      GameData.teams[currentTeamIndex].score += question.points;
-      resultContent = `
+
+    // Cerrar cualquier modal existente FORZADAMENTE
+    const existingModals = document.querySelectorAll('.modal-backdrop:not(.hidden)');
+    existingModals.forEach(modal => {
+      modal.classList.add('hidden');
+      if (modal.id.includes('answer-modal') || modal.id.includes('dynamic-modal')) {
+        setTimeout(() => {
+          if (document.body.contains(modal)) {
+            document.body.removeChild(modal);
+          }
+        }, 100);
+      }
+    });
+
+    // Esperar un momento antes de crear el nuevo modal
+    setTimeout(() => {
+      const { ModalSystem } = window.BammoozleUI;
+
+      // Mostrar resultado
+      let resultContent;
+      if (isCorrect) {
+        GameData.teams[currentTeamIndex].score += question.points;
+        resultContent = `
         <div class="text-center">
           <h3 class="text-3xl font-bold text-green-600 mb-4">Correct!</h3>
           <p class="text-2xl font-semibold mb-6">${question.points} points</p>
@@ -249,8 +284,8 @@ const GameController = {
           </button>
         </div>
       `;
-    } else {
-      resultContent = `
+      } else {
+        resultContent = `
         <div class="text-center">
           <h3 class="text-3xl font-bold text-red-600 mb-4">Incorrect!</h3>
           <p class="text-2xl font-semibold mb-6">No points</p>
@@ -259,35 +294,38 @@ const GameController = {
           </button>
         </div>
       `;
-    }
-    
-    ModalSystem.createModal("", resultContent, {
-      id: "result-modal",
-      showFooter: false
-    });
+      }
+
+      ModalSystem.createModal("", resultContent, {
+        id: "result-modal",
+        showFooter: false
+      });
+
+      console.log('✅ answerQuestion: Modal de resultado creado');
+    }, 200);
   },
 
   closeResultModal() {
     const { ModalSystem } = window.BammoozleUI;
     ModalSystem.closeModal();
-    
+
     // Marcar pregunta como contestada
     GameData.answeredQuestions.push(GameData.currentQuestion.id);
-    
+
     // Cambiar turno
     GameData.currentTeam = GameData.currentTeam === 1 ? 2 : 1;
-    
+
     // Actualizar UI
     this.updateUI();
-    
+
     // Marcar tarjeta como usada
     this.markTileAsUsed(GameData.currentQuestion.id);
-    
+
     // Verificar si el juego terminó
     if (GameData.answeredQuestions.length >= GameData.questions.length) {
       this.endGame();
     }
-    
+
     GameData.currentQuestion = null;
   },
 
@@ -300,16 +338,16 @@ const GameController = {
 
   endGame() {
     GameData.gameState = "ended";
-    
-    const winner = GameData.teams.reduce((a, b) => 
+
+    const winner = GameData.teams.reduce((a, b) =>
       a.score > b.score ? a : b
     );
-    
+
     const { NotificationSystem } = window.BammoozleUtils;
     const { ModalSystem } = window.BammoozleUI;
-    
+
     NotificationSystem.success(`Game finished! Winner: ${winner.name}`);
-    
+
     const content = `
       <div class="text-center">
         <h3 class="text-2xl font-bold mb-4">Game Finished!</h3>
@@ -324,7 +362,7 @@ const GameController = {
         <p class="text-lg font-semibold text-green-600">🏆 Winner: ${winner.name}</p>
       </div>
     `;
-    
+
     ModalSystem.createModal("Results", content, {
       id: "results-modal",
       closeButtonText: "Close"
@@ -341,16 +379,16 @@ const GameController = {
     const team2Score = document.getElementById('team2-score');
     const team1Name = document.getElementById('team1-name');
     const team2Name = document.getElementById('team2-name');
-    
+
     if (team1Score) team1Score.textContent = this.formatScore(GameData.teams[0].score);
     if (team2Score) team2Score.textContent = this.formatScore(GameData.teams[1].score);
     if (team1Name) team1Name.textContent = GameData.teams[0].name;
     if (team2Name) team2Name.textContent = GameData.teams[1].name;
-    
+
     // Resaltar equipo actual
     const team1Container = document.getElementById('team1-container');
     const team2Container = document.getElementById('team2-container');
-    
+
     if (team1Container && team2Container) {
       team1Container.classList.toggle('ring-2', GameData.currentTeam === 1);
       team2Container.classList.toggle('ring-2', GameData.currentTeam === 2);
@@ -361,7 +399,7 @@ const GameController = {
     const gameCode = document.getElementById('game-code');
     const gameTitle = document.getElementById('game-title');
     const gameInstruction = document.getElementById('game-instruction');
-    
+
     if (gameCode) gameCode.textContent = GameData.gameConfig.gameCode;
     if (gameTitle) gameTitle.textContent = GameData.gameConfig.title;
     if (gameInstruction) gameInstruction.textContent = GameData.gameConfig.instruction;
@@ -380,7 +418,7 @@ const GameController = {
 
   showTeamEditor() {
     const { ModalSystem } = window.BammoozleUI;
-    
+
     const content = `
       <div class="space-y-4">
         <div>
@@ -401,7 +439,7 @@ const GameController = {
         </div>
       </div>
     `;
-    
+
     ModalSystem.createModal("Edit Teams", content, {
       id: "team-editor-modal",
       closeButtonText: "Close"
@@ -411,16 +449,16 @@ const GameController = {
   saveTeamNames() {
     const team1Input = document.getElementById('team1-name-input');
     const team2Input = document.getElementById('team2-name-input');
-    
+
     if (team1Input && team2Input) {
       GameData.teams[0].name = team1Input.value.trim() || "Team 1";
       GameData.teams[1].name = team2Input.value.trim() || "Team 2";
-      
+
       this.updateUI();
-      
+
       const { NotificationSystem } = window.BammoozleUtils;
       const { ModalSystem } = window.BammoozleUI;
-      
+
       NotificationSystem.success("Team names updated");
       ModalSystem.closeModal();
     }
@@ -429,10 +467,10 @@ const GameController = {
   resetTeamNames() {
     GameData.teams[0].name = "Team 1";
     GameData.teams[1].name = "Team 2";
-    
+
     const team1Input = document.getElementById('team1-name-input');
     const team2Input = document.getElementById('team2-name-input');
-    
+
     if (team1Input) team1Input.value = GameData.teams[0].name;
     if (team2Input) team2Input.value = GameData.teams[1].name;
   }
@@ -483,9 +521,9 @@ const StudyController = {
     if (!question) return;
 
     this.stats.seen++;
-    
+
     const { ModalSystem } = window.BammoozleUI;
-    
+
     const content = `
       <div class="text-center">
         <div class="bg-gray-100 p-4 rounded-lg mb-4">
@@ -518,12 +556,12 @@ const StudyController = {
     } else {
       this.stats.wrong++;
     }
-    
+
     this.updateProgressUI();
-    
+
     const { ModalSystem } = window.BammoozleUI;
     const { NotificationSystem } = window.BammoozleUtils;
-    
+
     ModalSystem.closeModal();
     NotificationSystem.success(isCorrect ? "Correct!" : "Keep studying");
   },
@@ -533,11 +571,11 @@ const StudyController = {
     const wrongElement = document.getElementById('wrong-count');
     const seenElement = document.getElementById('seen-count');
     const progressElement = document.getElementById('progress-percentage');
-    
+
     if (correctElement) correctElement.textContent = this.stats.correct;
     if (wrongElement) wrongElement.textContent = this.stats.wrong;
     if (seenElement) seenElement.textContent = this.stats.seen;
-    
+
     if (progressElement) {
       const progress = Math.round((this.stats.seen / GameData.questions.length) * 100);
       progressElement.textContent = `${progress}%`;
@@ -548,7 +586,7 @@ const StudyController = {
     this.stats = { correct: 0, wrong: 0, seen: 0 };
     this.currentIndex = 0;
     this.updateProgressUI();
-    
+
     const { NotificationSystem } = window.BammoozleUtils;
     NotificationSystem.info("Study session restarted");
   },
@@ -564,7 +602,7 @@ const StudyController = {
 
 const EditorController = {
   currentQuestion: null,
-  
+
   init() {
     this.bindEvents();
     this.loadQuestions();
@@ -612,7 +650,7 @@ const EditorController = {
     if (!questionsList) return;
 
     questionsList.innerHTML = '';
-    
+
     GameData.questions.forEach(question => {
       const questionElement = this.createQuestionElement(question);
       questionsList.appendChild(questionElement);
@@ -623,7 +661,7 @@ const EditorController = {
     const div = document.createElement('div');
     div.className = 'card';
     div.dataset.questionId = question.id;
-    
+
     div.innerHTML = `
       <div class="card-body">
         <p class="text-gray-500 mb-2">${question.question}</p>
@@ -645,7 +683,7 @@ const EditorController = {
         </div>
       </div>
     `;
-    
+
     return div;
   },
 
@@ -654,13 +692,13 @@ const EditorController = {
     const question = form.querySelector('#question').value.trim();
     const answer = form.querySelector('#answer').value.trim();
     const points = parseInt(form.querySelector('#points').value) || 15;
-    
+
     if (!question || !answer) {
       const { NotificationSystem } = window.BammoozleUtils;
       NotificationSystem.error('Question and answer are required');
       return;
     }
-    
+
     if (this.currentQuestion) {
       // Editar pregunta existente
       this.currentQuestion.question = question;
@@ -676,12 +714,12 @@ const EditorController = {
       };
       GameData.questions.push(newQuestion);
     }
-    
+
     this.loadQuestions();
     this.bindQuestionListEvents();
     form.reset();
     this.currentQuestion = null;
-    
+
     const { NotificationSystem } = window.BammoozleUtils;
     NotificationSystem.success('Question saved successfully');
   },
@@ -689,14 +727,14 @@ const EditorController = {
   editQuestion(questionId) {
     const question = GameData.questions.find(q => q.id === questionId);
     if (!question) return;
-    
+
     this.currentQuestion = question;
-    
+
     const form = document.getElementById('edit-form');
     form.querySelector('#question').value = question.question;
     form.querySelector('#answer').value = question.answer;
     form.querySelector('#points').value = question.points;
-    
+
     // Scroll al formulario
     form.scrollIntoView({ behavior: 'smooth' });
   },
@@ -706,7 +744,7 @@ const EditorController = {
       GameData.questions = GameData.questions.filter(q => q.id !== questionId);
       this.loadQuestions();
       this.bindQuestionListEvents();
-      
+
       const { NotificationSystem } = window.BammoozleUtils;
       NotificationSystem.success('Question deleted');
     }
@@ -726,7 +764,7 @@ const BammoozleGame = {
   init() {
     // Detectar página actual y inicializar el controlador apropiado
     const currentPage = this.getCurrentPage();
-    
+
     switch (currentPage) {
       case 'game-main':
         this.GameController.init();
@@ -734,9 +772,7 @@ const BammoozleGame = {
       case 'game-board':
         this.GameController.init();
         break;
-      case 'study':
-        this.StudyController.init();
-        break;
+      
       case 'edit':
         this.EditorController.init();
         break;
@@ -754,6 +790,10 @@ const BammoozleGame = {
     return 'unknown';
   }
 };
+//navegacion al juego 
+function startBaamboozleGame() {
+  window.location.href = 'game-board.html';
+}
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {

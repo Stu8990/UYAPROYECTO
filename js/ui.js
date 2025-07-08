@@ -449,16 +449,9 @@ const GameBoard = {
     // Voltear tarjeta
     tile.classList.add('is-flipped');
     
-    // Simular pregunta
-    setTimeout(() => {
-      ModalSystem.createModal(
-        `Pregunta ${number}`,
-        `<p>Esta sería la pregunta número ${number}</p>`,
-        { closeButtonText: 'Continuar' }
-      );
-    }, 300);
     
-    NotificationSystem.info(`Tarjeta ${number} seleccionada`);
+    
+    NotificationSystem.info(`Tarjet ${number} selected`);
   }
 };
 

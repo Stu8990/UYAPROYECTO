@@ -200,5 +200,99 @@
             }
         });
     </script>
+    <!-- Agregar este script al final de game-board.html, justo antes del cierre de </body> -->
+
+<script>
+// 🔧 FIX ROBUSTO PARA MODALES - Basado en el sistema de study.html
+
+// Función simple y directa para cerrar modales
+function closeAnyModal() {
+    console.log('🔧 Cerrando modal...');
+    
+    // Buscar todos los modales visibles
+    const modals = document.querySelectorAll('.modal-backdrop');
+    
+    modals.forEach(modal => {
+        if (!modal.classList.contains('hidden')) {
+            modal.classList.add('hidden');
+            console.log('✅ Modal cerrado:', modal.id);
+            
+            // Si es dinámico, eliminarlo
+            if (modal.id.includes('question-modal') || 
+                modal.id.includes('answer-modal') ||
+                modal.id.includes('result-modal') ||
+                modal.id.includes('dynamic-modal') ||
+                modal.id.includes('team-editor-modal')) {
+                setTimeout(() => {
+                    if (document.body.contains(modal)) {
+                        document.body.removeChild(modal);
+                        console.log('🗑️ Modal eliminado del DOM');
+                    }
+                }, 300);
+            }
+        }
+    });
+    
+    // Restaurar scroll
+    document.body.style.overflow = '';
+    
+    // Limpiar estado si existe
+    if (window.BammoozleUI?.ModalSystem) {
+        window.BammoozleUI.ModalSystem.currentModal = null;
+    }
+}
+
+// Interceptar todos los clics en la página
+document.addEventListener('click', function(e) {
+    // Si se hace clic en el fondo del modal
+    if (e.target.classList.contains('modal-backdrop')) {
+        console.log('🖱️ Clic en backdrop detectado');
+        closeAnyModal();
+        return;
+    }
+    
+    // Si se hace clic en cualquier botón que parezca de cerrar
+    const target = e.target;
+    const isCloseButton = 
+        target.textContent.includes('Close') ||
+        target.textContent.includes('Cerrar') ||
+        target.textContent.includes('×') ||
+        target.classList.contains('close-modal-btn') ||
+        target.id.includes('close') ||
+        target.closest('.close-modal-btn');
+    
+    if (isCloseButton) {
+        console.log('🖱️ Botón de cerrar detectado');
+        e.preventDefault();
+        e.stopPropagation();
+        closeAnyModal();
+    }
+});
+
+// Cerrar con ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        console.log('⌨️ ESC presionado');
+        closeAnyModal();
+    }
+});
+
+// Sobrescribir el sistema original si existe
+if (window.BammoozleUI?.ModalSystem) {
+    const originalCloseModal = window.BammoozleUI.ModalSystem.closeModal;
+    
+    window.BammoozleUI.ModalSystem.closeModal = function() {
+        console.log('🔄 Usando sistema de cierre mejorado');
+        closeAnyModal();
+    };
+    
+    console.log('✅ Sistema de modales sobrescrito');
+}
+
+// Función global para usar desde la consola
+window.closeModal = closeAnyModal;
+
+console.log('🚀 Fix de modales cargado para game-board. Usa closeModal() en consola si hay problemas.');
+</script>
 </body>
 </html>
