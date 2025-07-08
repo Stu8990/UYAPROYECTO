@@ -12,6 +12,7 @@ Este proyecto es una pequeña aplicación web enfocada en el aprendizaje mediant
 ## Probar la aplicación
 
 Abre el archivo `index.html` con tu navegador favorito. También puedes utilizar una extensión de servidor local (como Live Server) para actualizar automáticamente los cambios.
+otra opcion actualizada es el aceso por deployments de la plataforma de github
 
 ## Futuras mejoras
 
