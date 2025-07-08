@@ -105,7 +105,7 @@
     <main class="bg-white p-4 md:p-8">
         <div class="container">
             <div class="text-center mb-6">
-                <p class="text-gray-600 mb-2">Turno actual: <span id="current-team" class="font-bold">Team 1</span></p>
+                <p class="text-gray-600 mb-2">Current turn: <span id="current-team" class="font-bold">Team 1</span></p>
                 <div class="flex justify-center space-x-4">
                     <button id="restart-button" class="btn btn-danger">Restart Game</button>
                     <button class="btn btn-secondary" onclick="window.location.href='game-main.html'">Back to Setup</button>
@@ -113,7 +113,17 @@
             </div>
             
             <div id="game-board" class="grid-responsive cols-5">
-                <!-- Las tarjetas se generan con JavaScript -->
+                <!-- Tarjetas predefinidas -->
+                <div class="game-tile" data-tile="1">1</div>
+                <div class="game-tile" data-tile="2">2</div>
+                <div class="game-tile" data-tile="3">3</div>
+                <div class="game-tile" data-tile="4">4</div>
+                <div class="game-tile" data-tile="5">5</div>
+                <div class="game-tile" data-tile="6">6</div>
+                <div class="game-tile" data-tile="7">7</div>
+                <div class="game-tile" data-tile="8">8</div>
+                <div class="game-tile" data-tile="9">9</div>
+                <div class="game-tile" data-tile="10">10</div>
             </div>
         </div>
     </main>
@@ -140,25 +150,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             const { GameController } = window.BammoozleGame;
             
-            // Generar tablero de juego
-            const gameBoard = document.getElementById('game-board');
-            const numberOfTiles = 10;
-            
-            if (gameBoard) {
-                for (let i = 1; i <= numberOfTiles; i++) {
-                    const tile = document.createElement('div');
-                    tile.className = 'game-tile';
-                    tile.textContent = i;
-                    tile.setAttribute('data-tile', i);
-                    
-                    // Evento de clic para seleccionar pregunta
-                    tile.addEventListener('click', () => {
-                        GameController.selectQuestion(i);
-                    }, { once: true });
-                    
-                    gameBoard.appendChild(tile);
-                }
-            }
+            // Usar tarjetas existentes en lugar de crear nuevas
+            const existingTiles = document.querySelectorAll('.game-tile');
+            existingTiles.forEach(tile => {
+                const tileNumber = parseInt(tile.dataset.tile);
+                
+                // Agregar evento de clic para seleccionar pregunta
+                tile.addEventListener('click', () => {
+                    GameController.selectQuestion(tileNumber);
+                }, { once: true });
+            });
             
             // Inicializar el juego automáticamente
             GameController.startGame();
@@ -177,10 +178,10 @@
             // Actualizar display inicial
             updateCurrentTeamDisplay();
             
-            // Actualizar cuando cambie el turno
-            const originalAnswerQuestion = GameController.answerQuestion;
-            GameController.answerQuestion = function(isCorrect) {
-                originalAnswerQuestion.call(this, isCorrect);
+            // Actualizar cuando cambie el turno (reescribir la función original)
+            const originalCloseResultModal = GameController.closeResultModal;
+            GameController.closeResultModal = function() {
+                originalCloseResultModal.call(this);
                 updateCurrentTeamDisplay();
             };
             
@@ -194,7 +195,7 @@
                     soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
                     
                     const { NotificationSystem } = window.BammoozleUtils;
-                    NotificationSystem.info(soundEnabled ? 'Sonido activado' : 'Sonido desactivado');
+                    NotificationSystem.info(soundEnabled ? 'Sound enabled' : 'Sound disabled');
                 });
             }
         });

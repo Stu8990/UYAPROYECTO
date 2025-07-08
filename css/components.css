@@ -321,6 +321,25 @@
   max-height: 200px;
 }
 
+/* Modales estilo Baamboozle */
+.baamboozle-modal {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.baamboozle-modal .modal {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 3px solid #ffffff;
+  color: white;
+}
+
+.baamboozle-modal .modal .bg-white {
+  background-color: white !important;
+  color: #333 !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para las tarjetas del tablero */
 .game-tile {
   background-color: var(--bam-blue-dark);
   color: var(--bam-text-light);
@@ -334,14 +353,18 @@
   cursor: pointer;
   transition: transform 0.3s ease, opacity 0.3s ease;
   transform-style: preserve-3d;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 .game-tile:hover {
   transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 .game-tile.is-flipped {
   transform: rotateY(180deg);
   opacity: 0;
   pointer-events: none;
+  background-color: #666;
 }
 
 /* ============================================

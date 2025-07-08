@@ -131,7 +131,7 @@ const GameController = {
     this.updateUI();
     
     const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.success("¡Juego iniciado! Selecciona una tarjeta.");
+    NotificationSystem.success("Game started! Select a card.");
   },
 
   restartGame() {
@@ -145,13 +145,13 @@ const GameController = {
     this.regenerateBoard();
     
     const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.info("Juego reiniciado");
+    NotificationSystem.info("Game restarted");
   },
 
   selectQuestion(questionId) {
     if (GameData.gameState !== "playing") {
       const { NotificationSystem } = window.BammoozleUtils;
-      NotificationSystem.error("Inicia el juego primero");
+      NotificationSystem.error("Start the game first");
       return;
     }
 
@@ -172,53 +172,58 @@ const GameController = {
     const content = `
       <div class="text-center">
         <div class="mb-4">
-          <span class="text-sm font-semibold text-gray-500">Pregunta para ${GameData.teams[GameData.currentTeam - 1].name}</span>
+          <span class="text-sm font-semibold text-gray-500">Question for ${GameData.teams[GameData.currentTeam - 1].name}</span>
         </div>
-        <div class="bg-gray-100 p-4 rounded-lg mb-6">
-          <p class="text-lg font-medium">${question.question}</p>
+        <div class="bg-white p-6 rounded-lg mb-6 text-center">
+          <p class="text-xl font-medium text-black">${question.question}</p>
         </div>
-        <div class="flex justify-center space-x-4">
-          <button class="btn btn-success" onclick="BammoozleGame.GameController.answerQuestion(true)">
-            Correcto (${question.points} pts)
-          </button>
-          <button class="btn btn-danger" onclick="BammoozleGame.GameController.answerQuestion(false)">
-            Incorrecto
-          </button>
-        </div>
-        <div class="mt-4">
-          <button class="btn btn-secondary btn-sm" onclick="BammoozleGame.GameController.showAnswer()">
-            Mostrar Respuesta
+        <div class="flex justify-center">
+          <button class="btn btn-info btn-lg" onclick="BammoozleGame.GameController.showAnswer()" style="background-color: #49C8F0; color: white;">
+            🔍 Check
           </button>
         </div>
       </div>
     `;
 
-    ModalSystem.createModal("Pregunta", content, {
+    ModalSystem.createModal("", content, {
       id: "question-modal",
-      closeButtonText: "Cerrar"
+      closeButtonText: "Close"
     });
   },
 
   showAnswer() {
     if (!GameData.currentQuestion) return;
     
-    const answerDiv = document.createElement('div');
-    answerDiv.className = 'mt-4 p-4 bg-blue-50 rounded-lg';
-    answerDiv.innerHTML = `
-      <p class="font-semibold text-blue-800">Respuesta:</p>
-      <p class="text-blue-700">${GameData.currentQuestion.answer}</p>
+    const { ModalSystem } = window.BammoozleUI;
+    
+    // Cerrar modal actual
+    ModalSystem.closeModal();
+    
+    // Mostrar modal de respuesta con botones Yes/No
+    const content = `
+      <div class="text-center">
+        <div class="bg-white p-6 rounded-lg mb-6 text-center">
+          <p class="text-xl font-medium text-black mb-4">${GameData.currentQuestion.question}</p>
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <p class="font-semibold text-blue-800 mb-2">Answer:</p>
+            <p class="text-blue-700 text-lg">${GameData.currentQuestion.answer}</p>
+          </div>
+        </div>
+        <div class="flex justify-center space-x-4">
+          <button class="btn btn-success btn-lg" onclick="BammoozleGame.GameController.answerQuestion(true)" style="background-color: #49C8F0; color: white;">
+            Yes
+          </button>
+          <button class="btn btn-danger btn-lg" onclick="BammoozleGame.GameController.answerQuestion(false)" style="background-color: #FB4D3D; color: white;">
+            No
+          </button>
+        </div>
+      </div>
     `;
-    
-    const modal = document.getElementById('question-modal');
-    const modalBody = modal.querySelector('.modal-body');
-    
-    // Remover respuesta anterior si existe
-    const existingAnswer = modalBody.querySelector('.bg-blue-50');
-    if (existingAnswer) {
-      existingAnswer.remove();
-    }
-    
-    modalBody.appendChild(answerDiv);
+
+    ModalSystem.createModal("", content, {
+      id: "answer-modal",
+      closeButtonText: "Close"
+    });
   },
 
   answerQuestion(isCorrect) {
@@ -227,14 +232,47 @@ const GameController = {
     const currentTeamIndex = GameData.currentTeam - 1;
     const question = GameData.currentQuestion;
     
+    // Cerrar modal actual
+    const { ModalSystem } = window.BammoozleUI;
+    ModalSystem.closeModal();
+    
+    // Mostrar resultado
+    let resultContent;
     if (isCorrect) {
       GameData.teams[currentTeamIndex].score += question.points;
-      const { NotificationSystem } = window.BammoozleUtils;
-      NotificationSystem.success(`¡Correcto! +${question.points} puntos para ${GameData.teams[currentTeamIndex].name}`);
+      resultContent = `
+        <div class="text-center">
+          <h3 class="text-3xl font-bold text-green-600 mb-4">Correct!</h3>
+          <p class="text-2xl font-semibold mb-6">${question.points} points</p>
+          <button class="btn btn-primary btn-lg" onclick="BammoozleGame.GameController.closeResultModal()" style="background-color: #8453DB; color: white;">
+            Close
+          </button>
+        </div>
+      `;
+    } else {
+      resultContent = `
+        <div class="text-center">
+          <h3 class="text-3xl font-bold text-red-600 mb-4">Incorrect!</h3>
+          <p class="text-2xl font-semibold mb-6">No points</p>
+          <button class="btn btn-primary btn-lg" onclick="BammoozleGame.GameController.closeResultModal()" style="background-color: #8453DB; color: white;">
+            Close
+          </button>
+        </div>
+      `;
     }
     
+    ModalSystem.createModal("", resultContent, {
+      id: "result-modal",
+      showFooter: false
+    });
+  },
+
+  closeResultModal() {
+    const { ModalSystem } = window.BammoozleUI;
+    ModalSystem.closeModal();
+    
     // Marcar pregunta como contestada
-    GameData.answeredQuestions.push(question.id);
+    GameData.answeredQuestions.push(GameData.currentQuestion.id);
     
     // Cambiar turno
     GameData.currentTeam = GameData.currentTeam === 1 ? 2 : 1;
@@ -243,11 +281,7 @@ const GameController = {
     this.updateUI();
     
     // Marcar tarjeta como usada
-    this.markTileAsUsed(question.id);
-    
-    // Cerrar modal
-    const { ModalSystem } = window.BammoozleUI;
-    ModalSystem.closeModal();
+    this.markTileAsUsed(GameData.currentQuestion.id);
     
     // Verificar si el juego terminó
     if (GameData.answeredQuestions.length >= GameData.questions.length) {
@@ -274,26 +308,26 @@ const GameController = {
     const { NotificationSystem } = window.BammoozleUtils;
     const { ModalSystem } = window.BammoozleUI;
     
-    NotificationSystem.success(`¡Juego terminado! Ganador: ${winner.name}`);
+    NotificationSystem.success(`Game finished! Winner: ${winner.name}`);
     
     const content = `
       <div class="text-center">
-        <h3 class="text-2xl font-bold mb-4">¡Juego Terminado!</h3>
+        <h3 class="text-2xl font-bold mb-4">Game Finished!</h3>
         <div class="space-y-2 mb-6">
           ${GameData.teams.map(team => `
             <div class="flex justify-between items-center p-2 rounded ${team.id === winner.id ? 'bg-yellow-100' : 'bg-gray-100'}">
               <span class="font-semibold">${team.name}</span>
-              <span class="font-bold">${team.score} puntos</span>
+              <span class="font-bold">${team.score} points</span>
             </div>
           `).join('')}
         </div>
-        <p class="text-lg font-semibold text-green-600">🏆 Ganador: ${winner.name}</p>
+        <p class="text-lg font-semibold text-green-600">🏆 Winner: ${winner.name}</p>
       </div>
     `;
     
-    ModalSystem.createModal("Resultados", content, {
+    ModalSystem.createModal("Results", content, {
       id: "results-modal",
-      closeButtonText: "Cerrar"
+      closeButtonText: "Close"
     });
   },
 
@@ -339,7 +373,9 @@ const GameController = {
 
   regenerateBoard() {
     const { GameBoard } = window.BammoozleUI;
-    GameBoard.createGameTiles();
+    if (GameBoard) {
+      GameBoard.createGameTiles();
+    }
   },
 
   showTeamEditor() {
@@ -348,27 +384,27 @@ const GameController = {
     const content = `
       <div class="space-y-4">
         <div>
-          <label class="form-label">Nombre del Equipo 1</label>
+          <label class="form-label">Team 1 Name</label>
           <input type="text" id="team1-name-input" class="form-input" value="${GameData.teams[0].name}">
         </div>
         <div>
-          <label class="form-label">Nombre del Equipo 2</label>
+          <label class="form-label">Team 2 Name</label>
           <input type="text" id="team2-name-input" class="form-input" value="${GameData.teams[1].name}">
         </div>
         <div class="flex justify-center space-x-4">
           <button class="btn btn-primary" onclick="BammoozleGame.GameController.saveTeamNames()">
-            Guardar
+            Save
           </button>
           <button class="btn btn-secondary" onclick="BammoozleGame.GameController.resetTeamNames()">
-            Restaurar
+            Reset
           </button>
         </div>
       </div>
     `;
     
-    ModalSystem.createModal("Editar Equipos", content, {
+    ModalSystem.createModal("Edit Teams", content, {
       id: "team-editor-modal",
-      closeButtonText: "Cerrar"
+      closeButtonText: "Close"
     });
   },
 
@@ -385,7 +421,7 @@ const GameController = {
       const { NotificationSystem } = window.BammoozleUtils;
       const { ModalSystem } = window.BammoozleUI;
       
-      NotificationSystem.success("Nombres de equipos actualizados");
+      NotificationSystem.success("Team names updated");
       ModalSystem.closeModal();
     }
   },
@@ -456,7 +492,7 @@ const StudyController = {
           <p class="text-lg font-medium">${question.question}</p>
         </div>
         <div class="bg-blue-50 p-4 rounded-lg mb-6">
-          <p class="font-semibold text-blue-800">Respuesta:</p>
+          <p class="font-semibold text-blue-800">Answer:</p>
           <p class="text-blue-700">${question.answer}</p>
         </div>
         <div class="flex justify-center space-x-4">
@@ -489,7 +525,7 @@ const StudyController = {
     const { NotificationSystem } = window.BammoozleUtils;
     
     ModalSystem.closeModal();
-    NotificationSystem.success(isCorrect ? "¡YES!" : "keep studying");
+    NotificationSystem.success(isCorrect ? "Correct!" : "Keep studying");
   },
 
   updateProgressUI() {
@@ -514,7 +550,7 @@ const StudyController = {
     this.updateProgressUI();
     
     const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.info("study session restarted");
+    NotificationSystem.info("Study session restarted");
   },
 
   updateUI() {
@@ -621,7 +657,7 @@ const EditorController = {
     
     if (!question || !answer) {
       const { NotificationSystem } = window.BammoozleUtils;
-      NotificationSystem.error('La pregunta y respuesta son obligatorias');
+      NotificationSystem.error('Question and answer are required');
       return;
     }
     
@@ -647,7 +683,7 @@ const EditorController = {
     this.currentQuestion = null;
     
     const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.success('Pregunta guardada correctamente');
+    NotificationSystem.success('Question saved successfully');
   },
 
   editQuestion(questionId) {
@@ -666,13 +702,13 @@ const EditorController = {
   },
 
   deleteQuestion(questionId) {
-    if (confirm('¿Estás seguro de que deseas eliminar esta pregunta?')) {
+    if (confirm('Are you sure you want to delete this question?')) {
       GameData.questions = GameData.questions.filter(q => q.id !== questionId);
       this.loadQuestions();
       this.bindQuestionListEvents();
       
       const { NotificationSystem } = window.BammoozleUtils;
-      NotificationSystem.success('Pregunta eliminada');
+      NotificationSystem.success('Question deleted');
     }
   }
 };
@@ -705,7 +741,7 @@ const BammoozleGame = {
         this.EditorController.init();
         break;
       default:
-        console.log('Página no reconocida para inicialización del juego');
+        console.log('Page not recognized for game initialization');
     }
   },
 

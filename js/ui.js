@@ -181,17 +181,19 @@ const ModalSystem = {
         <div class="modal-header">
           <div class="flex justify-between items-center mb-4">
             <h2 class="modal-title text-xl font-bold">${title}</h2>
-            <button class="close-modal-btn text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+            ${title ? '<button class="close-modal-btn text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>' : ''}
           </div>
         </div>
         <div class="modal-body">
           ${content}
         </div>
+        ${options.showFooter !== false ? `
         <div class="modal-footer mt-6 text-center">
           <button class="btn btn-primary close-modal-btn">
-            ${options.closeButtonText || 'Cerrar'}
+            ${options.closeButtonText || 'Close'}
           </button>
         </div>
+        ` : ''}
       </div>
     `;
     
