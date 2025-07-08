@@ -461,18 +461,18 @@ const StudyController = {
         </div>
         <div class="flex justify-center space-x-4">
           <button class="btn btn-success" onclick="BammoozleGame.StudyController.markAnswer(${questionIndex}, true)">
-            Sabía la respuesta
+            I knew the answer
           </button>
           <button class="btn btn-danger" onclick="BammoozleGame.StudyController.markAnswer(${questionIndex}, false)">
-            No sabía la respuesta
+            I didn't know the answer
           </button>
         </div>
       </div>
     `;
 
-    ModalSystem.createModal("Respuesta", content, {
+    ModalSystem.createModal("Answer", content, {
       id: "study-answer-modal",
-      closeButtonText: "Cerrar"
+      closeButtonText: "Close"
     });
   },
 
@@ -489,7 +489,7 @@ const StudyController = {
     const { NotificationSystem } = window.BammoozleUtils;
     
     ModalSystem.closeModal();
-    NotificationSystem.success(isCorrect ? "¡Correcto!" : "Sigue estudiando");
+    NotificationSystem.success(isCorrect ? "¡YES!" : "keep studying");
   },
 
   updateProgressUI() {
@@ -514,7 +514,7 @@ const StudyController = {
     this.updateProgressUI();
     
     const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.info("Sesión de estudio reiniciada");
+    NotificationSystem.info("study session restarted");
   },
 
   updateUI() {

@@ -45,7 +45,7 @@
                 <h1 id="game-title" class="text-4xl font-bold">Game Gerund</h1>
                 <p class="font-semibold">Verbs followed by gerunds or infinitive (no diff...)</p>
             </div>
-            <div class="flex items-center space-x-2">
+            <!-- <div class="flex items-center space-x-2">
                 <div class="text-right">
                     <p class="font-bold text-sm">Translate the page</p>
                     <div class="flex gap-1 mt-1">
@@ -59,7 +59,7 @@
                 <div class="bg-blue-200 text-blue-800 text-xs p-2 rounded-lg max-w-[150px]">
                     Use this if you need it for better understanding.
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -70,15 +70,41 @@
         <aside class="lg:col-span-1 space-y-6">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">Command Center:</h2>
+                    <div class="flex items-center gap-2">
+                        <h2 class="card-title">Command Center:</h2>
+                        <div class="help-tooltip tooltip-right">
+                            <div class="help-circle">?</div>
+                            <div class="tooltip-content">
+                                <strong>Game Control Hub</strong><br>
+                                From here you can manage your entire game experience:
+                                <br><br>
+                                <strong>Game Code:</strong> Share with other players to join<br>
+                                <strong>Play:</strong> Start the game with different game modes<br>
+                                <strong>Study:</strong> Practice questions individually<br>
+                                <strong>Share:</strong> Get shareable link for your game
+                            </div>
+                        </div>
+                    </div>
                     <p class="card-subtitle">Press the buttons to do something.</p>
                 </div>
                 
                 <div class="card-body">
-                    <div class="bg-bam-blue text-white rounded-lg p-4 text-center mb-4">
-                        <p class="text-sm">Game Code:</p>
-                        <p id="game-code" class="text-4xl font-bold tracking-widest">1054334</p>
-                        <p class="text-xs mt-1">Use this to share the game with others.</p>
+                    <div class="help-tooltip tooltip-right">
+                        <div class="bg-bam-blue text-white rounded-lg p-4 text-center mb-4">
+                            <p class="text-sm">Game Code:</p>
+                            <p id="game-code" class="text-4xl font-bold tracking-widest">1054334</p>
+                            <p class="text-xs mt-1">Use this to share the game with others.</p>
+                        </div>
+                        <div class="tooltip-content">
+                            <strong>Game Access Code</strong><br>
+                            This unique code identifies your game session. Students can:
+                            <br><br>
+                            • Enter this code on the main page<br>
+                            • Join your game session instantly<br>
+                            • Access from any device<br>
+                            <br>
+                            <strong>Tip:</strong> Code remains active during the entire session.
+                        </div>
                     </div>
                     
                     <p id="game-instruction" class="text-sm text-gray-500 mb-4">Instruction: Say the two possible forms.</p>
@@ -140,15 +166,36 @@
             <div class="flex justify-between items-start mb-4">
                 <div class="flex items-center gap-2">
                     <h2 class="text-2xl font-bold">What you will see in this game:</h2>
-                    <div class="bg-bam-green rounded-full p-1 w-6 h-6 flex items-center justify-center">
-                        <span class="text-white font-bold text-md">?</span>
+                    <div class="help-tooltip tooltip-right">
+                        <div class="help-circle">?</div>
+                        <div class="tooltip-content">
+                            <strong>Question Preview</strong><br>
+                            These are the cards that will be in the game. Here you can familiarize with them before playing.
+                            <br><br>
+                            <strong>How to use:</strong><br>
+                            • Click on any card to see the answer<br>
+                            • Use "Show/Hide" buttons to reveal all answers<br>
+                            • Each card has a score (default 15 points)
+                        </div>
                     </div>
                 </div>
                 <div class="bg-bam-green text-bam-dark rounded-lg p-3 text-center">
                     <p class="text-sm font-bold mb-2">Press Show to see all the answers.</p>
                     <div class="flex space-x-2">
-                        <button class="btn btn-sm bg-black/20">Show</button>
-                        <button class="btn btn-sm bg-black/40">Hide</button>
+                        <div class="help-tooltip tooltip-left">
+                            <button class="btn btn-sm bg-black/20">Show</button>
+                            <div class="tooltip-content">
+                                <strong>Show All</strong><br>
+                                Reveals all answers at once for quick review.
+                            </div>
+                        </div>
+                        <div class="help-tooltip tooltip-left">
+                            <button class="btn btn-sm bg-black/40">Hide</button>
+                            <div class="tooltip-content">
+                                <strong>Hide All</strong><br>
+                                Hides all visible answers to return to the initial state.
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -261,18 +308,111 @@
             const { GameData } = window.BammoozleGame;
             
             if (gameCards && GameData) {
-                GameData.questions.forEach(question => {
+                GameData.questions.forEach((question, index) => {
                     const card = document.createElement('div');
-                    card.className = 'card study-card';
+                    card.className = 'card study-card preview-card';
+                    card.dataset.questionIndex = index;
                     card.innerHTML = `
                         <div class="card-body">
-                            <p class="text-lg mb-4">${question.question}</p>
+                            <p class="text-lg mb-4 question-text">${question.question}</p>
+                            <div class="answer-text hidden bg-blue-50 p-3 rounded-lg mt-4">
+                                <p class="font-semibold text-blue-800 mb-2">Answer:</p>
+                                <p class="text-blue-700">${question.answer}</p>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <p class="font-bold text-bam-grey-dark">v ${question.points}</p>
+                            <div class="flex items-center space-x-2">
+                                <button class="btn btn-primary btn-icon toggle-answer-btn" data-index="${index}" title="Ver respuesta">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     `;
+                    
+                    // Añadir evento de clic a la tarjeta completa
+                    card.addEventListener('click', function(e) {
+                        // Si se hizo clic en el botón, no expandir
+                        if (e.target.closest('.toggle-answer-btn')) {
+                            return;
+                        }
+                        toggleCardAnswer(card, index);
+                    });
+                    
+                    // Añadir evento específico al botón
+                    const toggleBtn = card.querySelector('.toggle-answer-btn');
+                    toggleBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        toggleCardAnswer(card, index);
+                    });
+                    
                     gameCards.appendChild(card);
+                });
+            }
+            
+            // Función para alternar la respuesta de una tarjeta
+            function toggleCardAnswer(cardElement, questionIndex) {
+                const answerDiv = cardElement.querySelector('.answer-text');
+                const toggleBtn = cardElement.querySelector('.toggle-answer-btn');
+                const isExpanded = !answerDiv.classList.contains('hidden');
+                
+                if (isExpanded) {
+                    // Ocultar respuesta
+                    answerDiv.classList.add('hidden');
+                    cardElement.classList.remove('expanded');
+                    toggleBtn.innerHTML = `
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    `;
+                    toggleBtn.title = "Ver respuesta";
+                } else {
+                    // Mostrar respuesta
+                    answerDiv.classList.remove('hidden');
+                    cardElement.classList.add('expanded');
+                    toggleBtn.innerHTML = `
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    `;
+                    toggleBtn.title = "Ocultar respuesta";
+                    
+                    // Añadir animación suave
+                    answerDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        answerDiv.style.transition = 'opacity 0.3s ease-in-out';
+                        answerDiv.style.opacity = '1';
+                    }, 10);
+                }
+            }
+            
+            // Botones "Show/Hide" globales
+            const showBtn = document.querySelector('.btn.bg-black\\/20');
+            const hideBtn = document.querySelector('.btn.bg-black\\/40');
+            
+            if (showBtn) {
+                showBtn.addEventListener('click', function() {
+                    const allCards = document.querySelectorAll('.preview-card');
+                    allCards.forEach((card, index) => {
+                        const answerDiv = card.querySelector('.answer-text');
+                        if (answerDiv.classList.contains('hidden')) {
+                            toggleCardAnswer(card, index);
+                        }
+                    });
+                });
+            }
+            
+            if (hideBtn) {
+                hideBtn.addEventListener('click', function() {
+                    const allCards = document.querySelectorAll('.preview-card');
+                    allCards.forEach((card, index) => {
+                        const answerDiv = card.querySelector('.answer-text');
+                        if (!answerDiv.classList.contains('hidden')) {
+                            toggleCardAnswer(card, index);
+                        }
+                    });
                 });
             }
         });
