@@ -1,0 +1,125 @@
+🎯 Atajos de Teclado Implementados
+🌐 Atajos Globales (Todas las páginas)
+
+Alt + H - Mostrar ayuda de atajos
+Alt + M - Alternar menú móvil
+Escape - Cerrar modal/menú
+Alt + 1 - Ir a página principal
+Alt + ← - Volver atrás
+F1 - Ayuda
+
+🏠 Página Principal (index.html)
+
+Enter - Comenzar
+Alt + S - Iniciar sesión
+Alt + J - Registrarse
+Tab - Siguiente elemento
+Shift + Tab - Elemento anterior
+Alt + G - Enfocar código de juego
+Ctrl + Enter - Enviar formulario
+
+🎮 Juego Principal (game-main.html)
+
+Alt + P - Jugar
+Alt + S - Modo estudio
+Alt + E - Editar juego
+Alt + R - Compartir juego
+Alt + C - Copiar código del juego
+Space - Mostrar/ocultar todas las respuestas
+Alt + 1-3 - Seleccionar modo de juego
+Flechas - Navegar entre tarjetas
+Enter - Mostrar/ocultar respuesta de tarjeta seleccionada
+Alt + A - Mostrar todas las respuestas
+Alt + H - Ocultar todas las respuestas
+F3 / Ctrl + F - Buscar tarjeta
+
+🎯 Tablero de Juego (game-board.html)
+
+Alt + R - Reiniciar juego
+Alt + B - Volver a configuración
+Alt + T - Editar equipos
+Alt + Q - Salir del juego
+Alt + 1-0 - Seleccionar casillas 1-10
+Space - Verificar respuesta
+Y - Respuesta correcta
+N - Respuesta incorrecta
+Enter - Cerrar resultado
+Alt + F - Pantalla completa
+Alt + M - Silenciar/Activar sonido
+F5 - Actualizar tablero
+
+📚 Modo Estudio (study.html)
+
+Alt + R - Reiniciar estudio
+Alt + B - Volver al juego
+Space - Mostrar respuesta
+Flechas - Navegar entre tarjetas
+Enter - Ver respuesta de tarjeta seleccionada
+C - Marcar como correcto
+I - Marcar como incorrecto
+Alt + P - Mostrar progreso
+Alt + M - Cambiar modo de estudio
+Alt + A - Mostrar todas las respuestas
+Alt + H - Ocultar todas las respuestas
+F4 - Enfocar progreso
+
+✏️ Editor (edit.html)
+
+Alt + S - Guardar pregunta
+Alt + C - Limpiar formulario
+Alt + N - Nueva pregunta
+Alt + D - Eliminar pregunta seleccionada
+Alt + B - Volver al juego
+Alt + I - Importar preguntas
+F2 - Editar pregunta seleccionada
+Delete - Eliminar pregunta seleccionada
+Flechas ↑↓ - Navegar entre preguntas
+Tab / Shift + Tab - Navegar entre campos
+Alt + E - Exportar preguntas
+Alt + U - Deshacer última acción
+Ctrl + Z - Deshacer
+Ctrl + Y - Rehacer
+
+🔧 Características Especiales
+🎨 Indicadores Visuales
+
+Elementos seleccionados: Borde púrpura con sombra
+Elementos enfocados: Contorno púrpura
+Notificaciones: Aparecer desde abajo derecha
+Overlay de ayuda: Fondo oscuro con contenido centrado
+
+🔍 Funcionalidades Avanzadas
+
+Búsqueda de tarjetas (F3/Ctrl+F en game-main)
+Navegación por grid (2 columnas automático)
+Autoguardado (cada 2 segundos en editor)
+Modo pantalla completa (Alt+F en game-board)
+Gestión de estado de modales (detección automática)
+
+💾 Persistencia
+
+Borradores automáticos en editor
+Configuraciones de teclado en localStorage
+Estado de navegación mantenido entre páginas
+
+🌟 Accesibilidad
+
+Indicadores aria-label para todos los elementos
+Navegación con Tab mejorada
+Roles ARIA apropiados
+Descripciones de atajos contextuales
+
+📱 Responsividad
+📱 Adaptaciones Móviles
+
+Detección automática de dispositivos móviles
+Atajos alternativos para pantallas táctiles
+Gestos de toque como alternativa a atajos
+Navegación optimizada para dedos
+
+🖥️ Adaptaciones Desktop
+
+Atajos completos disponibles
+Navegación por teclado completa
+Múltiples métodos de interacción
+Optimización para productividad
