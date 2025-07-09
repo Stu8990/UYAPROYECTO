@@ -96,6 +96,51 @@
   align-items: center;
   justify-content: center;
 }
+/* Botón Edit especial con color verde y animación */
+.btn-edit {
+  background-color: var(--bam-green) !important;
+  color: var(--bam-text-light) !important;
+  position: relative;
+  animation: pulse-green 2s infinite;
+}
+
+.btn-edit:hover {
+  background-color: var(--bam-green-dark) !important;
+  transform: translateY(-2px);
+}
+
+.btn-edit::before {
+  content: "✏️";
+  margin-right: 8px;
+}
+
+/* Animación de pulso verde */
+@keyframes pulse-green {
+  0% { 
+    box-shadow: 0 0 0 0 rgba(149, 219, 83, 0.7); 
+  }
+  70% { 
+    box-shadow: 0 0 0 10px rgba(149, 219, 83, 0); 
+  }
+  100% { 
+    box-shadow: 0 0 0 0 rgba(149, 219, 83, 0); 
+  }
+}
+
+/* Variante sin animación si prefieres algo más sutil */
+.btn-edit-simple {
+  background-color: var(--bam-green);
+  color: var(--bam-text-light);
+}
+
+.btn-edit-simple:hover {
+  background-color: var(--bam-green-dark);
+}
+
+.btn-edit-simple::before {
+  content: "✏️";
+  margin-right: 8px;
+}
 
 /* ============================================
    NAVEGACIÓN
@@ -689,3 +734,4 @@
     grid-template-columns: 1fr 2fr;
   }
 }
+
