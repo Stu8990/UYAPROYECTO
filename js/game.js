@@ -1,5 +1,5 @@
 /* ============================================
-   GAME.JS - Lógica del Juego
+   GAME.JS - VERSIÓN CORREGIDA Y COMPLETA
    ============================================ */
 
 /* ============================================
@@ -86,77 +86,204 @@ const GameData = {
   currentTeam: 1,
   gameState: "waiting", // waiting, playing, ended
   answeredQuestions: [],
-  currentQuestion: null
+  currentQuestion: null,
+  gameMode: "baamboozle" // baamboozle, spud, bowling, etc.
 };
 
 /* ============================================
-   CONTROLADOR DEL JUEGO
+   SISTEMA DE MODALES ROBUSTO
+   ============================================ */
+
+const RobustModalSystem = {
+  currentModal: null,
+  
+  init() {
+    this.bindGlobalEvents();
+  },
+
+  bindGlobalEvents() {
+    // Cerrar con ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closeModal();
+      }
+    });
+
+    // Cerrar clickeando fuera
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-backdrop')) {
+        this.closeModal();
+      }
+    });
+  },
+
+  createModal(title, content, options = {}) {
+    // Cerrar modal existente
+    this.closeModal();
+    
+    const modalId = options.id || `modal-${Date.now()}`;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50';
+    modal.id = modalId;
+    
+    modal.innerHTML = `
+      <div class="modal bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 m-4 relative">
+        ${title ? `
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h2 class="modal-title text-xl font-bold">${title}</h2>
+          <button class="close-modal-btn text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+        </div>
+        ` : ''}
+        <div class="modal-body">
+          ${content}
+        </div>
+      </div>
+    `;
+    
+    // Añadir eventos de cierre
+    const closeBtn = modal.querySelector('.close-modal-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => this.closeModal());
+    }
+    
+    document.body.appendChild(modal);
+    this.currentModal = modal;
+    
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+    
+    return modal;
+  },
+
+  closeModal() {
+    if (this.currentModal) {
+      document.body.removeChild(this.currentModal);
+      this.currentModal = null;
+    }
+    
+    // Cerrar cualquier modal huérfano
+    const orphanModals = document.querySelectorAll('.modal-backdrop');
+    orphanModals.forEach(modal => {
+      if (document.body.contains(modal)) {
+        document.body.removeChild(modal);
+      }
+    });
+    
+    // Restaurar scroll
+    document.body.style.overflow = '';
+  }
+};
+
+/* ============================================
+   CONTROLADOR DEL JUEGO PRINCIPAL
    ============================================ */
 
 const GameController = {
   init() {
     this.bindEvents();
     this.updateUI();
+    RobustModalSystem.init();
   },
 
   bindEvents() {
-    // Iniciar juego
-    const playButton = document.getElementById('play-button');
-    if (playButton) {
-      playButton.addEventListener('click', () => {
-        this.startGame();
-      });
-    }
-
-    // Reiniciar juego
-    const restartButton = document.getElementById('restart-button');
-    if (restartButton) {
-      restartButton.addEventListener('click', () => {
-        this.restartGame();
-      });
-    }
-
+    // Botones principales
+    this.bindButton('play-button', () => this.showGameModeSelection());
+    this.bindButton('restart-button', () => this.restartGame());
+    
     // Editar equipos
-    const editTeamsButton = document.querySelector('[aria-label="edit teams"]');
-    if (editTeamsButton) {
-      editTeamsButton.addEventListener('click', () => {
-        this.showTeamEditor();
-      });
+    const editTeamsBtn = document.querySelector('[aria-label="edit teams"]');
+    if (editTeamsBtn) {
+      editTeamsBtn.addEventListener('click', () => this.showTeamEditor());
+    }
+
+    // Eventos del tablero
+    this.bindBoardEvents();
+  },
+
+  bindButton(id, handler) {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', handler);
     }
   },
 
-  startGame() {
+  bindBoardEvents() {
+    const tiles = document.querySelectorAll('.game-tile');
+    tiles.forEach(tile => {
+      const questionId = parseInt(tile.dataset.tile);
+      tile.addEventListener('click', () => {
+        if (!tile.classList.contains('is-flipped')) {
+          this.selectQuestion(questionId);
+        }
+      });
+    });
+  },
+
+  showGameModeSelection() {
+    const content = `
+      <div class="text-center">
+        <h3 class="text-2xl font-bold mb-6">Choose Game Mode</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <button class="game-mode-btn bg-purple-200 hover:bg-purple-300 p-4 rounded-lg transition-colors" data-mode="baamboozle">
+            <div class="text-4xl mb-2">🎯</div>
+            <div class="font-bold">Baamboozle</div>
+          </button>
+          <button class="game-mode-btn bg-orange-200 hover:bg-orange-300 p-4 rounded-lg transition-colors" data-mode="spud">
+            <div class="text-4xl mb-2">🥔</div>
+            <div class="font-bold">Spud Game</div>
+          </button>
+          <button class="game-mode-btn bg-pink-200 hover:bg-pink-300 p-4 rounded-lg transition-colors" data-mode="bowling">
+            <div class="text-4xl mb-2">🎳</div>
+            <div class="font-bold">Bowling</div>
+          </button>
+          <button class="game-mode-btn bg-red-200 hover:bg-red-300 p-4 rounded-lg transition-colors" data-mode="bball">
+            <div class="text-4xl mb-2">🏀</div>
+            <div class="font-bold">B-Ball</div>
+          </button>
+        </div>
+      </div>
+    `;
+    
+    const modal = RobustModalSystem.createModal("Select Game Mode", content);
+    
+    // Añadir eventos a los botones de modo
+    const modeButtons = modal.querySelectorAll('.game-mode-btn');
+    modeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        this.startGame(mode);
+      });
+    });
+  },
+
+  startGame(mode = 'baamboozle') {
+    GameData.gameMode = mode;
     GameData.gameState = "playing";
     GameData.answeredQuestions = [];
-    this.updateUI();
-
-    const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.success("Game started! Select a card.");
-  },
-
-  restartGame() {
-    GameData.gameState = "waiting";
-    GameData.answeredQuestions = [];
-    GameData.teams.forEach(team => team.score = 0);
     GameData.currentTeam = 1;
-    GameData.currentQuestion = null;
-
+    
+    // Cerrar modal
+    RobustModalSystem.closeModal();
+    
+    // Redirigir al tablero si estamos en game-main
+    if (window.location.pathname.includes('game-main')) {
+      window.location.href = 'game-board.html';
+      return;
+    }
+    
     this.updateUI();
-    this.regenerateBoard();
-
-    const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.info("Game restarted");
+    this.showNotification("Game started! Select a card.", "success");
   },
 
   selectQuestion(questionId) {
     if (GameData.gameState !== "playing") {
-      const { NotificationSystem } = window.BammoozleUtils;
-      NotificationSystem.error("Start the game first");
+      this.showNotification("Start the game first!", "error");
       return;
     }
 
     if (GameData.answeredQuestions.includes(questionId)) {
-      return; // Pregunta ya contestada
+      return;
     }
 
     const question = GameData.questions.find(q => q.id === questionId);
@@ -167,150 +294,75 @@ const GameController = {
   },
 
   showQuestion(question) {
-    const { ModalSystem } = window.BammoozleUI;
-
+    const currentTeamName = GameData.teams[GameData.currentTeam - 1].name;
+    
     const content = `
-    <div class="text-center">
-      <div class="mb-4">
-        <span class="text-sm font-semibold text-gray-500">Question for ${GameData.teams[GameData.currentTeam - 1].name}</span>
-      </div>
-      <div class="bg-white p-6 rounded-lg mb-6 text-center">
-        <p class="text-xl font-medium text-black">${question.question}</p>
-      </div>
-      <div class="flex justify-center">
-        <button class="btn btn-info btn-lg" onclick="BammoozleGame.GameController.showAnswer()" style="background-color: #49C8F0; color: white;">
-          🔍 Check
+      <div class="text-center">
+        <div class="mb-4">
+          <span class="text-sm font-semibold text-gray-500">Question for ${currentTeamName}</span>
+        </div>
+        <div class="bg-blue-50 p-6 rounded-lg mb-6">
+          <p class="text-xl font-medium text-black">${question.question}</p>
+        </div>
+        <button id="check-answer-btn" class="btn bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold">
+          🔍 Check Answer
         </button>
       </div>
-    </div>
-  `;
+    `;
 
-    ModalSystem.createModal("", content, {
-      id: "question-modal",
-      closeButtonText: "Close"
-    });
+    const modal = RobustModalSystem.createModal("", content, { id: "question-modal" });
+    
+    const checkBtn = modal.querySelector('#check-answer-btn');
+    checkBtn.addEventListener('click', () => this.showAnswer());
   },
 
-  // Reemplazar estas funciones en js/game.js
-
-  // 1. Modificar showAnswer() para evitar modales anidados
   showAnswer() {
     if (!GameData.currentQuestion) return;
 
-    console.log('🔧 showAnswer: Cerrando modal anterior...');
-
-    // Cerrar cualquier modal existente FORZADAMENTE
-    const existingModals = document.querySelectorAll('.modal-backdrop:not(.hidden)');
-    existingModals.forEach(modal => {
-      modal.classList.add('hidden');
-      if (modal.id.includes('question-modal') || modal.id.includes('dynamic-modal')) {
-        setTimeout(() => {
-          if (document.body.contains(modal)) {
-            document.body.removeChild(modal);
-          }
-        }, 100);
-      }
-    });
-
-    // Esperar un momento antes de crear el nuevo modal
-    setTimeout(() => {
-      const { ModalSystem } = window.BammoozleUI;
-
-      const content = `
+    const content = `
       <div class="text-center">
-        <div class="bg-white p-6 rounded-lg mb-6 text-center">
-          <p class="text-xl font-medium text-black mb-4">${GameData.currentQuestion.question}</p>
-          <div class="bg-blue-50 p-4 rounded-lg">
-            <p class="font-semibold text-blue-800 mb-2">Answer:</p>
-            <p class="text-blue-700 text-lg">${GameData.currentQuestion.answer}</p>
-          </div>
+        <div class="bg-gray-100 p-4 rounded-lg mb-4">
+          <p class="text-lg font-medium">${GameData.currentQuestion.question}</p>
+        </div>
+        <div class="bg-blue-50 p-4 rounded-lg mb-6">
+          <p class="font-semibold text-blue-800 mb-2">Answer:</p>
+          <p class="text-blue-700 text-lg">${GameData.currentQuestion.answer}</p>
         </div>
         <div class="flex justify-center space-x-4">
-          <button class="btn btn-success btn-lg" onclick="BammoozleGame.GameController.answerQuestion(true)" style="background-color: #49C8F0; color: white;">
-            Yes
+          <button id="correct-btn" class="btn bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold">
+            ✅ Correct
           </button>
-          <button class="btn btn-danger btn-lg" onclick="BammoozleGame.GameController.answerQuestion(false)" style="background-color: #FB4D3D; color: white;">
-            No
+          <button id="incorrect-btn" class="btn bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold">
+            ❌ Incorrect
           </button>
         </div>
       </div>
     `;
 
-      ModalSystem.createModal("", content, {
-        id: "answer-modal",
-        closeButtonText: "Close"
-      });
-
-      console.log('✅ showAnswer: Nuevo modal creado');
-    }, 150);
+    const modal = RobustModalSystem.createModal("", content, { id: "answer-modal" });
+    
+    const correctBtn = modal.querySelector('#correct-btn');
+    const incorrectBtn = modal.querySelector('#incorrect-btn');
+    
+    correctBtn.addEventListener('click', () => this.answerQuestion(true));
+    incorrectBtn.addEventListener('click', () => this.answerQuestion(false));
   },
 
-  // 2. Modificar answerQuestion() para evitar modales anidados
   answerQuestion(isCorrect) {
     if (!GameData.currentQuestion) return;
-
-    console.log('🔧 answerQuestion: Cerrando modal anterior...');
 
     const currentTeamIndex = GameData.currentTeam - 1;
     const question = GameData.currentQuestion;
 
-    // Cerrar cualquier modal existente FORZADAMENTE
-    const existingModals = document.querySelectorAll('.modal-backdrop:not(.hidden)');
-    existingModals.forEach(modal => {
-      modal.classList.add('hidden');
-      if (modal.id.includes('answer-modal') || modal.id.includes('dynamic-modal')) {
-        setTimeout(() => {
-          if (document.body.contains(modal)) {
-            document.body.removeChild(modal);
-          }
-        }, 100);
-      }
-    });
-
-    // Esperar un momento antes de crear el nuevo modal
-    setTimeout(() => {
-      const { ModalSystem } = window.BammoozleUI;
-
-      // Mostrar resultado
-      let resultContent;
-      if (isCorrect) {
-        GameData.teams[currentTeamIndex].score += question.points;
-        resultContent = `
-        <div class="text-center">
-          <h3 class="text-3xl font-bold text-green-600 mb-4">Correct!</h3>
-          <p class="text-2xl font-semibold mb-6">${question.points} points</p>
-          <button class="btn btn-primary btn-lg" onclick="BammoozleGame.GameController.closeResultModal()" style="background-color: #8453DB; color: white;">
-            Close
-          </button>
-        </div>
-      `;
-      } else {
-        resultContent = `
-        <div class="text-center">
-          <h3 class="text-3xl font-bold text-red-600 mb-4">Incorrect!</h3>
-          <p class="text-2xl font-semibold mb-6">No points</p>
-          <button class="btn btn-primary btn-lg" onclick="BammoozleGame.GameController.closeResultModal()" style="background-color: #8453DB; color: white;">
-            Close
-          </button>
-        </div>
-      `;
-      }
-
-      ModalSystem.createModal("", resultContent, {
-        id: "result-modal",
-        showFooter: false
-      });
-
-      console.log('✅ answerQuestion: Modal de resultado creado');
-    }, 200);
-  },
-
-  closeResultModal() {
-    const { ModalSystem } = window.BammoozleUI;
-    ModalSystem.closeModal();
+    if (isCorrect) {
+      GameData.teams[currentTeamIndex].score += question.points;
+    }
 
     // Marcar pregunta como contestada
-    GameData.answeredQuestions.push(GameData.currentQuestion.id);
+    GameData.answeredQuestions.push(question.id);
+    
+    // Marcar tarjeta como usada
+    this.markTileAsUsed(question.id);
 
     // Cambiar turno
     GameData.currentTeam = GameData.currentTeam === 1 ? 2 : 1;
@@ -318,60 +370,174 @@ const GameController = {
     // Actualizar UI
     this.updateUI();
 
-    // Marcar tarjeta como usada
-    this.markTileAsUsed(GameData.currentQuestion.id);
+    // Mostrar resultado
+    this.showResult(isCorrect, question.points);
 
-    // Verificar si el juego terminó
+    // Verificar fin de juego
     if (GameData.answeredQuestions.length >= GameData.questions.length) {
-      this.endGame();
+      setTimeout(() => this.endGame(), 2000);
     }
 
     GameData.currentQuestion = null;
+  },
+
+  showResult(isCorrect, points) {
+    const content = `
+      <div class="text-center">
+        <div class="text-6xl mb-4">${isCorrect ? '🎉' : '😔'}</div>
+        <h3 class="text-3xl font-bold mb-4 ${isCorrect ? 'text-green-600' : 'text-red-600'}">
+          ${isCorrect ? 'Correct!' : 'Incorrect!'}
+        </h3>
+        <p class="text-2xl font-semibold mb-6">
+          ${isCorrect ? `+${points} points` : 'No points'}
+        </p>
+        <button id="continue-btn" class="btn bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold">
+          Continue
+        </button>
+      </div>
+    `;
+
+    const modal = RobustModalSystem.createModal("", content, { id: "result-modal" });
+    
+    const continueBtn = modal.querySelector('#continue-btn');
+    continueBtn.addEventListener('click', () => {
+      RobustModalSystem.closeModal();
+    });
   },
 
   markTileAsUsed(questionId) {
     const tile = document.querySelector(`[data-tile="${questionId}"]`);
     if (tile) {
       tile.classList.add('is-flipped');
+      // Añadir animación
+      tile.style.transform = 'rotateY(180deg)';
+      tile.style.opacity = '0.3';
+      tile.style.pointerEvents = 'none';
     }
   },
 
   endGame() {
     GameData.gameState = "ended";
-
-    const winner = GameData.teams.reduce((a, b) =>
-      a.score > b.score ? a : b
-    );
-
-    const { NotificationSystem } = window.BammoozleUtils;
-    const { ModalSystem } = window.BammoozleUI;
-
-    NotificationSystem.success(`Game finished! Winner: ${winner.name}`);
+    
+    const winner = GameData.teams.reduce((a, b) => a.score > b.score ? a : b);
+    const isTie = GameData.teams[0].score === GameData.teams[1].score;
 
     const content = `
       <div class="text-center">
+        <div class="text-6xl mb-4">🏆</div>
         <h3 class="text-2xl font-bold mb-4">Game Finished!</h3>
         <div class="space-y-2 mb-6">
           ${GameData.teams.map(team => `
-            <div class="flex justify-between items-center p-2 rounded ${team.id === winner.id ? 'bg-yellow-100' : 'bg-gray-100'}">
+            <div class="flex justify-between items-center p-3 rounded-lg ${team.id === winner.id && !isTie ? 'bg-yellow-100 border-2 border-yellow-400' : 'bg-gray-100'}">
               <span class="font-semibold">${team.name}</span>
               <span class="font-bold">${team.score} points</span>
             </div>
           `).join('')}
         </div>
-        <p class="text-lg font-semibold text-green-600">🏆 Winner: ${winner.name}</p>
+        <p class="text-lg font-semibold ${isTie ? 'text-blue-600' : 'text-green-600'} mb-4">
+          ${isTie ? '🤝 It\'s a tie!' : `🏆 Winner: ${winner.name}`}
+        </p>
+        <div class="flex justify-center space-x-4">
+          <button id="play-again-btn" class="btn bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold">
+            Play Again
+          </button>
+          <button id="back-setup-btn" class="btn bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">
+            Back to Setup
+          </button>
+        </div>
       </div>
     `;
 
-    ModalSystem.createModal("Results", content, {
-      id: "results-modal",
-      closeButtonText: "Close"
+    const modal = RobustModalSystem.createModal("🎮 Game Results", content, { id: "game-end-modal" });
+    
+    const playAgainBtn = modal.querySelector('#play-again-btn');
+    const backSetupBtn = modal.querySelector('#back-setup-btn');
+    
+    playAgainBtn.addEventListener('click', () => {
+      this.restartGame();
+      RobustModalSystem.closeModal();
     });
+    
+    backSetupBtn.addEventListener('click', () => {
+      window.location.href = 'game-main.html';
+    });
+  },
+
+  restartGame() {
+    GameData.gameState = "waiting";
+    GameData.answeredQuestions = [];
+    GameData.teams.forEach(team => team.score = 0);
+    GameData.currentTeam = 1;
+    GameData.currentQuestion = null;
+
+    // Restaurar todas las tarjetas
+    const tiles = document.querySelectorAll('.game-tile');
+    tiles.forEach(tile => {
+      tile.classList.remove('is-flipped');
+      tile.style.transform = '';
+      tile.style.opacity = '';
+      tile.style.pointerEvents = '';
+    });
+
+    this.updateUI();
+    this.showNotification("Game restarted!", "info");
+  },
+
+  showTeamEditor() {
+    const content = `
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Team 1 Name</label>
+          <input type="text" id="team1-name-input" class="w-full p-3 border border-gray-300 rounded-lg" value="${GameData.teams[0].name}">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Team 2 Name</label>
+          <input type="text" id="team2-name-input" class="w-full p-3 border border-gray-300 rounded-lg" value="${GameData.teams[1].name}">
+        </div>
+        <div class="flex justify-center space-x-4 pt-4">
+          <button id="save-teams-btn" class="btn bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold">
+            Save Teams
+          </button>
+          <button id="reset-teams-btn" class="btn bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold">
+            Reset
+          </button>
+        </div>
+      </div>
+    `;
+
+    const modal = RobustModalSystem.createModal("Edit Teams", content, { id: "team-editor-modal" });
+    
+    const saveBtn = modal.querySelector('#save-teams-btn');
+    const resetBtn = modal.querySelector('#reset-teams-btn');
+    
+    saveBtn.addEventListener('click', () => this.saveTeamNames(modal));
+    resetBtn.addEventListener('click', () => this.resetTeamNames(modal));
+  },
+
+  saveTeamNames(modal) {
+    const team1Input = modal.querySelector('#team1-name-input');
+    const team2Input = modal.querySelector('#team2-name-input');
+
+    GameData.teams[0].name = team1Input.value.trim() || "Team 1";
+    GameData.teams[1].name = team2Input.value.trim() || "Team 2";
+
+    this.updateUI();
+    this.showNotification("Team names updated!", "success");
+    RobustModalSystem.closeModal();
+  },
+
+  resetTeamNames(modal) {
+    const team1Input = modal.querySelector('#team1-name-input');
+    const team2Input = modal.querySelector('#team2-name-input');
+    
+    team1Input.value = "Team 1";
+    team2Input.value = "Team 2";
   },
 
   updateUI() {
     this.updateScoreboard();
     this.updateGameInfo();
+    this.updateCurrentTeam();
   },
 
   updateScoreboard() {
@@ -384,14 +550,25 @@ const GameController = {
     if (team2Score) team2Score.textContent = this.formatScore(GameData.teams[1].score);
     if (team1Name) team1Name.textContent = GameData.teams[0].name;
     if (team2Name) team2Name.textContent = GameData.teams[1].name;
+  },
 
-    // Resaltar equipo actual
+  updateCurrentTeam() {
+    const currentTeamElement = document.getElementById('current-team');
+    if (currentTeamElement) {
+      const currentTeamName = GameData.teams[GameData.currentTeam - 1].name;
+      currentTeamElement.textContent = currentTeamName;
+      currentTeamElement.className = `font-bold ${GameData.currentTeam === 1 ? 'text-pink-600' : 'text-blue-600'}`;
+    }
+
+    // Resaltar equipo actual en scoreboard
     const team1Container = document.getElementById('team1-container');
     const team2Container = document.getElementById('team2-container');
 
     if (team1Container && team2Container) {
-      team1Container.classList.toggle('ring-2', GameData.currentTeam === 1);
-      team2Container.classList.toggle('ring-2', GameData.currentTeam === 2);
+      team1Container.classList.toggle('ring-4', GameData.currentTeam === 1);
+      team1Container.classList.toggle('ring-pink-400', GameData.currentTeam === 1);
+      team2Container.classList.toggle('ring-4', GameData.currentTeam === 2);
+      team2Container.classList.toggle('ring-blue-400', GameData.currentTeam === 2);
     }
   },
 
@@ -409,70 +586,12 @@ const GameController = {
     return score === 1 ? '1 point' : `${score} points`;
   },
 
-  regenerateBoard() {
-    const { GameBoard } = window.BammoozleUI;
-    if (GameBoard) {
-      GameBoard.createGameTiles();
+  showNotification(message, type = "info") {
+    if (window.BammoozleUtils?.NotificationSystem) {
+      window.BammoozleUtils.NotificationSystem[type](message);
+    } else {
+      console.log(`[${type.toUpperCase()}] ${message}`);
     }
-  },
-
-  showTeamEditor() {
-    const { ModalSystem } = window.BammoozleUI;
-
-    const content = `
-      <div class="space-y-4">
-        <div>
-          <label class="form-label">Team 1 Name</label>
-          <input type="text" id="team1-name-input" class="form-input" value="${GameData.teams[0].name}">
-        </div>
-        <div>
-          <label class="form-label">Team 2 Name</label>
-          <input type="text" id="team2-name-input" class="form-input" value="${GameData.teams[1].name}">
-        </div>
-        <div class="flex justify-center space-x-4">
-          <button class="btn btn-primary" onclick="BammoozleGame.GameController.saveTeamNames()">
-            Save
-          </button>
-          <button class="btn btn-secondary" onclick="BammoozleGame.GameController.resetTeamNames()">
-            Reset
-          </button>
-        </div>
-      </div>
-    `;
-
-    ModalSystem.createModal("Edit Teams", content, {
-      id: "team-editor-modal",
-      closeButtonText: "Close"
-    });
-  },
-
-  saveTeamNames() {
-    const team1Input = document.getElementById('team1-name-input');
-    const team2Input = document.getElementById('team2-name-input');
-
-    if (team1Input && team2Input) {
-      GameData.teams[0].name = team1Input.value.trim() || "Team 1";
-      GameData.teams[1].name = team2Input.value.trim() || "Team 2";
-
-      this.updateUI();
-
-      const { NotificationSystem } = window.BammoozleUtils;
-      const { ModalSystem } = window.BammoozleUI;
-
-      NotificationSystem.success("Team names updated");
-      ModalSystem.closeModal();
-    }
-  },
-
-  resetTeamNames() {
-    GameData.teams[0].name = "Team 1";
-    GameData.teams[1].name = "Team 2";
-
-    const team1Input = document.getElementById('team1-name-input');
-    const team2Input = document.getElementById('team2-name-input');
-
-    if (team1Input) team1Input.value = GameData.teams[0].name;
-    if (team2Input) team2Input.value = GameData.teams[1].name;
   }
 };
 
@@ -481,8 +600,6 @@ const GameController = {
    ============================================ */
 
 const StudyController = {
-  currentIndex: 0,
-  studyMode: "preview", // preview, practice
   stats: {
     correct: 0,
     wrong: 0,
@@ -492,27 +609,23 @@ const StudyController = {
   init() {
     this.bindEvents();
     this.updateUI();
+    RobustModalSystem.init();
   },
 
   bindEvents() {
-    // Botón de reinicio
-    const restartButton = document.getElementById('restart-button');
-    if (restartButton) {
-      restartButton.addEventListener('click', () => {
-        this.restart();
-      });
+    const restartBtn = document.getElementById('restart-button');
+    if (restartBtn) {
+      restartBtn.addEventListener('click', () => this.restart());
     }
 
-    // Botones de las tarjetas de estudio
-    const studyCards = document.querySelectorAll('.study-card');
-    studyCards.forEach((card, index) => {
-      const magnifyingGlass = card.querySelector('button');
-      if (magnifyingGlass) {
-        magnifyingGlass.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.showAnswer(index);
-        });
-      }
+    // Binds para botones de respuesta
+    const answerButtons = document.querySelectorAll('.study-answer-btn');
+    answerButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const index = parseInt(btn.dataset.index);
+        this.showAnswer(index);
+      });
     });
   },
 
@@ -522,32 +635,33 @@ const StudyController = {
 
     this.stats.seen++;
 
-    const { ModalSystem } = window.BammoozleUI;
-
     const content = `
       <div class="text-center">
         <div class="bg-gray-100 p-4 rounded-lg mb-4">
           <p class="text-lg font-medium">${question.question}</p>
         </div>
         <div class="bg-blue-50 p-4 rounded-lg mb-6">
-          <p class="font-semibold text-blue-800">Answer:</p>
-          <p class="text-blue-700">${question.answer}</p>
+          <p class="font-semibold text-blue-800 mb-2">Answer:</p>
+          <p class="text-blue-700 text-lg">${question.answer}</p>
         </div>
         <div class="flex justify-center space-x-4">
-          <button class="btn btn-success" onclick="BammoozleGame.StudyController.markAnswer(${questionIndex}, true)">
-            I knew the answer
+          <button id="knew-btn" class="btn bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold">
+            ✅ I knew it
           </button>
-          <button class="btn btn-danger" onclick="BammoozleGame.StudyController.markAnswer(${questionIndex}, false)">
-            I didn't know the answer
+          <button id="didnt-know-btn" class="btn bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold">
+            ❌ I didn't know
           </button>
         </div>
       </div>
     `;
 
-    ModalSystem.createModal("Answer", content, {
-      id: "study-answer-modal",
-      closeButtonText: "Close"
-    });
+    const modal = RobustModalSystem.createModal("Study Answer", content, { id: "study-modal" });
+    
+    const knewBtn = modal.querySelector('#knew-btn');
+    const didntKnowBtn = modal.querySelector('#didnt-know-btn');
+    
+    knewBtn.addEventListener('click', () => this.markAnswer(questionIndex, true));
+    didntKnowBtn.addEventListener('click', () => this.markAnswer(questionIndex, false));
   },
 
   markAnswer(questionIndex, isCorrect) {
@@ -558,12 +672,10 @@ const StudyController = {
     }
 
     this.updateProgressUI();
+    RobustModalSystem.closeModal();
 
-    const { ModalSystem } = window.BammoozleUI;
-    const { NotificationSystem } = window.BammoozleUtils;
-
-    ModalSystem.closeModal();
-    NotificationSystem.success(isCorrect ? "Correct!" : "Keep studying");
+    const message = isCorrect ? "Great! Keep it up! 🎉" : "Keep studying! 💪";
+    GameController.showNotification(message, isCorrect ? "success" : "info");
   },
 
   updateProgressUI() {
@@ -584,11 +696,8 @@ const StudyController = {
 
   restart() {
     this.stats = { correct: 0, wrong: 0, seen: 0 };
-    this.currentIndex = 0;
     this.updateProgressUI();
-
-    const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.info("Study session restarted");
+    GameController.showNotification("Study session restarted!", "info");
   },
 
   updateUI() {
@@ -597,159 +706,20 @@ const StudyController = {
 };
 
 /* ============================================
-   CONTROLADOR DE EDITOR
+   FUNCIONES GLOBALES PARA NAVEGACIÓN
    ============================================ */
 
-const EditorController = {
-  currentQuestion: null,
+function startBaamboozleGame() {
+  window.location.href = 'game-board.html';
+}
 
-  init() {
-    this.bindEvents();
-    this.loadQuestions();
-  },
+function goToStudy() {
+  window.location.href = 'study.html';
+}
 
-  bindEvents() {
-    // Formulario de edición
-    const editForm = document.getElementById('edit-form');
-    if (editForm) {
-      editForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        this.saveQuestion();
-      });
-    }
-
-    // Botones de acción en la lista
-    this.bindQuestionListEvents();
-  },
-
-  bindQuestionListEvents() {
-    const questionsList = document.getElementById('questions-list');
-    if (!questionsList) return;
-
-    // Botones de editar
-    const editButtons = questionsList.querySelectorAll('[data-action="edit"]');
-    editButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const questionId = parseInt(e.target.closest('[data-question-id]').dataset.questionId);
-        this.editQuestion(questionId);
-      });
-    });
-
-    // Botones de eliminar
-    const deleteButtons = questionsList.querySelectorAll('[data-action="delete"]');
-    deleteButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const questionId = parseInt(e.target.closest('[data-question-id]').dataset.questionId);
-        this.deleteQuestion(questionId);
-      });
-    });
-  },
-
-  loadQuestions() {
-    const questionsList = document.getElementById('questions-list');
-    if (!questionsList) return;
-
-    questionsList.innerHTML = '';
-
-    GameData.questions.forEach(question => {
-      const questionElement = this.createQuestionElement(question);
-      questionsList.appendChild(questionElement);
-    });
-  },
-
-  createQuestionElement(question) {
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.dataset.questionId = question.id;
-
-    div.innerHTML = `
-      <div class="card-body">
-        <p class="text-gray-500 mb-2">${question.question}</p>
-        <p class="font-bold text-bam-blue">${question.answer}</p>
-      </div>
-      <div class="card-footer">
-        <span class="font-bold text-gray-600">v ${question.points}</span>
-        <div class="flex items-center space-x-2 text-gray-600">
-          <button data-action="edit" class="hover:text-bam-blue">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
-            </svg>
-          </button>
-          <button data-action="delete" class="hover:text-bam-red">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    `;
-
-    return div;
-  },
-
-  saveQuestion() {
-    const form = document.getElementById('edit-form');
-    const question = form.querySelector('#question').value.trim();
-    const answer = form.querySelector('#answer').value.trim();
-    const points = parseInt(form.querySelector('#points').value) || 15;
-
-    if (!question || !answer) {
-      const { NotificationSystem } = window.BammoozleUtils;
-      NotificationSystem.error('Question and answer are required');
-      return;
-    }
-
-    if (this.currentQuestion) {
-      // Editar pregunta existente
-      this.currentQuestion.question = question;
-      this.currentQuestion.answer = answer;
-      this.currentQuestion.points = points;
-    } else {
-      // Nueva pregunta
-      const newQuestion = {
-        id: Date.now(),
-        question,
-        answer,
-        points
-      };
-      GameData.questions.push(newQuestion);
-    }
-
-    this.loadQuestions();
-    this.bindQuestionListEvents();
-    form.reset();
-    this.currentQuestion = null;
-
-    const { NotificationSystem } = window.BammoozleUtils;
-    NotificationSystem.success('Question saved successfully');
-  },
-
-  editQuestion(questionId) {
-    const question = GameData.questions.find(q => q.id === questionId);
-    if (!question) return;
-
-    this.currentQuestion = question;
-
-    const form = document.getElementById('edit-form');
-    form.querySelector('#question').value = question.question;
-    form.querySelector('#answer').value = question.answer;
-    form.querySelector('#points').value = question.points;
-
-    // Scroll al formulario
-    form.scrollIntoView({ behavior: 'smooth' });
-  },
-
-  deleteQuestion(questionId) {
-    if (confirm('Are you sure you want to delete this question?')) {
-      GameData.questions = GameData.questions.filter(q => q.id !== questionId);
-      this.loadQuestions();
-      this.bindQuestionListEvents();
-
-      const { NotificationSystem } = window.BammoozleUtils;
-      NotificationSystem.success('Question deleted');
-    }
-  }
-};
+function goToEdit() {
+  window.location.href = 'edit.html';
+}
 
 /* ============================================
    INICIALIZACIÓN PRINCIPAL
@@ -758,26 +728,22 @@ const EditorController = {
 const BammoozleGame = {
   GameController,
   StudyController,
-  EditorController,
   GameData,
+  RobustModalSystem,
 
   init() {
-    // Detectar página actual y inicializar el controlador apropiado
     const currentPage = this.getCurrentPage();
 
     switch (currentPage) {
       case 'game-main':
-        this.GameController.init();
-        break;
       case 'game-board':
         this.GameController.init();
         break;
-      
-      case 'edit':
-        this.EditorController.init();
+      case 'study':
+        this.StudyController.init();
         break;
       default:
-        console.log('Page not recognized for game initialization');
+        console.log('Game system ready for:', currentPage);
     }
   },
 
@@ -790,10 +756,6 @@ const BammoozleGame = {
     return 'unknown';
   }
 };
-//navegacion al juego 
-function startBaamboozleGame() {
-  window.location.href = 'game-board.html';
-}
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {

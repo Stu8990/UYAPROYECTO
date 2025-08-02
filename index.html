@@ -9,6 +9,23 @@
     <link href="css/base.css" rel="stylesheet">
     <link href="css/components.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+      // Configuración temporal - reemplaza con tu config real
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQ1yAvpEja8HeS8GbEImNNj2dVR5Gcwf4",
+            authDomain: "uyaepn.firebaseapp.com",
+            projectId: "uyaepn",
+            storageBucket: "uyaepn.firebasestorage.app",
+            messagingSenderId: "608933657675",
+            appId: "1:608933657675:web:e611b91aab24edda54a1ce",
+            measurementId: "G-S2JPQHKTEX"
+        };
+      
+      // Esto se cargará antes que el resto de scripts
+      window.firebaseConfig = firebaseConfig;
+    </script>
 </head>
 <body class="landing-page relative min-h-screen flex flex-col">
 
@@ -17,6 +34,13 @@
         <div class="shape shape-planet-1">
             <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100.967 15.6542C96.6336 16.1417 92.1377 18.2542 87.5877 21.775C80.871 18.2542 73.396 16.3583 65.596 16.25C52.4877 16.25 40.1919 21.0167 30.9294 30.0625C26.3335 34.5318 22.6697 39.8683 20.1501 45.763C17.6304 51.6578 16.3049 57.9937 16.2502 64.4042C16.1625 70.5248 17.2283 76.6072 19.3919 82.3333C13.596 88.8333 8.17938 102.267 14.896 109.85C17.7127 112.992 21.721 114.4 26.5419 114.4C41.2211 114.4 63.4294 101.4 82.1169 84.825C106.979 62.7792 126.209 33.8 114.942 21.0708C113.233 19.1143 111.07 17.6072 108.643 16.6817C106.216 15.7561 103.599 15.4405 101.021 15.7625L100.967 15.6542Z" fill="#0A91AB"/>
+            </svg>
+        </div>
+        
+        <!-- Más elementos decorativos... -->
+        <div class="shape shape-cloud-1">
+            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/>
             </svg>
         </div>
     </div>
@@ -33,10 +57,15 @@
                     <a href="#" class="nav-link">Blog</a>
                     <a href="#" class="nav-link">Pricing</a>
                     <a href="#" class="nav-link">Class PIN</a>
-                    <button id="header-signin-btn" class="btn btn-outline text-white border-white hover:bg-white hover:text-bam-purple">
+                    
+                    <!-- Info del usuario (aparece cuando está logueado) -->
+                    <div class="user-info"></div>
+                    
+                    <!-- Botones de auth (aparecen cuando NO está logueado) -->
+                    <button id="header-signin-btn" class="btn btn-outline text-white border-white hover:bg-white hover:text-bam-purple signin-btn">
                         Sign in
                     </button>
-                    <button id="header-join-btn" class="btn btn-primary btn-rounded">
+                    <button id="header-join-btn" class="btn btn-primary btn-rounded join-btn">
                         Join for Free
                     </button>
                 </div>
@@ -68,6 +97,26 @@
                 <!-- Modo Formulario -->
                 <div id="form-content" class="w-full max-w-md mx-auto hidden">
                     <h1 id="form-title" class="text-5xl font-bold mb-8 text-bam-dark">Join for free</h1>
+                    
+                    <!-- Botón de Google Sign In -->
+                    <button id="google-signin-btn" class="btn w-full mb-6 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 flex items-center justify-center space-x-3 py-3">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span>Continue with Google</span>
+                    </button>
+                    
+                    <div class="relative mb-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-bam-yellow text-gray-500">or continue with email</span>
+                        </div>
+                    </div>
                     
                     <form id="auth-form" novalidate>
                         <div class="form-group">
@@ -131,15 +180,73 @@
             <a href="#" class="mobile-menu-link">Pricing</a>
             <a href="#" class="mobile-menu-link">Class PIN</a>
             <hr class="border-gray-600 my-4"/>
-            <a href="#" class="mobile-menu-link">Sign in</a>
-            <a href="#" class="btn btn-primary btn-rounded text-center">Join for Free</a>
+            
+            <!-- Mobile user info -->
+            <div class="user-info"></div>
+            
+            <!-- Mobile auth buttons -->
+            <a href="#" class="mobile-menu-link signin-btn">Sign in</a>
+            <a href="#" class="btn btn-primary btn-rounded text-center join-btn">Join for Free</a>
         </nav>
     </div>
 
     <!-- Scripts -->
     <script src="js/utils.js"></script>
     <script src="js/ui.js"></script>
-    <script src = "js/keyboard-shortcuts.js"></script>
+    <script src="js/keyboard-shortcuts.js"></script>
+    
+    <!-- Firebase Scripts (usando CDN para simplicidad) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+
+        // // Usar la configuración global
+        // const firebaseConfig = {
+        //     apiKey: "AIzaSyAQ1yAvpEja8HeS8GbEImNNj2dVR5Gcwf4",
+        //     authDomain: "uyaepn.firebaseapp.com",
+        //     projectId: "uyaepn",
+        //     storageBucket: "uyaepn.firebasestorage.app",
+        //     messagingSenderId: "608933657675",
+        //     appId: "1:608933657675:web:e611b91aab24edda54a1ce",
+        //     measurementId: "G-S2JPQHKTEX"
+        // };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Hacer disponible globalmente
+        window.firebaseApp = app;
+        window.firebaseAuth = auth;
+        window.firebaseDB = db;
+        window.googleProvider = googleProvider;
+        window.firebaseModules = {
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            updateProfile,
+            signInWithPopup,
+            doc,
+            setDoc,
+            getDoc,
+            collection,
+            addDoc,
+            updateDoc,
+            query,
+            where,
+            getDocs
+        };
+
+        console.log('🔥 Firebase initialized successfully');
+    </script>
+    
+    <!-- Firebase Auth Controller -->
+    <script src="js/firebase-auth.js"></script>
+    
     <script>
         // Lógica específica para la página de landing/auth
         document.addEventListener('DOMContentLoaded', function() {
@@ -150,42 +257,31 @@
             // Mostrar formulario cuando se hace clic en "Get Started"
             if (getStartedBtn) {
                 getStartedBtn.addEventListener('click', () => {
-                    landingContent.classList.add('hidden');
-                    formContent.classList.remove('hidden');
-                    
-                    // Cambiar el fondo del body
-                    document.body.classList.remove('landing-page');
-                    document.body.style.backgroundColor = '#FAC663';
+                    showAuthForm();
                 });
             }
             
-            // Volver al landing desde el header
+            // Volver al formulario desde el header
             const headerButtons = document.querySelectorAll('#header-signin-btn, #header-join-btn');
             headerButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    landingContent.classList.add('hidden');
-                    formContent.classList.remove('hidden');
-                    document.body.classList.remove('landing-page');
-                    document.body.style.backgroundColor = '#FAC663';
+                    showAuthForm();
                 });
             });
+
+            function showAuthForm() {
+                landingContent.classList.add('hidden');
+                formContent.classList.remove('hidden');
+                document.body.classList.remove('landing-page');
+                document.body.style.backgroundColor = '#FAC663';
+            }
+
+            // Integración con FormSwitcher existente
+            if (window.BammoozleUI?.FormSwitcher) {
+                window.BammoozleUI.FormSwitcher.init();
+            }
         });
     </script>
 </body>
 </html>
-            </svg>
-        </div>
-        <div class="shape shape-cloud-1">
-            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/>
-            </svg>
-        </div>
-        <div class="shape shape-cloud-2">
-            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M89.9252 50.9208C87.9543 32.6333 73.0585 18.3333 55.0002 18.3333C41.021 18.3333 28.921 26.95 23.5127 40.425C12.696 43.6791 4.5835 54.3125 4.5835 65.6791C4.5835 79.9791 15.7668 91.6666 29.5168 91.6666H85.5252C96.4793 91.6666 105.371 82.4083 105.371 71.0416C105.371 61.2333 98.7252 52.9833 89.8793 50.9208H89.9252Z" fill="#F0386B"/>
-            </svg>
-        </div>
-        <div class="shape shape-planet-2">
-            <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100.967 15.6542C96.6336 16.1417 92.1377 18.2542 87.5877 21.775C80.871 18.2542 73.396 16.3583 65.596 16.25C52.4877 16.25 40.1919 21.0167 30.9294 30.0625C26.3335 34.5318 22.6697 39.8683 20.1501 45.763C17.6304 51.6578 16.3049 57.9937 16.2502 64.4042C16.1625 70.5248 17.2283 76.6072 19.3919 82.3333C13.596 88.8333 8.17938 102.267 14.896 109.85C17.7127 112.992 21.721 114.4 26.5419 114.4C41.2211 114.4 63.4294 101.4 82.1169 84.825C106.979 62.7792 126.209 33.8 114.942 21.0708C113.233 19.1143 111.07 17.6072 108.643 16.6817C106.216 15.7561 103.599 15.4405 101.021 15.7625L100.967 15.6542Z" fill="#0A91AB"/>
