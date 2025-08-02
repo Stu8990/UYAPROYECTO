@@ -171,3 +171,585 @@ body {
 .transition-all { transition: all var(--transition-normal); }
 .transition-colors { transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast); }
 .transition-transform { transition: transform var(--transition-normal); }
+
+/* ============================================
+   ACCESSIBILITY IMPROVEMENTS - Añadir a base.css
+   ============================================ */
+
+/* ============================================
+   SKIP LINKS Y NAVEGACIÓN
+   ============================================ */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--bam-purple);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 1000;
+  font-weight: bold;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================
+   FOCUS INDICATORS MEJORADOS
+   ============================================ */
+
+/* Focus visible para todos los elementos interactivos */
+*:focus-visible {
+  outline: 3px solid var(--bam-purple);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Focus específico para botones */
+.btn:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--bam-purple);
+}
+
+/* Focus para inputs */
+.form-input:focus-visible {
+  outline: 3px solid var(--bam-purple);
+  outline-offset: 2px;
+  border-color: var(--bam-purple);
+}
+
+/* ============================================
+   CONTRASTE MEJORADO
+   ============================================ */
+
+/* Asegurar contraste mínimo de 4.5:1 */
+.text-gray-500 {
+  color: #6B7280; /* Cambiado para mejor contraste */
+}
+
+.text-gray-600 {
+  color: #4B5563; /* Cambiado para mejor contraste */
+}
+
+/* Estados de hover con mejor contraste */
+.nav-link:hover {
+  color: #E5E7EB; /* Mejor contraste en hover */
+}
+
+/* ============================================
+   INDICADORES DE ESTADO
+   ============================================ */
+
+/* Estados de carga */
+.loading {
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid var(--bam-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Indicadores de error */
+.error-state {
+  border: 2px solid var(--bam-red);
+  background-color: #FEF2F2;
+}
+
+.error-message {
+  color: var(--bam-red);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-message::before {
+  content: '⚠️';
+  font-size: 16px;
+}
+
+/* Indicadores de éxito */
+.success-state {
+  border: 2px solid var(--bam-green);
+  background-color: #F0FDF4;
+}
+
+.success-message {
+  color: var(--bam-green-dark);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.success-message::before {
+  content: '✅';
+  font-size: 16px;
+}
+
+/* ============================================
+   TEXTO Y TIPOGRAFÍA ACCESIBLE
+   ============================================ */
+
+/* Tamaño mínimo de texto */
+body {
+  font-size: 16px; /* Mínimo recomendado */
+  line-height: 1.6; /* Mejor legibilidad */
+}
+
+/* Espaciado mejorado para lectura */
+p, li, div {
+  line-height: 1.6;
+}
+
+/* Títulos con mejor jerarquía */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   LANDMARKS Y REGIONES
+   ============================================ */
+
+/* Estilos para regiones ARIA */
+[role="main"] {
+  min-height: 200px;
+}
+
+[role="navigation"] {
+  border-bottom: 1px solid #E5E7EB;
+}
+
+[role="banner"] {
+  background: var(--bam-header-dark);
+}
+
+[role="contentinfo"] {
+  background: #F9FAFB;
+  border-top: 1px solid #E5E7EB;
+}
+
+/* ============================================
+   NOTIFICACIONES ACCESIBLES
+   ============================================ */
+
+/* Region live para screen readers */
+.sr-live-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Notificaciones mejoradas */
+.notification {
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-height: 48px; /* Tamaño mínimo para touch */
+}
+
+.notification-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+.notification-content {
+  flex: 1;
+  font-weight: 500;
+}
+
+.notification-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.notification-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   FORMULARIOS ACCESIBLES
+   ============================================ */
+
+/* Labels siempre visibles */
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--bam-text-dark);
+  font-size: 14px;
+}
+
+/* Campos de formulario mejorados */
+.form-input {
+  min-height: 48px; /* Tamaño mínimo para touch */
+  padding: 12px 16px;
+  border: 2px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 16px; /* Previene zoom en iOS */
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--bam-purple);
+  box-shadow: 0 0 0 3px rgba(132, 83, 219, 0.1);
+}
+
+/* Estados de error mejorados */
+.form-input.error {
+  border-color: var(--bam-red);
+  background-color: #FEF2F2;
+}
+
+.form-input.error:focus {
+  box-shadow: 0 0 0 3px rgba(251, 77, 61, 0.1);
+}
+
+/* Descripciones de campos */
+.form-description {
+  font-size: 14px;
+  color: #6B7280;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* Campos obligatorios */
+.required::after {
+  content: ' *';
+  color: var(--bam-red);
+  font-weight: bold;
+}
+
+/* ============================================
+   BOTONES ACCESIBLES
+   ============================================ */
+
+.btn {
+  min-height: 44px; /* Tamaño mínimo para touch */
+  min-width: 44px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Estados de botón */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  transform: none;
+}
+
+/* Botón con icono */
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+/* ============================================
+   TARJETAS DE JUEGO ACCESIBLES
+   ============================================ */
+
+.game-tile {
+  min-height: 88px; /* Tamaño mínimo para touch */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.game-tile:hover {
+  transform: scale(1.05);
+  border-color: white;
+}
+
+.game-tile:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+
+.game-tile[aria-pressed="true"] {
+  transform: rotateY(180deg);
+  opacity: 0.3;
+}
+
+/* ============================================
+   MODALES ACCESIBLES
+   ============================================ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--bam-text-dark);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: #F3F4F6;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+/* ============================================
+   MODO DE ALTO CONTRASTE
+   ============================================ */
+
+@media (prefers-contrast: high) {
+  :root {
+    --bam-text-dark: #000000;
+    --bam-grey-dark: #000000;
+    --bam-background: #FFFFFF;
+  }
+  
+  .btn {
+    border: 2px solid currentColor;
+  }
+  
+  .form-input {
+    border: 2px solid #000000;
+  }
+  
+  .game-tile {
+    border: 3px solid #000000;
+  }
+}
+
+/* ============================================
+   PREFERENCIAS DE MOVIMIENTO
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .shape {
+    animation: none;
+  }
+  
+  .game-tile {
+    transition: none;
+  }
+  
+  .game-tile:hover {
+    transform: none;
+  }
+}
+
+/* ============================================
+   RESPONSIVE MEJORADO
+   ============================================ */
+
+/* Touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 16px 24px;
+  }
+  
+  .game-tile {
+    min-height: 100px;
+  }
+  
+  .form-input {
+    min-height: 52px;
+    padding: 16px;
+    font-size: 16px; /* Previene zoom en Safari iOS */
+  }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 640px) {
+  .modal {
+    margin: 16px;
+    max-height: calc(100vh - 32px);
+  }
+  
+  .modal-header {
+    padding: 16px;
+  }
+  
+  .modal-body {
+    padding: 16px;
+  }
+  
+  .btn-xl {
+    padding: 16px 32px;
+    font-size: 18px;
+  }
+}
+
+/* ============================================
+   UTILIDADES DE ACCESIBILIDAD
+   ============================================ */
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip al contenido principal */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--bam-purple);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 1000;
+  font-weight: bold;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Indicador de focus personalizado */
+.focus-ring {
+  outline: 3px solid var(--bam-purple);
+  outline-offset: 2px;
+}
+
+/* Estados de carga accesibles */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid var(--bam-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

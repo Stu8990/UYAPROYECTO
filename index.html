@@ -28,6 +28,8 @@
     </script>
 </head>
 <body class="landing-page relative min-h-screen flex flex-col">
+    <a href="#main-content" class="skip-to-content">Saltar al contenido principal</a>
+    <div id="sr-live-region" class="sr-live-region" aria-live="polite" aria-atomic="true"></div>
 
     <!-- Elementos decorativos de fondo -->
     <div class="absolute inset-0 w-full h-full overflow-hidden">
@@ -75,7 +77,7 @@
         </header>
 
         <!-- Contenido Hero -->
-        <main class="flex-grow flex items-center justify-center p-4">
+        <main id="main-content" role="main" class="flex-grow flex items-center justify-center p-4">
             <div class="w-full max-w-4xl mx-auto text-center">
                 
                 <!-- Modo Landing Page -->
@@ -246,7 +248,7 @@
     
     <!-- Firebase Auth Controller -->
     <script src="js/firebase-auth.js"></script>
-    
+    <script src="../js/accessibility-enhancer.js"></script>
     <script>
         // Lógica específica para la página de landing/auth
         document.addEventListener('DOMContentLoaded', function() {
