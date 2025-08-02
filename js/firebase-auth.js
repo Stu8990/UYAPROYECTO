@@ -1,5 +1,5 @@
 /* ============================================
-   FIREBASE AUTH CONTROLLER - CDN VERSION
+   FIREBASE AUTH CONTROLLER - CDN VERSION MEJORADO
    Archivo: js/firebase-auth.js
    ============================================ */
 
@@ -26,17 +26,22 @@ const FirebaseAuthController = {
     }
   },
 
+  // 🔧 FUNCIÓN MEJORADA
   bindAuthStateListener() {
     const { onAuthStateChanged } = window.firebaseModules;
     
     onAuthStateChanged(this.auth, (user) => {
+      console.log('🔄 Auth state changed:', user ? user.email : 'No user');
+      
       this.currentUser = user;
       this.updateUIForUser(user);
       
       if (user) {
         console.log('✅ User signed in:', user.email);
         this.createUserProfile(user);
-        this.redirectToGameIfNeeded();
+        
+        // 🔧 FIX: Usar nueva función mejorada
+        this.handleSuccessfulLogin();
       } else {
         console.log('❌ User signed out');
         this.clearUserData();
@@ -95,6 +100,7 @@ const FirebaseAuthController = {
     }
   },
 
+  // 🔧 FUNCIÓN MEJORADA
   async signUp(email, password) {
     const { createUserWithEmailAndPassword, updateProfile } = window.firebaseModules;
     
@@ -106,25 +112,32 @@ const FirebaseAuthController = {
       const displayName = this.extractNameFromEmail(email);
       await updateProfile(user, { displayName });
 
+      // 🔧 NO redirigir aquí, dejar que onAuthStateChanged lo maneje
       this.showNotification('¡Cuenta creada exitosamente! 🎉', 'success');
+      
       return user;
     } catch (error) {
       throw error;
     }
   },
 
+  // 🔧 FUNCIÓN MEJORADA
   async signIn(email, password) {
     const { signInWithEmailAndPassword } = window.firebaseModules;
     
     try {
       const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+      
+      // 🔧 NO redirigir aquí, dejar que onAuthStateChanged lo maneje
       this.showNotification('¡Bienvenido de vuelta! 👋', 'success');
+      
       return userCredential.user;
     } catch (error) {
       throw error;
     }
   },
 
+  // 🔧 FUNCIÓN MEJORADA
   async signInWithGoogle() {
     const { signInWithPopup } = window.firebaseModules;
     
@@ -133,11 +146,18 @@ const FirebaseAuthController = {
     this.setLoading(true);
     
     try {
+      console.log('🔄 Iniciando Google Sign-In...');
       const result = await signInWithPopup(this.auth, this.googleProvider);
       const user = result.user;
-      this.showNotification(`¡Bienvenido ${user.displayName}! 🎉`, 'success');
+      
+      console.log('✅ Google Sign-In exitoso:', user.email);
+      
+      // 🔧 NO redirigir aquí, dejar que onAuthStateChanged lo maneje
+      this.showNotification(`¡Hola ${user.displayName}! 👋`, 'success');
+      
       return user;
     } catch (error) {
+      console.error('❌ Error en Google Sign-In:', error);
       if (error.code !== 'auth/popup-closed-by-user') {
         this.handleAuthError(error);
       }
@@ -287,6 +307,86 @@ const FirebaseAuthController = {
     }
   },
 
+  // 🔧 NUEVA FUNCIÓN - Manejar login exitoso
+  handleSuccessfulLogin() {
+    console.log('🎯 Manejando login exitoso...');
+    
+    // Pequeño delay para asegurar que el DOM esté actualizado
+    setTimeout(() => {
+      this.redirectToGameIfNeeded();
+    }, 500);
+  },
+
+  // 🔧 FUNCIÓN COMPLETAMENTE REESCRITA
+  redirectToGameIfNeeded() {
+    console.log('🎯 Verificando si necesita redirección...');
+    
+    const currentPath = window.location.pathname;
+    const formContent = document.getElementById('form-content');
+    const landingContent = document.getElementById('landing-content');
+    
+    // Verificar si estamos en página de auth
+    const isInAuthPage = (currentPath.includes('index.html') || 
+                         currentPath === '/' || 
+                         currentPath.endsWith('UYAPROYECTO/')) &&
+                         formContent && 
+                         !formContent.classList.contains('hidden');
+    
+    console.log('📍 Estado de la página:', {
+      path: currentPath,
+      isInAuthPage,
+      formExists: !!formContent,
+      formVisible: formContent ? !formContent.classList.contains('hidden') : false
+    });
+    
+    if (isInAuthPage) {
+      console.log('✅ Usuario logueado en página de auth, iniciando redirección...');
+      
+      // Ocultar formulario
+      formContent.classList.add('hidden');
+      
+      // Mostrar mensaje de carga
+      if (landingContent) {
+        landingContent.innerHTML = `
+          <div class="text-center text-white text-shadow">
+            <div class="text-6xl mb-4">🎮</div>
+            <h2 class="text-3xl font-bold mb-4">¡Hola ${this.currentUser.displayName || this.currentUser.email}!</h2>
+            <p class="text-xl mb-4">Redirigiendo al juego...</p>
+            <div class="animate-spin w-8 h-8 border-4 border-white border-t-transparent rounded-full mx-auto"></div>
+          </div>
+        `;
+        landingContent.classList.remove('hidden');
+      }
+      
+      // Mostrar notificación
+      this.showNotification('¡Redirigiendo al juego! 🎮', 'success');
+      
+      // Redirección después de 2 segundos
+      setTimeout(() => {
+        let targetURL;
+        
+        if (currentPath.includes('/UYAPROYECTO/')) {
+          // GitHub Pages
+          targetURL = '/UYAPROYECTO/html/game-main.html';
+        } else {
+          // Localhost
+          targetURL = 'html/game-main.html';
+        }
+        
+        console.log('🚀 Redirigiendo a:', targetURL);
+        window.location.href = targetURL;
+      }, 2000);
+    } else {
+      console.log('❌ No es necesario redirigir');
+    }
+  },
+
+  clearUserData() {
+    // Limpiar datos del usuario del localStorage si es necesario
+    localStorage.removeItem('userGameData');
+    localStorage.removeItem('userPreferences');
+  },
+
   // Utilidades
   validateForm(email, password, confirmPassword, isLoginMode) {
     const { ValidationUtils } = window.BammoozleUtils || {};
@@ -355,6 +455,10 @@ const FirebaseAuthController = {
         break;
       case 'auth/network-request-failed':
         message = 'Error de conexión. Verifica tu internet.';
+        break;
+      case 'auth/unauthorized-domain':
+        message = `❌ Dominio no autorizado: ${window.location.hostname}. Contacta al administrador.`;
+        console.error('🔧 Solución: Añadir dominio en Firebase Console > Authentication > Settings > Authorized domains');
         break;
       default:
         message = error.message;
@@ -453,26 +557,6 @@ const FirebaseAuthController = {
     joinBtns.forEach(btn => btn.style.display = 'inline-block');
   },
 
-  redirectToGameIfNeeded() {
-    // Redirigir solo si estamos en la página de auth
-    const currentPath = window.location.pathname;
-    if (currentPath.includes('index.html') || currentPath === '/' || currentPath === '') {
-      const authContainer = document.getElementById('form-content');
-      if (authContainer && !authContainer.classList.contains('hidden')) {
-        this.showNotification('¡Redirigiendo al juego! 🎮', 'success');
-        setTimeout(() => {
-          window.location.href = 'html/game-main.html';
-        }, 1500);
-      }
-    }
-  },
-
-  clearUserData() {
-    // Limpiar datos del usuario del localStorage si es necesario
-    localStorage.removeItem('userGameData');
-    localStorage.removeItem('userPreferences');
-  },
-
   showNotification(message, type = 'info') {
     if (window.BammoozleUtils?.NotificationSystem) {
       window.BammoozleUtils.NotificationSystem[type](message);
@@ -512,6 +596,15 @@ const FirebaseAuthController = {
   // Verificar si el usuario está autenticado
   isAuthenticated() {
     return !!this.currentUser;
+  },
+
+  // 🔧 FUNCIÓN DE DEBUG
+  debugAuthState() {
+    console.log('🔧 DEBUG AUTH STATE:');
+    console.log('- Current user:', this.currentUser);
+    console.log('- Current path:', window.location.pathname);
+    console.log('- Form visible:', !document.getElementById('form-content')?.classList.contains('hidden'));
+    console.log('- Landing visible:', !document.getElementById('landing-content')?.classList.contains('hidden'));
   }
 };
 
@@ -603,4 +696,29 @@ window.showUserStats = async function() {
   }
 };
 
+// 🔧 FUNCIÓN GLOBAL PARA DEBUG
+window.debugAuth = function() {
+  if (window.FirebaseAuth) {
+    window.FirebaseAuth.debugAuthState();
+  } else {
+    console.log('❌ FirebaseAuth no disponible');
+  }
+};
+
+// 🔧 FUNCIÓN MANUAL PARA FORZAR REDIRECCIÓN
+window.forceRedirect = function() {
+  console.log('🔧 Forzando redirección...');
+  if (window.FirebaseAuth) {
+    window.FirebaseAuth.redirectToGameIfNeeded();
+  } else {
+    const targetURL = window.location.pathname.includes('/UYAPROYECTO/') 
+      ? '/UYAPROYECTO/html/game-main.html' 
+      : 'html/game-main.html';
+    window.location.href = targetURL;
+  }
+};
+
 console.log('🔥 Firebase Auth System loaded successfully!');
+console.log('💡 Funciones de debug disponibles:');
+console.log('   - debugAuth() - Ver estado actual');
+console.log('   - forceRedirect() - Forzar redirección manual');
