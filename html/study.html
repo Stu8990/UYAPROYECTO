@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study - Bammoozle</title>
+    <title>Study - Bamboozle</title>
     
     <!-- CSS -->
     <link href="../css/base.css" rel="stylesheet">
     <link href="../css/components.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="../img/logo.png">
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="skip-to-content">Saltar al contenido principal</a>
@@ -19,23 +20,26 @@
         <nav class="nav">
             <div class="flex items-center space-x-8">
                 <a href="game-main.html" class="nav-brand hover:opacity-70">
-                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <span class="sr-only">Ir a la página principal</span>
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                         <path d="M2.12499 15.8749H3.49999V25.4999C3.49999 27.0124 4.73749 28.2499 6.24999 28.2499H22.75C24.2625 28.2499 25.5 27.0124 25.5 25.4999V15.8749H26.875C27.425 15.8749 27.9337 15.5449 28.14 15.0224C28.3462 14.5137 28.2362 13.9224 27.8375 13.5237L15.4762 1.14869C15.349 1.02123 15.1979 0.920097 15.0316 0.851098C14.8653 0.782098 14.6869 0.746582 14.5069 0.746582C14.3268 0.746582 14.1485 0.782098 13.9821 0.851098C13.8158 0.920097 13.6647 1.02123 13.5375 1.14869L1.14874 13.5237C0.749992 13.9224 0.639992 14.5137 0.846242 15.0224C1.05249 15.5312 1.56124 15.8749 2.11124 15.8749H2.12499ZM14.5 4.06369L22.75 12.3137V25.4999H6.24999V12.3137L14.5 4.06369Z" fill="#ECECEC"/>
                     </svg>
                 </a>
-                
+
                 <div class="nav-links">
                     <a href="#" class="nav-link">Games</a>
                     <a href="#" class="nav-link">Blog</a>
                     <a href="#" class="nav-link">Class PIN</a>
                 </div>
             </div>
-            
+
             <div class="nav-links">
                 <a href="#" class="nav-link">Sign in</a>
-                <a href="#" class="btn btn-info btn-sm btn-rounded">Join for Free</a>
+                <a href="#" class="btn btn-rounded bg-accessible-blue" style="color: #fff; opacity: 1;">
+                    Join for Free
+                </a>
             </div>
-            
+
             <button id="hamburger-btn" class="hamburger">☰</button>
         </nav>
     </header>
@@ -83,13 +87,13 @@
                 </div>
                 
                 <div class="card-body">
-                    <div class="bg-bam-cyan text-white rounded-lg p-4 mb-4">
+                    <div class="bg-bam-blue-dark text-white rounded-lg p-4 mb-4">
                         <p class="font-bold">Progress Percentage</p>
                         <div class="flex items-center gap-4">
                             <svg class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.293a1 1 0 00-1.414-1.414L9 9.586 7.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                             </svg>
-                            <p id="progress-percentage" class="text-5xl font-bold">0%</p>
+                            <h2 id="progress-percentage" class="text-5xl font-bold">0%</h2>
                         </div>
                     </div>
 
@@ -145,7 +149,7 @@
                     </div>
                 </div>
             </div>
-            <p class="text-sm text-gray-500 -mt-2 mb-4">These are the cards that will be in the game, here you can familiarize with them. Each one of them has a score (by default it's 15).</p>
+            <p class="text-sm text-bam-dark -mt-2 mb-4">These are the cards that will be in the game, here you can familiarize with them. Each one of them has a score (by default it's 15).</p>
             
             <div id="study-cards-container" class="grid-responsive cols-2">
                 <!-- Tarjetas se generan con JavaScript -->
@@ -177,39 +181,29 @@
         document.addEventListener('DOMContentLoaded', function() {
             const { GameData, StudyController } = window.BammoozleGame;
             const studyCardsContainer = document.getElementById('study-cards-container');
-            
+
             // Generar tarjetas de estudio
             if (studyCardsContainer && GameData) {
                 GameData.questions.forEach((question, index) => {
                     const card = document.createElement('div');
                     card.className = 'study-card card';
                     card.innerHTML = `
-                        <div class="card-body">
-                            <p class="text-lg mb-4">${question.question}</p>
-                        </div>
-                        <div class="card-footer">
-                            <p class="font-bold text-bam-grey-dark">v ${question.points}</p>
-                            <button class="btn btn-primary btn-icon study-answer-btn" data-index="${index}">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    `;
+                <div class="card-body">
+                    <p class="text-lg mb-4">${question.question}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="font-bold text-bam-dark">Value: ${question.points}</p>
+                    <button class="btn btn-primary btn-icon study-answer-btn" data-index="${index}" aria-label="Ver respuesta">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
                     studyCardsContainer.appendChild(card);
                 });
-                
-                // Añadir eventos a los botones de respuesta
-                // const answerButtons = document.querySelectorAll('.study-answer-btn');
-                // answerButtons.forEach(btn => {
-                //     btn.addEventListener('click', (e) => {
-                //         e.stopPropagation();
-                //         const index = parseInt(btn.dataset.index);
-                //         StudyController.showAnswer(index);
-                //     });
-                // });
             }
-            
+
             // Inicializar el controlador de estudio
             StudyController.init();
         });

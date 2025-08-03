@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Board - Bammoozle</title>
+    <title>Game Board - Bamboozle</title>
     
     <!-- CSS -->
     <link href="../css/base.css" rel="stylesheet">
     <link href="../css/components.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="../img/logo.png">
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="skip-to-content">Saltar al contenido principal</a>
@@ -19,7 +20,8 @@
         <nav class="nav">
             <div class="flex items-center space-x-8">
                 <a href="game-main.html" class="nav-brand hover:opacity-70">
-                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <span class="sr-only">Ir a la página principal</span>
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                         <path d="M2.12499 15.8749H3.49999V25.4999C3.49999 27.0124 4.73749 28.2499 6.24999 28.2499H22.75C24.2625 28.2499 25.5 27.0124 25.5 25.4999V15.8749H26.875C27.425 15.8749 27.9337 15.5449 28.14 15.0224C28.3462 14.5137 28.2362 13.9224 27.8375 13.5237L15.4762 1.14869C15.349 1.02123 15.1979 0.920097 15.0316 0.851098C14.8653 0.782098 14.6869 0.746582 14.5069 0.746582C14.3268 0.746582 14.1485 0.782098 13.9821 0.851098C13.8158 0.920097 13.6647 1.02123 13.5375 1.14869L1.14874 13.5237C0.749992 13.9224 0.639992 14.5137 0.846242 15.0224C1.05249 15.5312 1.56124 15.8749 2.11124 15.8749H2.12499ZM14.5 4.06369L22.75 12.3137V25.4999H6.24999V12.3137L14.5 4.06369Z" fill="#ECECEC"/>
                     </svg>
                 </a>
@@ -33,7 +35,9 @@
             
             <div class="nav-links">
                 <a href="#" class="nav-link">Sign in</a>
-                <a href="#" class="btn btn-info btn-sm btn-rounded">Join for Free</a>
+                <a href="#" class="btn btn-rounded bg-accessible-blue" style="color: #fff; opacity: 1;">
+                    Join for Free
+                </a>
             </div>
             
             <button id="hamburger-btn" class="hamburger">☰</button>

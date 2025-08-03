@@ -12,11 +12,12 @@ author: Stuart Paalma*/
   --bam-yellow-darker: #F8BE4B;
   --bam-purple: #8453DB;
   --bam-purple-dark: #7148c2;
-  --bam-pink: #F0386B;
-  --bam-red: #FB4D3D;
-  --bam-green: #95DB53;
+  --bam-pink: #D41047;
+  --bam-red: #E21300;
+  --bam-green: #48791B;
   --bam-green-dark: #82C344;
-  --bam-blue: #0A91AB;
+  --bam-green-darker: #436523;
+  --bam-blue: #197F93;
   --bam-blue-dark: #1C77C3;
   --bam-blue-light: #49C8F0;
   --bam-cyan: #0A91AB;
@@ -100,6 +101,8 @@ body {
 .bg-bam-header-dark { background-color: var(--bam-header-dark); }
 .bg-bam-grey-light { background-color: var(--bam-grey-light); }
 .bg-bam-grey-dark { background-color: var(--bam-grey-dark); }
+.bg-accessible-yellow { background-color: #FFD600; color: #222222; }
+.bg-accessible-blue   { background-color: #0057B8; color: #FFFFFF; }
 
 /* Utilidades de color de texto */
 .text-bam-dark { color: var(--bam-text-dark); }

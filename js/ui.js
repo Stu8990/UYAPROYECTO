@@ -533,6 +533,7 @@ const FormSwitcher = {
    INICIALIZACIÓN PRINCIPAL
    ============================================ */
 
+// Al final de js/ui.js
 const BammoozleUI = {
   MobileNavigation,
   ModalSystem,
@@ -542,14 +543,16 @@ const BammoozleUI = {
   FormSwitcher,
 
   init() {
-    // Inicializar todos los componentes
     this.MobileNavigation.init();
     this.ModalSystem.init();
     this.FormHandler.init();
     this.GameControls.init();
-    this.GameBoard.init();
+    // Solo inicializar GameBoard si NO estamos en game-board.html
+    if (!window.location.pathname.includes('game-board')) {
+      this.GameBoard.init();
+    }
     this.FormSwitcher.init();
-    
+
     console.log('Bammoozle UI iniciado correctamente');
   }
 };

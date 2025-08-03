@@ -71,7 +71,7 @@ const GameData = {
   ],
 
   gameConfig: {
-    title: "Verbs followed by gerunds or infinitive (no diff...)",
+    title: "The Verb Journey",
     gameCode: "1054334",
     instruction: "Say the two possible forms.",
     totalQuestions: 10,
@@ -222,38 +222,21 @@ const GameController = {
 
   showGameModeSelection() {
     const content = `
-      <div class="text-center">
-        <h3 class="text-2xl font-bold mb-6">Choose Game Mode</h3>
-        <div class="grid grid-cols-2 gap-4">
-          <button class="game-mode-btn bg-purple-200 hover:bg-purple-300 p-4 rounded-lg transition-colors" data-mode="baamboozle">
-            <div class="text-4xl mb-2">🎯</div>
-            <div class="font-bold">Baamboozle</div>
-          </button>
-          <button class="game-mode-btn bg-orange-200 hover:bg-orange-300 p-4 rounded-lg transition-colors" data-mode="spud">
-            <div class="text-4xl mb-2">🥔</div>
-            <div class="font-bold">Spud Game</div>
-          </button>
-          <button class="game-mode-btn bg-pink-200 hover:bg-pink-300 p-4 rounded-lg transition-colors" data-mode="bowling">
-            <div class="text-4xl mb-2">🎳</div>
-            <div class="font-bold">Bowling</div>
-          </button>
-          <button class="game-mode-btn bg-red-200 hover:bg-red-300 p-4 rounded-lg transition-colors" data-mode="bball">
-            <div class="text-4xl mb-2">🏀</div>
-            <div class="font-bold">B-Ball</div>
-          </button>
-        </div>
-      </div>
-    `;
-    
+    <div class="text-center">
+      <h3 class="text-2xl font-bold mb-6">Choose Game Mode</h3>
+      <button class="game-mode-btn bg-purple-200 hover:bg-purple-300 p-4 rounded-lg transition-colors" data-mode="baamboozle">
+        <div class="text-4xl mb-2">🎯</div>
+        <div class="font-bold">The Verb Journey</div>
+      </button>
+    </div>
+  `;
+
     const modal = RobustModalSystem.createModal("Select Game Mode", content);
-    
-    // Añadir eventos a los botones de modo
-    const modeButtons = modal.querySelectorAll('.game-mode-btn');
-    modeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const mode = btn.dataset.mode;
-        this.startGame(mode);
-      });
+
+    // Solo un botón
+    const modeButton = modal.querySelector('.game-mode-btn');
+    modeButton.addEventListener('click', () => {
+      this.startGame('baamboozle');
     });
   },
 
