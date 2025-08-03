@@ -613,7 +613,7 @@ h3 {
    MODO DE ALTO CONTRASTE
    ============================================ */
 
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   :root {
     --bam-text-dark: #000000;
     --bam-grey-dark: #000000;
