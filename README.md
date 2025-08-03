@@ -1,4 +1,4 @@
-# Bammoozle
+# The Verb Journey - Bamboozle
 
 Este proyecto es una pequeña aplicación web enfocada en el aprendizaje mediante un juego de preguntas.
 
