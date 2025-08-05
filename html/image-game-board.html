@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Game Board - Bamboozle</title>
+    
+    <!-- CSS -->
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/components.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="../img/logo.png">
+</head>
+<body class="min-h-screen">
+    <a href="#main-content" class="skip-to-content">Saltar al contenido principal</a>
+    <div id="sr-live-region" class="sr-live-region" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Navegación -->
+    <header class="header">
+        <nav class="nav">
+            <div class="flex items-center space-x-8">
+                <a href="game-main.html" class="nav-brand hover:opacity-70">
+                    <span class="sr-only">Ir a la página principal</span>
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <path d="M2.12499 15.8749H3.49999V25.4999C3.49999 27.0124 4.73749 28.2499 6.24999 28.2499H22.75C24.2625 28.2499 25.5 27.0124 25.5 25.4999V15.8749H26.875C27.425 15.8749 27.9337 15.5449 28.14 15.0224C28.3462 14.5137 28.2362 13.9224 27.8375 13.5237L15.4762 1.14869C15.349 1.02123 15.1979 0.920097 15.0316 0.851098C14.8653 0.782098 14.6869 0.746582 14.5069 0.746582C14.3268 0.746582 14.1485 0.782098 13.9821 0.851098C13.8158 0.920097 13.6647 1.02123 13.5375 1.14869L1.14874 13.5237C0.749992 13.9224 0.639992 14.5137 0.846242 15.0224C1.05249 15.5312 1.56124 15.8749 2.11124 15.8749H2.12499ZM14.5 4.06369L22.75 12.3137V25.4999H6.24999V12.3137L14.5 4.06369Z" fill="#ECECEC"/>
+                    </svg>
+                </a>
+                
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Games</a>
+                    <a href="#" class="nav-link">Blog</a>
+                    <a href="#" class="nav-link">Class PIN</a>
+                </div>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link">Sign in</a>
+                <a href="#" class="btn btn-rounded bg-accessible-blue" style="color: #fff; opacity: 1;">
+                    Join for Free
+                </a>
+            </div>
+            
+            <button id="hamburger-btn" class="hamburger">☰</button>
+        </nav>
+    </header>
+
+    <!-- Bloque de Controles Superior -->
+    <div class="bg-gradient-to-r from-blue-600 to-teal-600 text-white py-4 px-6">
+        <div class="container grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+            <!-- Controles -->
+            <div class="flex items-center space-x-2 justify-center md:justify-start">
+                <span class="font-bold">Controls:</span>
+                <button class="btn btn-icon btn-sm bg-white/20 hover:bg-white/30" onclick="window.location.href='game-main.html'">
+                    &times;
+                </button>
+                <button class="btn btn-icon btn-sm bg-white/20 hover:bg-white/30" id="zoom-toggle" title="Zoom mode">
+                    🔍
+                </button>
+                <button class="btn btn-icon btn-sm bg-white/20 hover:bg-white/30" id="fullscreen-toggle" title="Pantalla completa">
+                    🖼️
+                </button>
+            </div>
+            
+            <!-- Título del Juego -->
+            <div class="text-center">
+                <h1 class="text-4xl font-bold">🖼️ Visual Discovery</h1>
+                <p id="game-title" class="font-semibold">Interactive Image Learning Challenge</p>
+            </div>
+            
+            <!-- Stats -->
+            <div class="text-center md:text-right">
+                <div class="text-sm bg-white/20 px-4 py-2 rounded-lg">
+                    <div>Images revealed: <span id="images-revealed">0</span>/6</div>
+                    <div>Questions left: <span id="questions-left">6</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bloque de Puntuaciones -->
+    <div class="bg-gradient-to-r from-blue-700 to-teal-700 text-white py-4 px-6">
+        <div class="container grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+            <!-- Editar Equipos -->
+            <div class="flex items-center justify-center md:justify-start space-x-2">
+                <span class="font-bold">Edit teams:</span>
+                <button class="btn btn-icon btn-sm hover:bg-white/20" aria-label="edit teams">
+                    <svg class="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Puntuaciones de Equipos -->
+            <div class="flex justify-center items-end space-x-8 col-span-1">
+                <div id="team1-container" class="text-center">
+                    <div class="bg-emerald-400 text-gray-800 px-4 py-1 rounded-t-lg font-bold">
+                        <span id="team1-name">Team 1</span>
+                    </div>
+                    <div class="font-bold text-3xl text-emerald-200">
+                        <span id="team1-score">0 points</span>
+                    </div>
+                </div>
+                
+                <div id="team2-container" class="text-center">
+                    <div class="bg-cyan-400 text-gray-800 px-4 py-1 rounded-t-lg font-bold">
+                        <span id="team2-name">Team 2</span>
+                    </div>
+                    <div class="font-bold text-3xl text-emerald-200">
+                        <span id="team2-score">0 points</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Image Controls -->
+            <div class="flex justify-center md:justify-end space-x-2">
+                <button id="hint-mode" class="btn btn-sm bg-white/20 hover:bg-white/30 text-white">
+                    💡 Hint Mode
+                </button>
+                <button id="gallery-view" class="btn btn-sm bg-white/20 hover:bg-white/30 text-white">
+                    🖼️ Gallery
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tablero de Imágenes -->
+    <main id="main-content" role="main" class="bg-gradient-to-b from-blue-50 to-teal-50 p-4 md:p-8 min-h-screen">
+        <div class="container">
+            <div class="text-center mb-6">
+                <p class="text-gray-700 mb-2 text-lg">Current turn: <span id="current-team" class="font-bold text-blue-600">Team 1</span></p>
+                <p class="text-gray-600 mb-4">🖼️ Click on an image to reveal it and answer the question!</p>
+                <div class="flex justify-center space-x-4 flex-wrap gap-2">
+                    <button id="restart-button" class="btn btn-danger">🔄 Restart Game</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='game-main.html'">⬅️ Back to Setup</button>
+                    <button id="instructions-btn" class="btn btn-info">❓ How to Play</button>
+                    <button id="reveal-all-btn" class="btn btn-warning">👁️ Reveal All</button>
+                </div>
+            </div>
+            
+            <div id="image-game-board" class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Image tiles se generan dinámicamente -->
+            </div>
+            
+            <!-- Loading indicator -->
+            <div id="loading-images" class="text-center py-8 hidden">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading images...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="modal-backdrop hidden">
+        <div class="modal modal-lg">
+            <div class="modal-header bg-gradient-to-r from-blue-600 to-teal-600 text-white">
+                <h3 id="image-modal-title" class="modal-title text-white">🖼️ Picture Challenge</h3>
+                <button class="modal-close text-white hover:text-gray-300">&times;</button>
+            </div>
+            <div class="modal-body p-0">
+                <!-- Image container -->
+                <div id="image-container" class="relative bg-gray-100">
+                    <img id="challenge-image" class="w-full h-auto max-h-96 object-contain mx-auto block" src="" alt="Challenge image">
+                    <div id="image-overlay" class="absolute inset-0 bg-gray-200 flex items-center justify-center">
+                        <div class="text-gray-600 text-center">
+                            <div class="text-6xl mb-4">🖼️</div>
+                            <p class="text-xl">Image loading...</p>
+                            <p class="text-sm mt-2">Please wait</p>
+                        </div>
+                    </div>
+                    <!-- Zoom controls -->
+                    <div id="zoom-controls" class="absolute top-4 right-4 flex space-x-2 opacity-75 hover:opacity-100">
+                        <button id="zoom-in" class="btn btn-sm bg-black/50 text-white hover:bg-black/70">🔍+</button>
+                        <button id="zoom-out" class="btn btn-sm bg-black/50 text-white hover:bg-black/70">🔍-</button>
+                        <button id="zoom-reset" class="btn btn-sm bg-black/50 text-white hover:bg-black/70">↻</button>
+                    </div>
+                </div>
+                
+                <!-- Question section -->
+                <div class="bg-white p-6">
+                    <div id="image-question-content">
+                        <h4 class="text-xl font-bold mb-4 text-blue-800">What do you see in this image?</h4>
+                        <p id="image-question-text" class="text-lg mb-4 bg-blue-50 p-4 rounded-lg"></p>
+                        <div class="text-center">
+                            <button id="show-image-answer-btn" class="btn btn-primary btn-lg">
+                                🎯 Show Answer
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="image-answer-content" class="hidden">
+                        <h4 class="text-xl font-bold mb-4 text-green-800">Correct Answer:</h4>
+                        <div class="bg-green-50 p-4 rounded-lg mb-6">
+                            <p id="image-answer-text" class="text-lg text-green-800"></p>
+                        </div>
+                        <div class="flex justify-center space-x-4">
+                            <button id="image-correct-btn" class="btn btn-success btn-lg">
+                                ✅ Correct (+15 pts)
+                            </button>
+                            <button id="image-incorrect-btn" class="btn btn-danger btn-lg">
+                                ❌ Incorrect (0 pts)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div id="gallery-modal" class="modal-backdrop hidden">
+        <div class="modal modal-lg">
+            <div class="modal-header bg-gradient-to-r from-blue-600 to-teal-600 text-white">
+                <h3 class="modal-title text-white">🖼️ Image Gallery</h3>
+                <button class="modal-close text-white hover:text-gray-300">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Gallery images populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal-btn">Close Gallery</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">🖼️ How to Play - Visual Discovery</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">🎯 Objective:</h4>
+                        <p>Look at images carefully and answer questions to earn points for your team!</p>
+                    </div>
+                    
+                    <div class="bg-teal-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-teal-800 mb-2">📋 How to Play:</h4>
+                        <ol class="list-decimal list-inside space-y-1">
+                            <li>Click on an image tile to reveal the picture</li>
+                            <li>Study the image carefully</li>
+                            <li>Use zoom controls if needed (🔍+, 🔍-, ↻)</li>
+                            <li>Read the question about the image</li>
+                            <li>Discuss with your team</li>
+                            <li>Click "Show Answer" when ready</li>
+                            <li>Mark if your answer was correct or not</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-emerald-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-emerald-800 mb-2">🏆 Scoring:</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Correct answer: +15 points</li>
+                            <li>Incorrect answer: 0 points</li>
+                            <li>Team with most points wins!</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-cyan-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-cyan-800 mb-2">💡 Tips:</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Use the zoom controls to see details</li>
+                            <li>Look for patterns, colors, and objects</li>
+                            <li>Pay attention to background elements</li>
+                            <li>Use "Gallery" to see all revealed images</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary close-modal-btn">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menú móvil -->
+    <div id="mobile-menu" class="mobile-menu">
+        <button id="close-menu-btn" class="mobile-menu-close">&times;</button>
+        <nav class="mobile-menu-links">
+            <a href="#" class="mobile-menu-link">Games</a>
+            <a href="#" class="mobile-menu-link">Blog</a>
+            <a href="#" class="mobile-menu-link">Class PIN</a>
+            <hr class="border-gray-600 my-4"/>
+            <a href="#" class="mobile-menu-link">Sign in</a>
+            <a href="#" class="btn btn-primary btn-rounded text-center">Join for Free</a>
+        </nav>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/game.js"></script>
+    <script src="../js/keyboard-shortcuts.js"></script>
+    <script src="../js/accessibility-enhancer.js"></script>
+    
+    <script>
+        // Image Game Controller
+        const ImageGameController = {
+            currentQuestion: null,
+            zoomLevel: 1,
+            hintModeActive: false,
+            imageData: [
+                {
+                    id: 1,
+                    title: "Nature Scene",
+                    imageUrl: "https://picsum.photos/800/600?random=1", // Placeholder - reemplazar con imágenes reales
+                    question: "What is the main element in the center of this image?",
+                    answer: "A large oak tree with spreading branches dominates the center of the scene.",
+                    points: 15,
+                    isUsed: false,
+                    category: "nature"
+                },
+                {
+                    id: 2,
+                    title: "Urban Architecture", 
+                    imageUrl: "https://picsum.photos/800/600?random=2",
+                    question: "What architectural style is prominently featured in this building?",
+                    answer: "The building showcases modern glass and steel architecture with clean geometric lines.",
+                    points: 15,
+                    isUsed: false,
+                    category: "architecture"
+                },
+                {
+                    id: 3,
+                    title: "Historical Artifact",
+                    imageUrl: "https://picsum.photos/800/600?random=3",
+                    question: "What time period does this artifact likely represent?",
+                    answer: "This appears to be from the medieval period, approximately 12th-14th century.",
+                    points: 15,
+                    isUsed: false,
+                    category: "history"
+                },
+                {
+                    id: 4,
+                    title: "Scientific Diagram",
+                    imageUrl: "https://picsum.photos/800/600?random=4",
+                    question: "What scientific process is being illustrated in this diagram?",
+                    answer: "The diagram illustrates the process of photosynthesis in plant cells.",
+                    points: 15,
+                    isUsed: false,
+                    category: "science"
+                },
+                {
+                    id: 5,
+                    title: "Cultural Scene",
+                    imageUrl: "https://picsum.photos/800/600?random=5",
+                    question: "What cultural tradition or celebration is depicted here?",
+                    answer: "This shows a traditional harvest festival with community gathering and dancing.",
+                    points: 15,
+                    isUsed: false,
+                    category: "culture"
+                },
+                {
+                    id: 6,
+                    title: "Art Masterpiece",
+                    imageUrl: "https://picsum.photos/800/600?random=6",
+                    question: "What artistic technique is primarily used in this artwork?",
+                    answer: "The artwork primarily uses the impressionist technique with visible brushstrokes and light effects.",
+                    points: 15,
+                    isUsed: false,
+                    category: "art"
+                }
+            ],
+            
+            teams: [
+                { id: 1, name: "Team 1", score: 0 },
+                { id: 2, name: "Team 2", score: 0 }
+            ],
+            
+            currentTeam: 1,
+            gameState: "playing",
+            
+            init() {
+                this.createImageTiles();
+                this.bindEvents();
+                this.updateUI();
+                this.updateStats();
+                console.log("🖼️ Image Game Controller initialized");
+            },
+            
+            createImageTiles() {
+                const board = document.getElementById('image-game-board');
+                if (!board) return;
+                
+                board.innerHTML = '';
+                
+                this.imageData.forEach((image, index) => {
+                    const tile = document.createElement('div');
+                    tile.className = `image-tile cursor-pointer transition-all duration-300 transform hover:scale-105 ${image.isUsed ? 'opacity-75' : 'hover:shadow-xl'}`;
+                    tile.dataset.imageId = image.id;
+                    
+                    tile.innerHTML = `
+                        <div class="relative bg-gradient-to-br from-pink-400 to-orange-400 rounded-xl shadow-lg overflow-hidden min-h-[250px] ${image.isUsed ? 'ring-4 ring-green-400' : ''}">
+                            ${image.isUsed ? `
+                                <img src="${image.imageUrl}" alt="${image.title}" class="w-full h-48 object-cover">
+                                <div class="absolute top-2 right-2 bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">✓</div>
+                            ` : `
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-teal-600 flex items-center justify-center">
+                                    <div class="text-center text-white">
+                                        <div class="text-6xl mb-4">🖼️</div>
+                                        <h3 class="font-bold text-xl mb-2">${image.title}</h3>
+                                        <p class="text-sm opacity-90">Click to reveal</p>
+                                        <div class="mt-4 bg-white/20 px-3 py-1 rounded-full">
+                                            <span class="text-sm font-bold">${image.points} pts</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `}
+                            <div class="p-4 bg-white">
+                                <h3 class="font-bold text-gray-800 mb-1">${image.title}</h3>
+                                <p class="text-sm text-gray-600 capitalize">📁 ${image.category}</p>
+                                ${image.isUsed ? '<p class="text-xs text-emerald-600 font-semibold mt-1">✅ Completed</p>' : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    tile.addEventListener('click', () => this.selectImage(image.id));
+                    
+                    board.appendChild(tile);
+                });
+            },
+            
+            selectImage(imageId) {
+                const image = this.imageData.find(img => img.id === imageId);
+                if (!image) return;
+                
+                this.currentQuestion = image;
+                this.showImageModal(image);
+            },
+            
+            showImageModal(image) {
+                const modal = document.getElementById('image-modal');
+                const imageElement = document.getElementById('challenge-image');
+                const imageOverlay = document.getElementById('image-overlay');
+                const questionText = document.getElementById('image-question-text');
+                const modalTitle = document.getElementById('image-modal-title');
+                
+                modalTitle.textContent = `🖼️ ${image.title} - Team ${this.currentTeam}`;
+                questionText.textContent = image.question;
+                
+                // Reset modal state
+                document.getElementById('image-question-content').classList.remove('hidden');
+                document.getElementById('image-answer-content').classList.add('hidden');
+                this.zoomLevel = 1;
+                this.resetZoom();
+                
+                // Load image
+                imageOverlay.classList.remove('hidden');
+                imageElement.onload = () => {
+                    imageOverlay.classList.add('hidden');
+                };
+                imageElement.onerror = () => {
+                    imageOverlay.innerHTML = `
+                        <div class="text-gray-600 text-center">
+                            <div class="text-6xl mb-4">❌</div>
+                            <p class="text-xl">Image not available</p>
+                            <p class="text-sm mt-2">Please check the image URL</p>
+                        </div>
+                    `;
+                };
+                imageElement.src = image.imageUrl;
+                imageElement.alt = image.title;
+                
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            },
+            
+            showImageAnswer() {
+                if (!this.currentQuestion) return;
+                
+                const answerText = document.getElementById('image-answer-text');
+                answerText.textContent = this.currentQuestion.answer;
+                
+                document.getElementById('image-question-content').classList.add('hidden');
+                document.getElementById('image-answer-content').classList.remove('hidden');
+            },
+            
+            answerImageQuestion(isCorrect) {
+                if (!this.currentQuestion) return;
+                
+                const currentTeamIndex = this.currentTeam - 1;
+                const points = isCorrect ? this.currentQuestion.points : 0;
+                
+                if (isCorrect) {
+                    this.teams[currentTeamIndex].score += points;
+                }
+                
+                // Mark image as used
+                this.currentQuestion.isUsed = true;
+                
+                // Show result
+                this.showImageResult(isCorrect, points);
+                
+                // Update turn
+                this.currentTeam = this.currentTeam === 1 ? 2 : 1;
+                
+                // Update UI
+                this.updateUI();
+                this.updateStats();
+                this.createImageTiles();
+                
+                // Check game end
+                setTimeout(() => {
+                    if (this.isGameComplete()) {
+                        this.endGame();
+                    }
+                }, 2000);
+            },
+            
+            showImageResult(isCorrect, points) {
+                const modal = document.getElementById('image-modal');
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+                
+                const resultContent = `
+                    <div class="text-center">
+                        <div class="text-8xl mb-6">${isCorrect ? '🎉' : '😔'}</div>
+                        <h3 class="text-4xl font-bold mb-4 ${isCorrect ? 'text-green-600' : 'text-red-600'}">
+                            ${isCorrect ? 'Correct!' : 'Incorrect!'}
+                        </h3>
+                        <p class="text-2xl font-semibold mb-6 text-blue-600">
+                            Team ${this.currentTeam}: ${isCorrect ? `+${points} points` : 'No points'}
+                        </p>
+                        <button id="continue-image-game" class="btn btn-primary btn-xl">
+                            Continue Game
+                        </button>
+                    </div>
+                `;
+                
+                const resultModal = this.createDynamicModal('Image Result', resultContent);
+                
+                const continueBtn = resultModal.querySelector('#continue-image-game');
+                continueBtn.addEventListener('click', () => this.closeModal(resultModal));
+            },
+            
+            // Zoom functionality
+            zoomIn() {
+                this.zoomLevel = Math.min(this.zoomLevel * 1.2, 3);
+                this.applyZoom();
+            },
+            
+            zoomOut() {
+                this.zoomLevel = Math.max(this.zoomLevel / 1.2, 0.5);
+                this.applyZoom();
+            },
+            
+            resetZoom() {
+                this.zoomLevel = 1;
+                this.applyZoom();
+            },
+            
+            applyZoom() {
+                const image = document.getElementById('challenge-image');
+                image.style.transform = `scale(${this.zoomLevel})`;
+                image.style.transformOrigin = 'center center';
+                image.style.transition = 'transform 0.3s ease';
+            },
+            
+            // Gallery functionality
+            showGallery() {
+                const galleryGrid = document.getElementById('gallery-grid');
+                galleryGrid.innerHTML = '';
+                
+                this.imageData.filter(img => img.isUsed).forEach(image => {
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item cursor-pointer';
+                    galleryItem.innerHTML = `
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                            <img src="${image.imageUrl}" alt="${image.title}" class="w-full h-32 object-cover">
+                            <div class="p-3">
+                                <h4 class="font-bold text-sm">${image.title}</h4>
+                                <p class="text-xs text-gray-600 capitalize">${image.category}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    galleryItem.addEventListener('click', () => {
+                        this.closeGallery();
+                        this.selectImage(image.id);
+                    });
+                    
+                    galleryGrid.appendChild(galleryItem);
+                });
+                
+                document.getElementById('gallery-modal').classList.remove('hidden');
+            },
+            
+            closeGallery() {
+                document.getElementById('gallery-modal').classList.add('hidden');
+            },
+            
+            // Reveal all images (special mode)
+            revealAllImages() {
+                const confirmReveal = confirm('Are you sure you want to reveal all images? This will end the current game mode.');
+                if (!confirmReveal) return;
+                
+                this.imageData.forEach(image => image.isUsed = true);
+                this.createImageTiles();
+                this.updateStats();
+                
+                setTimeout(() => {
+                    this.showGallery();
+                }, 500);
+            },
+            
+            createDynamicModal(title, content) {
+                const modal = document.createElement('div');
+                modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+                modal.innerHTML = `
+                    <div class="modal bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 m-4">
+                        <div class="modal-header mb-4">
+                            <h2 class="modal-title text-xl font-bold text-center">${title}</h2>
+                        </div>
+                        <div class="modal-body">
+                            ${content}
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                return modal;
+            },
+            
+            closeModal(modal) {
+                if (modal && document.body.contains(modal)) {
+                    document.body.removeChild(modal);
+                }
+                document.body.style.overflow = '';
+            },
+            
+            isGameComplete() {
+                return this.imageData.every(image => image.isUsed);
+            },
+            
+            endGame() {
+                const winner = this.teams.reduce((a, b) => a.score > b.score ? a : b);
+                const isTie = this.teams[0].score === this.teams[1].score;
+                
+                const endContent = `
+                    <div class="text-center">
+                        <div class="text-8xl mb-6">🏆</div>
+                        <h3 class="text-3xl font-bold mb-6">Game Finished!</h3>
+                        
+                        <div class="space-y-3 mb-6">
+                            ${this.teams.map(team => `
+                                <div class="flex justify-between items-center p-4 rounded-lg ${team.id === winner.id && !isTie ? 'bg-yellow-100 border-2 border-yellow-400' : 'bg-gray-100'}">
+                                    <span class="font-semibold text-lg">${team.name}</span>
+                                    <span class="font-bold text-xl">${team.score} points</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <p class="text-2xl font-bold ${isTie ? 'text-blue-600' : 'text-green-600'} mb-6">
+                            ${isTie ? '🤝 It\'s a tie!' : `🎉 Winner: ${winner.name}!`}
+                        </p>
+                        
+                        <div class="flex justify-center space-x-4 flex-wrap gap-2">
+                            <button id="play-again-image" class="btn btn-success btn-lg">
+                                🔄 Play Again
+                            </button>
+                            <button id="view-gallery-final" class="btn btn-info btn-lg">
+                                🖼️ View Gallery
+                            </button>
+                            <button id="back-setup-image" class="btn btn-secondary btn-lg">
+                                🏠 Back to Setup
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                const endModal = this.createDynamicModal('🖼️ Visual Discovery Results', endContent);
+                
+                const playAgainBtn = endModal.querySelector('#play-again-image');
+                const viewGalleryBtn = endModal.querySelector('#view-gallery-final');
+                const backSetupBtn = endModal.querySelector('#back-setup-image');
+                
+                playAgainBtn.addEventListener('click', () => {
+                    this.restartGame();
+                    this.closeModal(endModal);
+                });
+                
+                viewGalleryBtn.addEventListener('click', () => {
+                    this.closeModal(endModal);
+                    this.showGallery();
+                });
+                
+                backSetupBtn.addEventListener('click', () => {
+                    window.location.href = 'game-main.html';
+                });
+            },
+            
+            restartGame() {
+                this.imageData.forEach(image => image.isUsed = false);
+                this.teams.forEach(team => team.score = 0);
+                this.currentTeam = 1;
+                this.currentQuestion = null;
+                this.zoomLevel = 1;
+                this.hintModeActive = false;
+                this.updateUI();
+                this.updateStats();
+                this.createImageTiles();
+            },
+            
+            updateStats() {
+                const revealed = this.imageData.filter(img => img.isUsed).length;
+                const left = this.imageData.length - revealed;
+                
+                document.getElementById('images-revealed').textContent = revealed;
+                document.getElementById('questions-left').textContent = left;
+            },
+            
+            updateUI() {
+                // Update scores
+                document.getElementById('team1-name').textContent = this.teams[0].name;
+                document.getElementById('team2-name').textContent = this.teams[1].name;
+                document.getElementById('team1-score').textContent = `${this.teams[0].score} points`;
+                document.getElementById('team2-score').textContent = `${this.teams[1].score} points`;
+                
+                // Update current team
+                const currentTeamElement = document.getElementById('current-team');
+                if (currentTeamElement) {
+                    currentTeamElement.textContent = this.teams[this.currentTeam - 1].name;
+                    currentTeamElement.className = `font-bold ${this.currentTeam === 1 ? 'text-blue-600' : 'text-teal-600'}`;
+                }
+                
+                // Update team containers
+                const team1Container = document.getElementById('team1-container');
+                const team2Container = document.getElementById('team2-container');
+                
+                if (team1Container && team2Container) {
+                    team1Container.classList.toggle('ring-4', this.currentTeam === 1);
+                    team1Container.classList.toggle('ring-emerald-400', this.currentTeam === 1);
+                    team2Container.classList.toggle('ring-4', this.currentTeam === 2);
+                    team2Container.classList.toggle('ring-cyan-400', this.currentTeam === 2);
+                }
+            },
+            
+            bindEvents() {
+                // Show answer button
+                document.getElementById('show-image-answer-btn').addEventListener('click', () => {
+                    this.showImageAnswer();
+                });
+                
+                // Answer buttons
+                document.getElementById('image-correct-btn').addEventListener('click', () => {
+                    this.answerImageQuestion(true);
+                });
+                
+                document.getElementById('image-incorrect-btn').addEventListener('click', () => {
+                    this.answerImageQuestion(false);
+                });
+                
+                // Zoom controls
+                document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
+                document.getElementById('zoom-out').addEventListener('click', () => this.zoomOut());
+                document.getElementById('zoom-reset').addEventListener('click', () => this.resetZoom());
+                
+                // Close image modal
+                const imageModal = document.getElementById('image-modal');
+                const closeImageModal = () => {
+                    imageModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    this.resetZoom();
+                };
+                
+                imageModal.querySelector('.modal-close').addEventListener('click', closeImageModal);
+                imageModal.addEventListener('click', (e) => {
+                    if (e.target === imageModal) closeImageModal();
+                });
+                
+                // Gallery
+                document.getElementById('gallery-view').addEventListener('click', () => this.showGallery());
+                
+                const galleryModal = document.getElementById('gallery-modal');
+                const closeGalleryModal = () => this.closeGallery();
+                
+                galleryModal.querySelector('.modal-close').addEventListener('click', closeGalleryModal);
+                galleryModal.querySelector('.close-modal-btn').addEventListener('click', closeGalleryModal);
+                galleryModal.addEventListener('click', (e) => {
+                    if (e.target === galleryModal) closeGalleryModal();
+                });
+                
+                // Restart button
+                document.getElementById('restart-button').addEventListener('click', () => {
+                    this.restartGame();
+                });
+                
+                // Reveal all button
+                document.getElementById('reveal-all-btn').addEventListener('click', () => {
+                    this.revealAllImages();
+                });
+                
+                // Instructions
+                document.getElementById('instructions-btn').addEventListener('click', () => {
+                    document.getElementById('instructions-modal').classList.remove('hidden');
+                });
+                
+                // Close instructions modal
+                const instructionsModal = document.getElementById('instructions-modal');
+                const closeInstructionsModal = () => {
+                    instructionsModal.classList.add('hidden');
+                };
+                
+                instructionsModal.querySelector('.modal-close').addEventListener('click', closeInstructionsModal);
+                instructionsModal.querySelector('.close-modal-btn').addEventListener('click', closeInstructionsModal);
+                instructionsModal.addEventListener('click', (e) => {
+                    if (e.target === instructionsModal) closeInstructionsModal();
+                });
+                
+                // Hint mode toggle
+                document.getElementById('hint-mode').addEventListener('click', (e) => {
+                    this.hintModeActive = !this.hintModeActive;
+                    const btn = e.target;
+                    btn.textContent = this.hintModeActive ? '💡 Hint: ON' : '💡 Hint Mode';
+                    btn.classList.toggle('bg-yellow-400', this.hintModeActive);
+                    btn.classList.toggle('text-black', this.hintModeActive);
+                });
+                
+                // Fullscreen toggle
+                document.getElementById('fullscreen-toggle').addEventListener('click', () => {
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                });
+                
+                // Zoom toggle
+                document.getElementById('zoom-toggle').addEventListener('click', (e) => {
+                    const btn = e.target;
+                    const imageContainer = document.getElementById('image-container');
+                    const zoomControls = document.getElementById('zoom-controls');
+                    
+                    if (zoomControls.classList.contains('hidden')) {
+                        zoomControls.classList.remove('hidden');
+                        btn.textContent = '🔍 ON';
+                    } else {
+                        zoomControls.classList.add('hidden');
+                        btn.textContent = '🔍';
+                        this.resetZoom();
+                    }
+                });
+            }
+        };
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            ImageGameController.init();
+        });
+        
+        // Global functions for external access
+        window.ImageGameController = ImageGameController;
+        
+        // Fix para modales (igual que en game-board y video-board)
+        function closeAnyModal() {
+            const modals = document.querySelectorAll('.modal-backdrop');
+            modals.forEach(modal => {
+                if (!modal.classList.contains('hidden')) {
+                    modal.classList.add('hidden');
+                    if (modal.id.includes('dynamic') || modal.classList.contains('dynamic')) {
+                        setTimeout(() => {
+                            if (document.body.contains(modal)) {
+                                document.body.removeChild(modal);
+                            }
+                        }, 300);
+                    }
+                }
+            });
+            document.body.style.overflow = '';
+        }
+        
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-backdrop')) {
+                closeAnyModal();
+                return;
+            }
+            
+            const isCloseButton = 
+                e.target.textContent.includes('Close') ||
+                e.target.textContent.includes('×') ||
+                e.target.classList.contains('close-modal-btn') ||
+                e.target.classList.contains('modal-close');
+            
+            if (isCloseButton) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeAnyModal();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAnyModal();
+            }
+        });
+        
+        window.closeModal = closeAnyModal;
+    </script>
+</body>
+</html>

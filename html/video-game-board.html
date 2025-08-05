@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Game Board - Bamboozle</title>
+    
+    <!-- CSS -->
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/components.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="../img/logo.png">
+</head>
+<body class="min-h-screen">
+    <a href="#main-content" class="skip-to-content">Saltar al contenido principal</a>
+    <div id="sr-live-region" class="sr-live-region" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Navegación -->
+    <header class="header">
+        <nav class="nav">
+            <div class="flex items-center space-x-8">
+                <a href="game-main.html" class="nav-brand hover:opacity-70">
+                    <span class="sr-only">Ir a la página principal</span>
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <path d="M2.12499 15.8749H3.49999V25.4999C3.49999 27.0124 4.73749 28.2499 6.24999 28.2499H22.75C24.2625 28.2499 25.5 27.0124 25.5 25.4999V15.8749H26.875C27.425 15.8749 27.9337 15.5449 28.14 15.0224C28.3462 14.5137 28.2362 13.9224 27.8375 13.5237L15.4762 1.14869C15.349 1.02123 15.1979 0.920097 15.0316 0.851098C14.8653 0.782098 14.6869 0.746582 14.5069 0.746582C14.3268 0.746582 14.1485 0.782098 13.9821 0.851098C13.8158 0.920097 13.6647 1.02123 13.5375 1.14869L1.14874 13.5237C0.749992 13.9224 0.639992 14.5137 0.846242 15.0224C1.05249 15.5312 1.56124 15.8749 2.11124 15.8749H2.12499ZM14.5 4.06369L22.75 12.3137V25.4999H6.24999V12.3137L14.5 4.06369Z" fill="#ECECEC"/>
+                    </svg>
+                </a>
+                
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Games</a>
+                    <a href="#" class="nav-link">Blog</a>
+                    <a href="#" class="nav-link">Class PIN</a>
+                </div>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link">Sign in</a>
+                <a href="#" class="btn btn-rounded bg-accessible-blue" style="color: #fff; opacity: 1;">
+                    Join for Free
+                </a>
+            </div>
+            
+            <button id="hamburger-btn" class="hamburger">☰</button>
+        </nav>
+    </header>
+
+    <!-- Bloque de Controles Superior -->
+    <div class="bg-bam-purple text-white py-4 px-6">
+        <div class="container grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+            <!-- Controles -->
+            <div class="flex items-center space-x-2 justify-center md:justify-start">
+                <span class="font-bold">Controls:</span>
+                <button class="btn btn-icon btn-sm bg-white/20 hover:bg-white/30" onclick="window.location.href='game-main.html'">
+                    &times;
+                </button>
+                <button class="btn btn-icon btn-sm bg-white/20 hover:bg-white/30" id="sound-toggle">
+                    🔊
+                </button>
+                <button class="btn btn-icon btn-sm bg-white/20 hover:bg-white/30" id="fullscreen-toggle" title="Pantalla completa">
+                    📺
+                </button>
+            </div>
+            
+            <!-- Título del Juego -->
+            <div class="text-center">
+                <h1 class="text-4xl font-bold">🎬 Video Challenge</h1>
+                <p id="game-title" class="font-semibold">Interactive Video Learning Game</p>
+            </div>
+            
+            <!-- Timer (opcional) -->
+            <div class="text-center md:text-right">
+                <div id="video-timer" class="text-xl font-bold bg-white/20 px-4 py-2 rounded-lg hidden">
+                    ⏱️ <span id="timer-display">00:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bloque de Puntuaciones -->
+    <div class="bg-bam-purple-dark text-white py-4 px-6">
+        <div class="container grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+            <!-- Editar Equipos -->
+            <div class="flex items-center justify-center md:justify-start space-x-2">
+                <span class="font-bold">Edit teams:</span>
+                <button class="btn btn-icon btn-sm hover:bg-white/20" aria-label="edit teams">
+                    <svg class="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Puntuaciones de Equipos -->
+            <div class="flex justify-center items-end space-x-8 col-span-1">
+                <div id="team1-container" class="text-center">
+                    <div class="bg-bam-pink text-white px-4 py-1 rounded-t-lg font-bold">
+                        <span id="team1-name">Team 1</span>
+                    </div>
+                    <div class="font-bold text-3xl text-bam-yellow">
+                        <span id="team1-score">0 points</span>
+                    </div>
+                </div>
+                
+                <div id="team2-container" class="text-center">
+                    <div class="bg-bam-blue text-white px-4 py-1 rounded-t-lg font-bold">
+                        <span id="team2-name">Team 2</span>
+                    </div>
+                    <div class="font-bold text-3xl text-bam-yellow">
+                        <span id="team2-score">0 points</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Controls -->
+            <div class="flex justify-center md:justify-end space-x-2">
+                <button id="pause-all-videos" class="btn btn-sm bg-white/20 hover:bg-white/30 text-white">
+                    ⏸️ Pause All
+                </button>
+                <button id="replay-video" class="btn btn-sm bg-white/20 hover:bg-white/30 text-white hidden">
+                    🔄 Replay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tablero de Videos -->
+    <main id="main-content" role="main" class="bg-gradient-to-b from-purple-100 to-blue-100 p-4 md:p-8 min-h-screen">
+        <div class="container">
+            <div class="text-center mb-6">
+                <p class="text-gray-700 mb-2 text-lg">Current turn: <span id="current-team" class="font-bold text-purple-600">Team 1</span></p>
+                <p class="text-gray-600 mb-4">🎬 Click on a video to watch and answer the question!</p>
+                <div class="flex justify-center space-x-4">
+                    <button id="restart-button" class="btn btn-danger">🔄 Restart Game</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='game-main.html'">⬅️ Back to Setup</button>
+                    <button id="instructions-btn" class="btn btn-info">❓ Instructions</button>
+                </div>
+            </div>
+            
+            <div id="video-game-board" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Video tiles se generan dinámicamente -->
+            </div>
+            
+            <!-- Loading indicator -->
+            <div id="loading-videos" class="text-center py-8 hidden">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading videos...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="modal-backdrop hidden">
+        <div class="modal modal-lg bg-black">
+            <div class="modal-header bg-purple-900 text-white">
+                <h3 id="video-modal-title" class="modal-title text-white">🎬 Video Challenge</h3>
+                <button class="modal-close text-white hover:text-gray-300">&times;</button>
+            </div>
+            <div class="modal-body bg-black p-0">
+                <!-- Video container -->
+                <div id="video-container" class="relative aspect-video bg-black">
+                    <video id="challenge-video" class="w-full h-full" controls>
+                        <source src="" type="video/mp4">
+                        Tu navegador no soporta el elemento video.
+                    </video>
+                    <div id="video-overlay" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                        <div class="text-white text-center">
+                            <div class="text-6xl mb-4">📹</div>
+                            <p class="text-xl">Video not available</p>
+                            <p class="text-sm mt-2">Waiting for video from teammate...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question section -->
+                <div class="bg-white p-6">
+                    <div id="video-question-content">
+                        <h4 class="text-xl font-bold mb-4 text-purple-800">Question about the video:</h4>
+                        <p id="video-question-text" class="text-lg mb-4 bg-purple-50 p-4 rounded-lg"></p>
+                        <div class="text-center">
+                            <button id="show-video-answer-btn" class="btn btn-primary btn-lg">
+                                🎯 Show Answer
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="video-answer-content" class="hidden">
+                        <h4 class="text-xl font-bold mb-4 text-green-800">Correct Answer:</h4>
+                        <div class="bg-green-50 p-4 rounded-lg mb-6">
+                            <p id="video-answer-text" class="text-lg text-green-800"></p>
+                        </div>
+                        <div class="flex justify-center space-x-4">
+                            <button id="video-correct-btn" class="btn btn-success btn-lg">
+                                ✅ Correct (+15 pts)
+                            </button>
+                            <button id="video-incorrect-btn" class="btn btn-danger btn-lg">
+                                ❌ Incorrect (0 pts)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">🎬 How to Play - Video Challenge</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">🎯 Objective:</h4>
+                        <p>Watch videos and answer questions to earn points for your team!</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-800 mb-2">📋 How to Play:</h4>
+                        <ol class="list-decimal list-inside space-y-1">
+                            <li>Click on a video tile to start</li>
+                            <li>Watch the video carefully</li>
+                            <li>Read the question about the video</li>
+                            <li>Discuss with your team</li>
+                            <li>Click "Show Answer" when ready</li>
+                            <li>Mark if your answer was correct or not</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-yellow-800 mb-2">🏆 Scoring:</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Correct answer: +15 points</li>
+                            <li>Incorrect answer: 0 points</li>
+                            <li>Team with most points wins!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary close-modal-btn">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menú móvil -->
+    <div id="mobile-menu" class="mobile-menu">
+        <button id="close-menu-btn" class="mobile-menu-close">&times;</button>
+        <nav class="mobile-menu-links">
+            <a href="#" class="mobile-menu-link">Games</a>
+            <a href="#" class="mobile-menu-link">Blog</a>
+            <a href="#" class="mobile-menu-link">Class PIN</a>
+            <hr class="border-gray-600 my-4"/>
+            <a href="#" class="mobile-menu-link">Sign in</a>
+            <a href="#" class="btn btn-primary btn-rounded text-center">Join for Free</a>
+        </nav>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/game.js"></script>
+    <script src="../js/keyboard-shortcuts.js"></script>
+    <script src="../js/accessibility-enhancer.js"></script>
+    
+    <script>
+        // Video Game Controller
+        const VideoGameController = {
+            currentQuestion: null,
+            videoData: [
+                {
+                    id: 1,
+                    title: "Video 1",
+                    videoUrl: "", // Placeholder - tu compañero proporcionará estas URLs
+                    question: "What is the main topic discussed in this video?",
+                    answer: "The main topic is sustainable development and environmental protection.",
+                    points: 15,
+                    isUsed: false
+                },
+                {
+                    id: 2,
+                    title: "Video 2", 
+                    videoUrl: "",
+                    question: "Which technique was demonstrated in the video?",
+                    answer: "The video demonstrates active listening techniques for better communication.",
+                    points: 15,
+                    isUsed: false
+                },
+                {
+                    id: 3,
+                    title: "Video 3",
+                    videoUrl: "",
+                    question: "What was the conclusion of the experiment shown?",
+                    answer: "The experiment concluded that collaborative learning improves retention by 40%.",
+                    points: 15,
+                    isUsed: false
+                },
+                {
+                    id: 4,
+                    title: "Video 4",
+                    videoUrl: "",
+                    question: "What problem was solved in the video?",
+                    answer: "The video solved the problem of effective time management in academic settings.",
+                    points: 15,
+                    isUsed: false
+                },
+                {
+                    id: 5,
+                    title: "Video 5",
+                    videoUrl: "",
+                    question: "What new concept was introduced?",
+                    answer: "The concept of growth mindset was introduced as a learning strategy.",
+                    points: 15,
+                    isUsed: false
+                },
+                {
+                    id: 6,
+                    title: "Video 6",
+                    videoUrl: "",
+                    question: "What was the key takeaway from the presentation?",
+                    answer: "The key takeaway is that practice and feedback are essential for skill development.",
+                    points: 15,
+                    isUsed: false
+                }
+            ],
+            
+            teams: [
+                { id: 1, name: "Team 1", score: 0 },
+                { id: 2, name: "Team 2", score: 0 }
+            ],
+            
+            currentTeam: 1,
+            gameState: "playing",
+            
+            init() {
+                this.createVideoTiles();
+                this.bindEvents();
+                this.updateUI();
+                console.log("🎬 Video Game Controller initialized");
+            },
+            
+            createVideoTiles() {
+                const board = document.getElementById('video-game-board');
+                if (!board) return;
+                
+                board.innerHTML = '';
+                
+                this.videoData.forEach((video, index) => {
+                    const tile = document.createElement('div');
+                    tile.className = `video-tile cursor-pointer transition-all duration-300 transform hover:scale-105 ${video.isUsed ? 'opacity-50 pointer-events-none' : ''}`;
+                    tile.dataset.videoId = video.id;
+                    
+                    tile.innerHTML = `
+                        <div class="bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl min-h-[200px] flex flex-col items-center justify-center">
+                            <div class="text-6xl mb-4">🎬</div>
+                            <h3 class="font-bold text-xl mb-2">${video.title}</h3>
+                            <p class="text-sm opacity-90 text-center">Click to watch video</p>
+                            <div class="mt-4 bg-white/20 px-3 py-1 rounded-full">
+                                <span class="text-sm font-bold">${video.points} pts</span>
+                            </div>
+                            ${video.isUsed ? '<div class="absolute inset-0 bg-black bg-opacity-50 rounded-xl flex items-center justify-center"><span class="text-white font-bold">COMPLETED</span></div>' : ''}
+                        </div>
+                    `;
+                    
+                    if (!video.isUsed) {
+                        tile.addEventListener('click', () => this.selectVideo(video.id));
+                    }
+                    
+                    board.appendChild(tile);
+                });
+            },
+            
+            selectVideo(videoId) {
+                const video = this.videoData.find(v => v.id === videoId);
+                if (!video || video.isUsed) return;
+                
+                this.currentQuestion = video;
+                this.showVideoModal(video);
+            },
+            
+            showVideoModal(video) {
+                const modal = document.getElementById('video-modal');
+                const videoElement = document.getElementById('challenge-video');
+                const videoOverlay = document.getElementById('video-overlay');
+                const questionText = document.getElementById('video-question-text');
+                const modalTitle = document.getElementById('video-modal-title');
+                
+                modalTitle.textContent = `🎬 ${video.title} - Team ${this.currentTeam}`;
+                questionText.textContent = video.question;
+                
+                // Reset modal state
+                document.getElementById('video-question-content').classList.remove('hidden');
+                document.getElementById('video-answer-content').classList.add('hidden');
+                
+                // Handle video loading
+                if (video.videoUrl && video.videoUrl.trim() !== '') {
+                    videoElement.src = video.videoUrl;
+                    videoElement.classList.remove('hidden');
+                    videoOverlay.classList.add('hidden');
+                } else {
+                    videoElement.classList.add('hidden');
+                    videoOverlay.classList.remove('hidden');
+                }
+                
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            },
+            
+            showVideoAnswer() {
+                if (!this.currentQuestion) return;
+                
+                const answerText = document.getElementById('video-answer-text');
+                answerText.textContent = this.currentQuestion.answer;
+                
+                document.getElementById('video-question-content').classList.add('hidden');
+                document.getElementById('video-answer-content').classList.remove('hidden');
+            },
+            
+            answerVideoQuestion(isCorrect) {
+                if (!this.currentQuestion) return;
+                
+                const currentTeamIndex = this.currentTeam - 1;
+                const points = isCorrect ? this.currentQuestion.points : 0;
+                
+                if (isCorrect) {
+                    this.teams[currentTeamIndex].score += points;
+                }
+                
+                // Mark video as used
+                this.currentQuestion.isUsed = true;
+                
+                // Show result
+                this.showVideoResult(isCorrect, points);
+                
+                // Update turn
+                this.currentTeam = this.currentTeam === 1 ? 2 : 1;
+                
+                // Update UI
+                this.updateUI();
+                this.createVideoTiles(); // Recreate tiles to show used state
+                
+                // Check game end
+                setTimeout(() => {
+                    if (this.isGameComplete()) {
+                        this.endGame();
+                    }
+                }, 2000);
+            },
+            
+            showVideoResult(isCorrect, points) {
+                const modal = document.getElementById('video-modal');
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+                
+                const resultContent = `
+                    <div class="text-center">
+                        <div class="text-8xl mb-6">${isCorrect ? '🎉' : '😔'}</div>
+                        <h3 class="text-4xl font-bold mb-4 ${isCorrect ? 'text-green-600' : 'text-red-600'}">
+                            ${isCorrect ? 'Correct!' : 'Incorrect!'}
+                        </h3>
+                        <p class="text-2xl font-semibold mb-6 text-purple-600">
+                            Team ${this.currentTeam}: ${isCorrect ? `+${points} points` : 'No points'}
+                        </p>
+                        <button id="continue-video-game" class="btn btn-primary btn-xl">
+                            Continue Game
+                        </button>
+                    </div>
+                `;
+                
+                const resultModal = this.createDynamicModal('Video Result', resultContent);
+                
+                const continueBtn = resultModal.querySelector('#continue-video-game');
+                continueBtn.addEventListener('click', () => this.closeModal(resultModal));
+            },
+            
+            createDynamicModal(title, content) {
+                const modal = document.createElement('div');
+                modal.className = 'modal-backdrop fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+                modal.innerHTML = `
+                    <div class="modal bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 m-4">
+                        <div class="modal-header mb-4">
+                            <h2 class="modal-title text-xl font-bold text-center">${title}</h2>
+                        </div>
+                        <div class="modal-body">
+                            ${content}
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                return modal;
+            },
+            
+            closeModal(modal) {
+                if (modal && document.body.contains(modal)) {
+                    document.body.removeChild(modal);
+                }
+                document.body.style.overflow = '';
+            },
+            
+            isGameComplete() {
+                return this.videoData.every(video => video.isUsed);
+            },
+            
+            endGame() {
+                const winner = this.teams.reduce((a, b) => a.score > b.score ? a : b);
+                const isTie = this.teams[0].score === this.teams[1].score;
+                
+                const endContent = `
+                    <div class="text-center">
+                        <div class="text-8xl mb-6">🏆</div>
+                        <h3 class="text-3xl font-bold mb-6">Game Finished!</h3>
+                        
+                        <div class="space-y-3 mb-6">
+                            ${this.teams.map(team => `
+                                <div class="flex justify-between items-center p-4 rounded-lg ${team.id === winner.id && !isTie ? 'bg-yellow-100 border-2 border-yellow-400' : 'bg-gray-100'}">
+                                    <span class="font-semibold text-lg">${team.name}</span>
+                                    <span class="font-bold text-xl">${team.score} points</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <p class="text-2xl font-bold ${isTie ? 'text-blue-600' : 'text-green-600'} mb-6">
+                            ${isTie ? '🤝 It\'s a tie!' : `🎉 Winner: ${winner.name}!`}
+                        </p>
+                        
+                        <div class="flex justify-center space-x-4">
+                            <button id="play-again-video" class="btn btn-success btn-lg">
+                                🔄 Play Again
+                            </button>
+                            <button id="back-setup-video" class="btn btn-secondary btn-lg">
+                                🏠 Back to Setup
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                const endModal = this.createDynamicModal('🎬 Video Game Results', endContent);
+                
+                const playAgainBtn = endModal.querySelector('#play-again-video');
+                const backSetupBtn = endModal.querySelector('#back-setup-video');
+                
+                playAgainBtn.addEventListener('click', () => {
+                    this.restartGame();
+                    this.closeModal(endModal);
+                });
+                
+                backSetupBtn.addEventListener('click', () => {
+                    window.location.href = 'game-main.html';
+                });
+            },
+            
+            restartGame() {
+                this.videoData.forEach(video => video.isUsed = false);
+                this.teams.forEach(team => team.score = 0);
+                this.currentTeam = 1;
+                this.currentQuestion = null;
+                this.updateUI();
+                this.createVideoTiles();
+            },
+            
+            updateUI() {
+                // Update scores
+                document.getElementById('team1-name').textContent = this.teams[0].name;
+                document.getElementById('team2-name').textContent = this.teams[1].name;
+                document.getElementById('team1-score').textContent = `${this.teams[0].score} points`;
+                document.getElementById('team2-score').textContent = `${this.teams[1].score} points`;
+                
+                // Update current team
+                const currentTeamElement = document.getElementById('current-team');
+                if (currentTeamElement) {
+                    currentTeamElement.textContent = this.teams[this.currentTeam - 1].name;
+                    currentTeamElement.className = `font-bold ${this.currentTeam === 1 ? 'text-pink-600' : 'text-blue-600'}`;
+                }
+                
+                // Update team containers
+                const team1Container = document.getElementById('team1-container');
+                const team2Container = document.getElementById('team2-container');
+                
+                if (team1Container && team2Container) {
+                    team1Container.classList.toggle('ring-4', this.currentTeam === 1);
+                    team1Container.classList.toggle('ring-pink-400', this.currentTeam === 1);
+                    team2Container.classList.toggle('ring-4', this.currentTeam === 2);
+                    team2Container.classList.toggle('ring-blue-400', this.currentTeam === 2);
+                }
+            },
+            
+            bindEvents() {
+                // Show answer button
+                document.getElementById('show-video-answer-btn').addEventListener('click', () => {
+                    this.showVideoAnswer();
+                });
+                
+                // Answer buttons
+                document.getElementById('video-correct-btn').addEventListener('click', () => {
+                    this.answerVideoQuestion(true);
+                });
+                
+                document.getElementById('video-incorrect-btn').addEventListener('click', () => {
+                    this.answerVideoQuestion(false);
+                });
+                
+                // Close video modal
+                const videoModal = document.getElementById('video-modal');
+                const closeVideoModal = () => {
+                    videoModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    const video = document.getElementById('challenge-video');
+                    video.pause();
+                };
+                
+                videoModal.querySelector('.modal-close').addEventListener('click', closeVideoModal);
+                videoModal.addEventListener('click', (e) => {
+                    if (e.target === videoModal) closeVideoModal();
+                });
+                
+                // Restart button
+                document.getElementById('restart-button').addEventListener('click', () => {
+                    this.restartGame();
+                });
+                
+                // Instructions
+                document.getElementById('instructions-btn').addEventListener('click', () => {
+                    document.getElementById('instructions-modal').classList.remove('hidden');
+                });
+                
+                // Close instructions modal
+                const instructionsModal = document.getElementById('instructions-modal');
+                const closeInstructionsModal = () => {
+                    instructionsModal.classList.add('hidden');
+                };
+                
+                instructionsModal.querySelector('.modal-close').addEventListener('click', closeInstructionsModal);
+                instructionsModal.querySelector('.close-modal-btn').addEventListener('click', closeInstructionsModal);
+                instructionsModal.addEventListener('click', (e) => {
+                    if (e.target === instructionsModal) closeInstructionsModal();
+                });
+                
+                // Sound toggle
+                document.getElementById('sound-toggle').addEventListener('click', (e) => {
+                    const btn = e.target;
+                    const video = document.getElementById('challenge-video');
+                    video.muted = !video.muted;
+                    btn.textContent = video.muted ? '🔇' : '🔊';
+                });
+                
+                // Pause all videos
+                document.getElementById('pause-all-videos').addEventListener('click', () => {
+                    const video = document.getElementById('challenge-video');
+                    video.pause();
+                });
+                
+                // Fullscreen toggle
+                document.getElementById('fullscreen-toggle').addEventListener('click', () => {
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                });
+            }
+        };
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            VideoGameController.init();
+        });
+        
+        // Global functions for external access
+        window.VideoGameController = VideoGameController;
+        
+        // Fix para modales (igual que en game-board)
+        function closeAnyModal() {
+            const modals = document.querySelectorAll('.modal-backdrop');
+            modals.forEach(modal => {
+                if (!modal.classList.contains('hidden')) {
+                    modal.classList.add('hidden');
+                    if (modal.id.includes('dynamic') || modal.classList.contains('dynamic')) {
+                        setTimeout(() => {
+                            if (document.body.contains(modal)) {
+                                document.body.removeChild(modal);
+                            }
+                        }, 300);
+                    }
+                }
+            });
+            document.body.style.overflow = '';
+        }
+        
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-backdrop')) {
+                closeAnyModal();
+                return;
+            }
+            
+            const isCloseButton = 
+                e.target.textContent.includes('Close') ||
+                e.target.textContent.includes('×') ||
+                e.target.classList.contains('close-modal-btn') ||
+                e.target.classList.contains('modal-close');
+            
+            if (isCloseButton) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeAnyModal();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAnyModal();
+            }
+        });
+        
+        window.closeModal = closeAnyModal;
+    </script>
+</body>
+</html>

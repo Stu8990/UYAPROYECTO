@@ -203,57 +203,117 @@
         </div>
     </main>
     
-    <!-- Modal: Seleccionar Tipo de Juego -->
+    <!-- Modal: Seleccionar Tipo de Juego - VERSIÓN MEJORADA -->
     <div id="play-modal" class="modal-backdrop hidden">
         <div class="modal modal-lg">
             <div class="modal-header">
                 <div class="flex justify-between items-center">
-                    <h2 class="modal-title">Play for free</h2>
+                    <h2 class="modal-title text-2xl font-bold text-purple-800">🎮 Choose Your Game Type</h2>
                     <button id="close-play-modal" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
                 </div>
+                <p class="text-gray-600 mt-2">Select the type of challenge you want to play:</p>
             </div>
+            
             <div class="modal-body">
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    <div class="card bg-purple-200 text-center cursor-pointer hover:bg-purple-300 transition-colors" onclick="startBaamboozleGame()">
-                        <div class="card-body">
-                            <img src="https://placehold.co/150x150/C4B5FD/312E81?text=Baamboozle" class="rounded-md mx-auto mb-2" alt="Baamboozle">
-                            <p class="font-bold">Bamboozle</p>
+                <!-- Tipos de Juego -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- Text-based Game -->
+                    <div class="game-type-card bg-gradient-to-br from-purple-500 to-purple-700 text-white rounded-xl p-6 cursor-pointer hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-xl" 
+                         data-game-type="text" 
+                         data-url="game-board.html"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Select Text Challenge game mode">
+                        <div class="text-center">
+                            <div class="text-5xl mb-4">📝</div>
+                            <h4 class="font-bold text-xl mb-2">Text Challenge</h4>
+                            <p class="text-sm opacity-90 mb-4">Classic question & answer format</p>
+                            <div class="bg-white/20 px-3 py-1 rounded-full text-sm font-semibold">
+                                Traditional Mode
+                            </div>
                         </div>
                     </div>
-                    <div class="card bg-orange-200 text-center cursor-pointer hover:bg-orange-300 transition-colors">
-                        <div class="card-body">
-                            <img src="https://placehold.co/150x150/FED7AA/9A3412?text=Spud+Game" class="rounded-md mx-auto mb-2" alt="Spud Game">
-                            <p class="font-bold">SPUD GAME</p>
+                    
+                    <!-- Video-based Game -->
+                    <div class="game-type-card bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-xl p-6 cursor-pointer hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-xl"
+                         data-game-type="video" 
+                         data-url="video-game-board.html"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Select Video Challenge game mode">
+                        <div class="text-center">
+                            <div class="text-5xl mb-4">🎬</div>
+                            <h4 class="font-bold text-xl mb-2">Video Challenge</h4>
+                            <p class="text-sm opacity-90 mb-4">Interactive multimedia learning</p>
+                            <div class="bg-white/20 px-3 py-1 rounded-full text-sm font-semibold">
+                                Media Mode
+                            </div>
                         </div>
                     </div>
-                    <div class="card bg-pink-200 text-center cursor-pointer hover:bg-pink-300 transition-colors">
-                        <div class="card-body">
-                            <img src="https://placehold.co/150x150/FBCFE8/831843?text=Bowling" class="rounded-md mx-auto mb-2" alt="Bowling">
-                            <p class="font-bold">Bowling</p>
+                    
+                    <!-- Image-based Game -->
+                    <div class="game-type-card bg-gradient-to-br from-blue-500 to-teal-500 text-white rounded-xl p-6 cursor-pointer hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-xl"
+                         data-game-type="image" 
+                         data-url="image-game-board.html"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Select Visual Discovery game mode">
+                        <div class="text-center">
+                            <div class="text-5xl mb-4">🖼️</div>
+                            <h4 class="font-bold text-xl mb-2">Visual Discovery</h4>
+                            <p class="text-sm opacity-90 mb-4">Image analysis & observation</p>
+                            <div class="bg-white/20 px-3 py-1 rounded-full text-sm font-semibold">
+                                Visual Mode
+                            </div>
                         </div>
                     </div>
-                    <div class="card bg-red-200 text-center cursor-pointer hover:bg-red-300 transition-colors">
-                        <div class="card-body">
-                            <img src="https://placehold.co/150x150/FECACA/991B1B?text=B-Ball" class="rounded-md mx-auto mb-2" alt="B-Ball">
-                            <p class="font-bold">B-Ball</p>
+                </div>
+                
+                <!-- Información adicional -->
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h5 class="font-bold text-blue-800 mb-3">💡 Choose the Perfect Mode for Your Learning:</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-blue-700">
+                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                            <div class="font-bold text-purple-600 mb-1">📝 Text Challenge</div>
+                            <p>Perfect for vocabulary, concepts, and traditional Q&A learning</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                            <div class="font-bold text-purple-600 mb-1">🎬 Video Challenge</div>
+                            <p>Great for demonstrations, storytelling, and contextual learning</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                            <div class="font-bold text-blue-600 mb-1">🖼️ Visual Discovery</div>
+                            <p>Ideal for art, science observations, and visual analysis skills</p>
                         </div>
                     </div>
-                    <div class="card bg-cyan-200 text-center cursor-pointer hover:bg-cyan-300 transition-colors">
-                        <div class="card-body">
-                            <img src="https://placehold.co/150x150/A5F3FC/0E7490?text=Snakes" class="rounded-md mx-auto mb-2" alt="Snakes and Ladders">
-                            <p class="font-bold">SNAKES AND LADDERS</p>
+                </div>
+                
+                <!-- Estadísticas del juego -->
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
+                        <div>
+                            <div class="font-bold text-lg text-purple-600">10</div>
+                            <div class="text-gray-600">Questions</div>
                         </div>
-                    </div>
-                    <div class="card bg-green-200 text-center cursor-pointer hover:bg-green-300 transition-colors">
-                        <div class="card-body">
-                            <img src="https://placehold.co/150x150/BEF264/3F6212?text=Egg+Hunt" class="rounded-md mx-auto mb-2" alt="Egg Hunt">
-                            <p class="font-bold">Egg Hunt</p>
+                        <div>
+                            <div class="font-bold text-lg text-blue-600">15</div>
+                            <div class="text-gray-600">Points Each</div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg text-green-600">2</div>
+                            <div class="text-gray-600">Teams</div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg text-orange-600">5-15</div>
+                            <div class="text-gray-600">Minutes</div>
                         </div>
                     </div>
                 </div>
             </div>
+            
             <div class="modal-footer">
-                <button class="btn btn-info">More</button>
+                <button class="btn btn-secondary" id="close-play-modal-footer">Cancel</button>
+                <button class="btn btn-info">Preview Questions</button>
             </div>
         </div>
     </div>
