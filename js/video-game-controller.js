@@ -5,7 +5,7 @@ const VideoGameController = {
         {
             id: 1,
             title: "Video 1",
-            videoUrl: "https://www.youtube.com/watch?v=kI1bSybydTk",
+            videoUrl: "https://youtu.be/7V8oFI4GYMY",
             question: "What is the main topic discussed in this video?",
             answer: "The main topic is sustainable development and environmental protection.",
             points: 15,
@@ -14,7 +14,7 @@ const VideoGameController = {
         {
             id: 2,
             title: "Video 2", 
-            videoUrl: "",
+            videoUrl: "https://youtu.be/DHAI_gR0HgA",
             question: "Which technique was demonstrated in the video?",
             answer: "The video demonstrates active listening techniques for better communication.",
             points: 15,
@@ -23,7 +23,7 @@ const VideoGameController = {
         {
             id: 3,
             title: "Video 3",
-            videoUrl: "",
+            videoUrl: "https://youtu.be/19bsbbyklOc",
             question: "What was the conclusion of the experiment shown?",
             answer: "The experiment concluded that collaborative learning improves retention by 40%.",
             points: 15,
@@ -32,7 +32,7 @@ const VideoGameController = {
         {
             id: 4,
             title: "Video 4",
-            videoUrl: "",
+            videoUrl: "https://youtu.be/iONDebHX9qk",
             question: "What problem was solved in the video?",
             answer: "The video solved the problem of effective time management in academic settings.",
             points: 15,
@@ -41,7 +41,7 @@ const VideoGameController = {
         {
             id: 5,
             title: "Video 5",
-            videoUrl: "",
+            videoUrl: "https://youtu.be/75GFzikmRY0",
             question: "What new concept was introduced?",
             answer: "The concept of growth mindset was introduced as a learning strategy.",
             points: 15,
@@ -50,7 +50,7 @@ const VideoGameController = {
         {
             id: 6,
             title: "Video 6",
-            videoUrl: "",
+            videoUrl: "https://youtu.be/fV-F8FVH868",
             question: "What was the key takeaway from the presentation?",
             answer: "The key takeaway is that practice and feedback are essential for skill development.",
             points: 15,
